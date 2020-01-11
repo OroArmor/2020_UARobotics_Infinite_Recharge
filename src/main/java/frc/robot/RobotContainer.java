@@ -7,11 +7,30 @@
 
 package frc.robot;
 
+// WPI Imports
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+import static edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
+// Command Imports
+import frc.robot.commands.ExampleCommand;
+
+// Subsystem Imports
+import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
+
+// Constant Imports
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.OIConstants;
+
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -22,10 +41,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final ShooterSubsystem m_shooter = new ShooterSubsystem();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
-
+  // The driver's controller
+  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  // The operator's controller
+  XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -42,6 +65,24 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    // TODO need to decide on which buttons to use and if they should be driver / operator
+    // Spin up the shooter when the 'A' button is pressed
+    new JoystickButton(m_driverController, Button.kA.value)
+        .whenPressed(new InstantCommand(m_shooter::enable, m_shooter));
+
+    // Turn off the shooter when the 'B' button is pressed
+    new JoystickButton(m_driverController, Button.kB.value)
+        .whenPressed(new InstantCommand(m_shooter::disable, m_shooter));
+
+    // Run the feeder when the 'X' button is held, but only if the shooter is at speed
+    new JoystickButton(m_driverController, Button.kX.value).whenPressed(new ConditionalCommand(
+        // Run the feeder
+        new InstantCommand(m_shooter::runFeeder, m_shooter),
+        // Do nothing
+        new InstantCommand(),
+        // Determine which of the above to do based on whether the shooter has reached the
+        // desired speed
+        m_shooter::atSetpoint)).whenReleased(new InstantCommand(m_shooter::stopFeeder, m_shooter));
   }
 
 
