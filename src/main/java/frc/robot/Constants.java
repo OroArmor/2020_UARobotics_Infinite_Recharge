@@ -19,13 +19,13 @@ package frc.robot;
 // TODO Need to tweak almost all of these constants.  Also going to use preferences to control some of the more variable things.
 public final class Constants {
     public static final class DriveConstants {
-        public static final int kLeftMotor1Port = 1;
-        public static final int kLeftMotor2Port = 2;
-        public static final int kRightMotor1Port = 3;
-        public static final int kRightMotor2Port = 4;
+        public static final int kLeftMotor1Port = 0;
+        public static final int kLeftMotor2Port = 1;
+        public static final int kRightMotor1Port = 2;
+        public static final int kRightMotor2Port = 3;
     
-        public static final int[] kLeftEncoderPorts = new int[]{1, 2};
-        public static final int[] kRightEncoderPorts = new int[]{3, 4};
+        public static final int[] kLeftEncoderPorts = new int[]{0, 1};
+        public static final int[] kRightEncoderPorts = new int[]{2, 3};
         public static final boolean kLeftEncoderReversed = false;
         public static final boolean kRightEncoderReversed = true;
     
@@ -37,15 +37,15 @@ public final class Constants {
     }
     
     public static final class ShooterConstants {
-        public static final int[] kEncoderPorts = new int[]{5, 6};
+        public static final int[] kEncoderPorts = new int[]{4, 5};
         public static final boolean kEncoderReversed = false;
         public static final int kEncoderCPR = 1024;
         public static final double kEncoderDistancePerPulse =
             // Distance units will be rotations
             1.0 / (double) kEncoderCPR;
     
-        public static final int kShooterMotorPort = 5;
-        public static final int kFeederMotorPort = 6;
+        public static final int kShooterMotorPort = 4;
+        public static final int kFeederMotorPort = 5;
     
         public static final double kShooterFreeRPS = 5300;
         public static final double kShooterTargetRPS = 4000;
