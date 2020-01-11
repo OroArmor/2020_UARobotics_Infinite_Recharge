@@ -42,6 +42,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
+  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
@@ -56,6 +57,16 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    // Configure default commands
+    // Set the default drive command to split-stick arcade drive
+    m_robotDrive.setDefaultCommand(
+        // A split-stick arcade command, with forward/backward controlled by the left
+        // hand, and turning controlled by the right.
+        new RunCommand(() -> m_robotDrive
+            .arcadeDrive(m_driverController.getY(GenericHID.Hand.kLeft),
+                         m_driverController.getX(GenericHID.Hand.kRight)), m_robotDrive));
+
   }
 
   /**
