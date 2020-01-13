@@ -66,6 +66,13 @@ public final class Constants {
         public static final double kFeederSpeed = 0.5;
     }
     
+    public static final class ControlPanelConstants {
+        public static final int kSolenoidPort = 0;
+        public static final int kSpinWheelPort = 0;
+        public static final double kWheelSpeedFast = 0.6;
+        public static final double kWheelSpeedSlow = 0.1;
+    }
+
     public static final class AutoConstants {
         public static final double kAutoTimeoutSeconds = 12;
         public static final double kAutoShootTimeSeconds = 7;

@@ -43,6 +43,7 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  //private final ControlPanelSubsystem m_controlpanel = new ControlPanelSubsystem();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
