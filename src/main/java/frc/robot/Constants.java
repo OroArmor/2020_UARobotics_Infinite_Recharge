@@ -70,6 +70,11 @@ public final class Constants {
         public static final double kAutoTimeoutSeconds = 12;
         public static final double kAutoShootTimeSeconds = 7;
     }
+
+    public static final class LEDConstants {
+        public static final int kLEDPWMPort = 0;
+        public static final int kBufferSize = 60;
+    }
     
     public static final class OIConstants {
         public static final int kDriverControllerPort = 1;

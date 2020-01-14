@@ -26,6 +26,7 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 
 // Constant Imports
 import frc.robot.Constants.AutoConstants;
@@ -43,6 +44,7 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final LEDSubsystem m_LED = new LEDSubsystem();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
@@ -94,6 +96,10 @@ public class RobotContainer {
         // Determine which of the above to do based on whether the shooter has reached the
         // desired speed
         m_shooter::atSetpoint)).whenReleased(new InstantCommand(m_shooter::stopFeeder, m_shooter));
+
+    // Rainbow Pattern on LEDs when 'Y' button is pressed
+    new JoystickButton(m_driverController, Button.kY.value)
+      .whenPressed(new InstantCommand(m_LED::rainbow, m_LED));
   }
 
 
