@@ -68,7 +68,10 @@ public class RobotContainer {
         new RunCommand(() -> m_robotDrive
             .arcadeDrive(m_driverController.getY(GenericHID.Hand.kLeft),
                          m_driverController.getX(GenericHID.Hand.kRight)), m_robotDrive));
-
+                         
+    // Sets the LEDs to start up with a rainbow config
+    m_LED.setDefaultCommand(
+      new RunCommand(() -> m_LED.rainbow()));
   }
 
   /**

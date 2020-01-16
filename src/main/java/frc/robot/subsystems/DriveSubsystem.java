@@ -12,6 +12,10 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 
 import frc.robot.Constants.DriveConstants;
 
@@ -25,7 +29,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   // Pigeon is plugged into the second talon on the left side
   private final PigeonIMU m_pigeon = new PigeonIMU(m_talonsrxleft2);
-  
+	
+	// Odometry class for tracking robot pose
+  private final DifferentialDriveOdometry m_odometry;
+
   /** Tracking variables */
 	boolean _firstCall = false;
 	boolean _state = false;
@@ -36,6 +43,12 @@ public class DriveSubsystem extends SubsystemBase {
    * Creates a new DriveSubsystem.
    */
   public DriveSubsystem() {
+		m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
+
+			// Set followers
+		m_talonsrxleft2.set(ControlMode.Follower, DriveConstants.kLeftMotor1Port);
+		m_victorspxright.set(ControlMode.Follower, DriveConstants.kRightMotor1Port);
+
     /* Disable all motor controllers */
 		m_talonsrxright.set(ControlMode.PercentOutput, 0);
 		m_talonsrxleft.set(ControlMode.PercentOutput, 0);
@@ -63,7 +76,7 @@ public class DriveSubsystem extends SubsystemBase {
 													DriveConstants.kTimeoutMs);			// Configuration Timeout
 		
 		/* Scale the Selected Sensor using a coefficient (Values explained in Constants.java */
-		m_talonsrxright.configSelectedFeedbackCoefficient(	Constants.kTurnTravelUnitsPerRotation / Constants.kPigeonUnitsPerRotation,	// Coefficient
+		m_talonsrxright.configSelectedFeedbackCoefficient(	DriveConstants.kTurnTravelUnitsPerRotation / DriveConstants.kPigeonUnitsPerRotation,	// Coefficient
                             DriveConstants.PID_TURN, 														// PID Slot of Source
 														DriveConstants.kTimeoutMs);														// Configuration Timeout
 		/* Configure output and sensor direction */
@@ -106,14 +119,14 @@ public class DriveSubsystem extends SubsystemBase {
 		 * - sensor movement is very slow causing the derivative error to be near zero.
 		 */
         int closedLoopTimeMs = 1;
-        m_talonsrxright.configClosedLoopPeriod(0, closedLoopTimeMs, Constants.kTimeoutMs);
-        m_talonsrxright.configClosedLoopPeriod(1, closedLoopTimeMs, Constants.kTimeoutMs);
+        m_talonsrxright.configClosedLoopPeriod(0, closedLoopTimeMs, DriveConstants.kTimeoutMs);
+        m_talonsrxright.configClosedLoopPeriod(1, closedLoopTimeMs, DriveConstants.kTimeoutMs);
 
 		/* configAuxPIDPolarity(boolean invert, int timeoutMs)
 		 * false means talon's local output is PID0 + PID1, and other side Talon is PID0 - PID1
 		 * true means talon's local output is PID0 - PID1, and other side Talon is PID0 + PID1
 		 */
-		m_talonsrxright.configAuxPIDPolarity(false, Constants.kTimeoutMs);
+		m_talonsrxright.configAuxPIDPolarity(false, DriveConstants.kTimeoutMs);
 
 		/* Initialize */
 		_firstCall = true;
@@ -129,15 +142,18 @@ public class DriveSubsystem extends SubsystemBase {
    * @param rot the commanded rotation
    */
   public void arcadeDrive(double fwd, double rot) {
-    m_drive.arcadeDrive(fwd, rot);
+		fwd = Deadband(fwd);
+		rot = Deadband(rot);
+		m_talonsrxleft.set(ControlMode.PercentOutput, fwd, DemandType.ArbitraryFeedForward, +rot);
+		m_talonsrxright.set(ControlMode.PercentOutput, fwd, DemandType.ArbitraryFeedForward, -rot);
   }
 
   /**
    * Resets the drive encoders to currently read a position of 0.
    */
   public void resetEncoders() {
-    m_leftEncoder.reset();
-    m_rightEncoder.reset();
+    m_talonsrxleft.setSelectedSensorPosition(0);
+    m_talonsrxright.setSelectedSensorPosition(0);
   }
 
   /**
@@ -146,34 +162,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return the average of the two encoder readings
    */
   public double getAverageEncoderDistance() {
-    return (m_leftEncoder.getDistance() + m_rightEncoder.getDistance()) / 2.0;
-  }
-
-  /**
-   * Gets the left drive encoder.
-   *
-   * @return the left drive encoder
-   */
-  public Encoder getLeftEncoder() {
-    return m_leftEncoder;
-  }
-
-  /**
-   * Gets the right drive encoder.
-   *
-   * @return the right drive encoder
-   */
-  public Encoder getRightEncoder() {
-    return m_rightEncoder;
-  }
-
-  /**
-   * Sets the max output of the drive.  Useful for scaling the drive to drive more slowly.
-   *
-   * @param maxOutput the maximum output to which the drive will be constrained
-   */
-  public void setMaxOutput(double maxOutput) {
-    m_drive.setMaxOutput(maxOutput);
+    return (m_talonsrxleft.getSelectedSensorPosition() + m_talonsrxright.getSelectedSensorPosition()) / 2.0;
   }
 
   /** Deadband 5 percent, used on the gamepad */
@@ -192,8 +181,19 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Zero all sensors used. */
 	void zeroHeading() {
-		_pidgey.setYaw(0, Constants.kTimeoutMs);
-		_pidgey.setAccumZAngle(0, Constants.kTimeoutMs);
+		m_pigeon.setYaw(0, DriveConstants.kTimeoutMs);
+		m_pigeon.setAccumZAngle(0, DriveConstants.kTimeoutMs);
 		System.out.println("[Pigeon] All sensors are zeroed.\n");
 	}
+
+	/**
+   * Returns the heading of the robot.
+   *
+   * @return the robot's heading in degrees, from 180 to 180
+   */
+  public double getHeading() {
+		double [] ypr = new double[3];
+		m_pigeon.getYawPitchRoll(ypr);
+    return Math.IEEEremainder(ypr[0], 360);
+  }
 }
