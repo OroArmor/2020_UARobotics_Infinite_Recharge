@@ -135,6 +135,42 @@ public class DriveSubsystem extends SubsystemBase {
 		zeroHeading();
   }
 
+	@Override
+  public void periodic() {
+    // Update the odometry in the periodic block
+    m_odometry.update(Rotation2d.fromDegrees(getHeading()), m_talonsrxleft.getSelectedSensorPosition()*DriveConstants.kEncoderDistancePerPulse,
+			m_talonsrxright.getSelectedSensorPosition()*DriveConstants.kEncoderDistancePerPulse);
+  }
+
+  /**
+   * Returns the currently-estimated pose of the robot.
+   *
+   * @return The pose.
+   */
+  public Pose2d getPose() {
+    return m_odometry.getPoseMeters();
+  }
+
+  /**
+   * Returns the current wheel speeds of the robot.
+   *
+   * @return The current wheel speeds.
+   */
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+		return new DifferentialDriveWheelSpeeds(m_talonsrxleft.getSelectedSensorVelocity()*DriveConstants.kEncoderDistancePerPulse
+			, m_talonsrxright.getSelectedSensorVelocity()*DriveConstants.kEncoderDistancePerPulse);
+  }
+
+  /**
+   * Resets the odometry to the specified pose.
+   *
+   * @param pose The pose to which to set the odometry.
+   */
+  public void resetOdometry(Pose2d pose) {
+    resetEncoders();
+    m_odometry.resetPosition(pose, Rotation2d.fromDegrees(getHeading()));
+  }
+
   /**
    * Drives the robot using arcade controls.
    *
@@ -162,7 +198,8 @@ public class DriveSubsystem extends SubsystemBase {
    * @return the average of the two encoder readings
    */
   public double getAverageEncoderDistance() {
-    return (m_talonsrxleft.getSelectedSensorPosition() + m_talonsrxright.getSelectedSensorPosition()) / 2.0;
+		return (m_talonsrxleft.getSelectedSensorPosition()*DriveConstants.kEncoderDistancePerPulse
+		  + m_talonsrxright.getSelectedSensorPosition()*DriveConstants.kEncoderDistancePerPulse) / 2.0;
   }
 
   /** Deadband 5 percent, used on the gamepad */
