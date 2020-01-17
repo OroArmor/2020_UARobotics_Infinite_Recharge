@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 
 import frc.robot.Constants.DriveConstants;
+import io.github.oblarg.oblog.annotations.Log;
 
 public class DriveSubsystem extends SubsystemBase {
   // TODO Need to fill in which Motor Controllers are actually being used on the drive
@@ -147,6 +148,7 @@ public class DriveSubsystem extends SubsystemBase {
    *
    * @return The pose.
    */
+	@Log
   public Pose2d getPose() {
     return m_odometry.getPoseMeters();
   }
@@ -156,6 +158,7 @@ public class DriveSubsystem extends SubsystemBase {
    *
    * @return The current wheel speeds.
    */
+	@Log
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
 		return new DifferentialDriveWheelSpeeds(m_talonsrxleft.getSelectedSensorVelocity()*DriveConstants.kEncoderDistancePerPulse
 			, m_talonsrxright.getSelectedSensorVelocity()*DriveConstants.kEncoderDistancePerPulse);
@@ -197,6 +200,7 @@ public class DriveSubsystem extends SubsystemBase {
    *
    * @return the average of the two encoder readings
    */
+	@Log
   public double getAverageEncoderDistance() {
 		return (m_talonsrxleft.getSelectedSensorPosition()*DriveConstants.kEncoderDistancePerPulse
 		  + m_talonsrxright.getSelectedSensorPosition()*DriveConstants.kEncoderDistancePerPulse) / 2.0;
@@ -228,6 +232,7 @@ public class DriveSubsystem extends SubsystemBase {
    *
    * @return the robot's heading in degrees, from 180 to 180
    */
+	@Log
   public double getHeading() {
 		double [] ypr = new double[3];
 		m_pigeon.getYawPitchRoll(ypr);

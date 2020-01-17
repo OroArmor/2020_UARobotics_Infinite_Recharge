@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import io.github.oblarg.oblog.annotations.Config;
+import io.github.oblarg.oblog.annotations.Log;
 
 // Command Imports
 import frc.robot.commands.ExampleCommand;
@@ -32,7 +34,6 @@ import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
 
-
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -42,15 +43,20 @@ import frc.robot.Constants.OIConstants;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  @Log
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
+  @Log
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  @Log
   private final LEDSubsystem m_LED = new LEDSubsystem();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
   // The driver's controller
+  @Config
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   // The operator's controller
+  @Config
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
 
   /**
