@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import io.github.oblarg.oblog.annotations.Config;
+import io.github.oblarg.oblog.annotations.Log;
 
 // Command Imports
 import frc.robot.commands.ExampleCommand;
@@ -26,11 +28,11 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 
 // Constant Imports
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
-
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -41,15 +43,22 @@ import frc.robot.Constants.OIConstants;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  @Log
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
+  @Log
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  //private final ControlPanelSubsystem m_controlpanel = new ControlPanelSubsystem();
+  @Log
+  private final ControlPanelSubsystem m_controlpanel = new ControlPanelSubsystem();
+  @Log
+  private final LEDSubsystem m_LED = new LEDSubsystem();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
   // The driver's controller
+  @Config
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   // The operator's controller
+  @Config
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
 
   /**
@@ -67,7 +76,10 @@ public class RobotContainer {
         new RunCommand(() -> m_robotDrive
             .arcadeDrive(m_driverController.getY(GenericHID.Hand.kLeft),
                          m_driverController.getX(GenericHID.Hand.kRight)), m_robotDrive));
-
+                         
+    // Sets the LEDs to start up with a rainbow config
+    m_LED.setDefaultCommand(
+      new RunCommand(() -> m_LED.rainbow()));
   }
 
   /**
@@ -95,6 +107,10 @@ public class RobotContainer {
         // Determine which of the above to do based on whether the shooter has reached the
         // desired speed
         m_shooter::atSetpoint)).whenReleased(new InstantCommand(m_shooter::stopFeeder, m_shooter));
+
+    // Rainbow Pattern on LEDs when 'Y' button is pressed
+    new JoystickButton(m_driverController, Button.kY.value)
+      .whenPressed(new InstantCommand(m_LED::rainbow, m_LED));
   }
 
 
