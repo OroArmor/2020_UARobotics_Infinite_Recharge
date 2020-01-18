@@ -48,6 +48,8 @@ public class RobotContainer {
   @Log
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   @Log
+  private final ControlPanelSubsystem m_controlpanel = new ControlPanelSubsystem();
+  @Log
   private final LEDSubsystem m_LED = new LEDSubsystem();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
