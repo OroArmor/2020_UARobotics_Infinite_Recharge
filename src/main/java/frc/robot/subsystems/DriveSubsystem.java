@@ -18,9 +18,11 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 
 import frc.robot.Constants.DriveConstants;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
-public class DriveSubsystem extends SubsystemBase {
+public class DriveSubsystem extends SubsystemBase implements Loggable{
   // TODO Need to fill in which Motor Controllers are actually being used on the drive
   // The motors on the left and right side of the drivetrain
   private final TalonSRX m_talonsrxleft = new TalonSRX(DriveConstants.kLeftMotor1Port);
