@@ -29,6 +29,7 @@ import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.ControlPanelSubsystem;
 
 // Constant Imports
 import frc.robot.Constants.AutoConstants;
@@ -78,8 +79,7 @@ public class RobotContainer {
                          m_driverController.getX(GenericHID.Hand.kRight)), m_robotDrive));
                          
     // Sets the LEDs to start up with a rainbow config
-    m_LED.setDefaultCommand(
-      new RunCommand(() -> m_LED.rainbow()));
+    m_LED.rainbow();
   }
 
   /**

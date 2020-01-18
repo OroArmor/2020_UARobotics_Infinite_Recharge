@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
@@ -9,12 +8,16 @@ import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
 import frc.robot.Constants.ShooterConstants;
 
 public class ShooterSubsystem extends PIDSubsystem implements Loggable{
   // TODO need to change the lines below to our actual motor controllers 
-  private final PWMVictorSPX m_shooterMotor = new PWMVictorSPX(ShooterConstants.kShooterMotorPort);
-  private final PWMVictorSPX m_feederMotor = new PWMVictorSPX(ShooterConstants.kFeederMotorPort);
+  @Log
+  private final WPI_VictorSPX m_shooterMotor = new WPI_VictorSPX(ShooterConstants.kShooterMotorPort);
+  @Log
+  private final WPI_VictorSPX m_feederMotor = new WPI_VictorSPX(ShooterConstants.kFeederMotorPort);
   
   private final Encoder m_shooterEncoder =
       new Encoder(ShooterConstants.kEncoderPorts[0], ShooterConstants.kEncoderPorts[1],

@@ -5,11 +5,10 @@ import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
@@ -24,11 +23,15 @@ import io.github.oblarg.oblog.annotations.Log;
 
 public class DriveSubsystem extends SubsystemBase implements Loggable{
   // TODO Need to fill in which Motor Controllers are actually being used on the drive
-  // The motors on the left and right side of the drivetrain
-  private final TalonSRX m_talonsrxleft = new TalonSRX(DriveConstants.kLeftMotor1Port);
-  private final TalonSRX m_talonsrxleft2 = new TalonSRX(DriveConstants.kLeftMotor2Port);
-  private final TalonSRX m_talonsrxright = new TalonSRX(DriveConstants.kRightMotor1Port);
-  private final VictorSPX m_victorspxright = new VictorSPX(DriveConstants.kRightMotor2Port);
+	// The motors on the left and right side of the drivetrain
+	@Log
+	private final WPI_TalonSRX m_talonsrxleft = new WPI_TalonSRX(DriveConstants.kLeftMotor1Port);
+	@Log
+	private final WPI_TalonSRX m_talonsrxleft2 = new WPI_TalonSRX(DriveConstants.kLeftMotor2Port);
+	@Log
+	private final WPI_TalonSRX m_talonsrxright = new WPI_TalonSRX(DriveConstants.kRightMotor1Port);
+	@Log
+  private final WPI_VictorSPX m_victorspxright = new WPI_VictorSPX(DriveConstants.kRightMotor2Port);
 
   // Pigeon is plugged into the second talon on the left side
   private final PigeonIMU m_pigeon = new PigeonIMU(m_talonsrxleft2);
@@ -150,7 +153,6 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
    *
    * @return The pose.
    */
-	@Log
   public Pose2d getPose() {
     return m_odometry.getPoseMeters();
   }
@@ -160,7 +162,6 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
    *
    * @return The current wheel speeds.
    */
-	@Log
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
 		return new DifferentialDriveWheelSpeeds(m_talonsrxleft.getSelectedSensorVelocity()*DriveConstants.kEncoderDistancePerPulse
 			, m_talonsrxright.getSelectedSensorVelocity()*DriveConstants.kEncoderDistancePerPulse);
