@@ -71,6 +71,10 @@ public final class Constants {
         public static final int kSpinWheelPort = 0;
         public static final double kWheelSpeedFast = 0.6;
         public static final double kWheelSpeedSlow = 0.1;
+        public static final double colorwheel_past = 2;
+        public static final double colorwheel_slow = 0.2;
+        public static final double colorwheel_fast = 0.3;
+        public static final double colorwheel_ticks = 110;
     }
 
     public static final class AutoConstants {

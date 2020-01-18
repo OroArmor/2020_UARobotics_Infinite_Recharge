@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -46,7 +45,7 @@ public class ControlPanelSubsystem extends SubsystemBase {
    * with given confidence range.
    */
   private final ColorMatch m_colorMatcher = new ColorMatch();
-
+  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   /**
    * Note: Any example colors should be calibrated as the user needs, these are
    * here as a basic example.
@@ -55,7 +54,6 @@ public class ControlPanelSubsystem extends SubsystemBase {
   public static final Color kGreenTarget = ColorMatch.makeColor(0.196, 0.557, 0.246);
   public static final Color kRedTarget = ColorMatch.makeColor(0.475, 0.371, 0.153);
   public static final Color kYellowTarget = ColorMatch.makeColor(0.293, 0.561, 0.144);
-
   private ColorMatchResult matchedResult = new ColorMatchResult(Color.kBlack, 0);
 
   // Rev Color threshold
@@ -88,7 +86,7 @@ public class ControlPanelSubsystem extends SubsystemBase {
         spinwheel.set(ControlMode.PercentOutput, 0);
     }
     else if ( state == State.ENC_ROTATE ) {
-        if ( spinwheel.getEncPosition() < ControlPanelConstants.kWheelSpeedFast ) {
+        if ( spinwheel.getSelectedSensorPosition() < ControlPanelConstants.kWheelSpeedFast ) {
             spinwheel.set(ControlMode.PercentOutput, ControlPanelConstants.kWheelSpeedFast);
         }
         else {
@@ -96,17 +94,17 @@ public class ControlPanelSubsystem extends SubsystemBase {
         }
     }
     else if ( state == State.COLOR_ROTATE ) {
-        if ( matcher.get_color() != expectedColor ) {
-            spinwheel.set(constants.colorwheel_slow);
+        if ( get_color() != kRedTarget ) {
+            spinwheel.set(ControlMode.PercentOutput, ControlPanelConstants.colorwheel_slow);
         }
         else {
             state = State.COLOR_ROTATE_FINAL;
-            target_rotation = constants.colorwheel_past + drive.getEncoder().getPosition();
+            target_rotation = ControlPanelConstants.colorwheel_past + m_robotDrive.getAverageEncoderDistance();
         }
     }
     else if ( state == State.COLOR_ROTATE_FINAL ) {
-        if ( spinwheel.getEncoder().getPosition() < target_rotation ) {
-            spinwheel.set(constants.colorwheel_slow);
+        if ( spinwheel.getSelectedSensorPosition() < target_rotation ) {
+            spinwheel.set(ControlMode.PercentOutput, ControlPanelConstants.colorwheel_slow);
         }
         else
             state = State.DISABLED;
@@ -130,6 +128,7 @@ public class ControlPanelSubsystem extends SubsystemBase {
      * Run the color match algorithm on our detected color
      */
     String colorString;
+    
     ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
 
     if (match.color == kBlueTarget) {
@@ -147,11 +146,52 @@ public class ControlPanelSubsystem extends SubsystemBase {
     /**
      * Open Smart Dashboard or Shuffleboard to see the color detected by the sensor.
      */
-    SmartDashboard.putNumber("Red", detectedColor.red);
-    SmartDashboard.putNumber("Green", detectedColor.green);
-    SmartDashboard.putNumber("Blue", detectedColor.blue);
-    SmartDashboard.putNumber("Confidence", match.confidence);
-    SmartDashboard.putString("Detected Color", colorString);
+    //SmartDashboard.putNumber("Red", detectedColor.red);
+    //SmartDashboard.putNumber("Green", detectedColor.green);
+    //SmartDashboard.putNumber("Blue", detectedColor.blue);
+    //SmartDashboard.putNumber("Confidence", match.confidence);
+    //SmartDashboard.putString("Detected Color", colorString);
     return match.color;
   }
+
+  /* public void StartColorFind() {
+    byte index;
+    //if a color wheel operation is going, don't change it
+    if(seq.isRunning() == true) return;
+
+    String gameData = DriverStation.getInstance().getGameSpecificMessage();
+
+    //get the color target
+    if (gameData.length() > 0) {
+        switch (gameData.charAt(0)) {
+        case 'G':
+            index = 0;
+            break;
+        case 'R':
+            index = 1;
+            break;
+        case 'Y':
+            index = 2;
+            break;
+        case 'B':
+            index = 3;
+            break;
+        default:
+            index = 100;
+            break;
+        }
+    } else {
+        index = 100;
+    }
+
+    //start the color finding
+    if(index >= 4) {
+        System.out.println("No color was provided to spin to.");
+    } else {
+        //need to rotate around the table.  We look at it from the far left, and need to rotate it 3 slots left, or 1 right, over to be what needs to be under the sensor.
+        index = (byte)((index + 1) % 4);
+    
+        seq.addStep(new FindColorWheelSlot(ColorWheel[index]));
+    }
+  } */
 }
