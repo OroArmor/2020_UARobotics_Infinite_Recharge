@@ -5,6 +5,10 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DriverStation;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Config;
+import io.github.oblarg.oblog.annotations.Log;
+
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -15,7 +19,7 @@ import com.revrobotics.ColorMatch;
 
 import frc.robot.Constants.ControlPanelConstants;
 
-public class ControlPanelSubsystem extends SubsystemBase {
+public class ControlPanelSubsystem extends SubsystemBase implements Loggable{
   /**
    * Change the I2C port below to match the connection of your color sensor
    */

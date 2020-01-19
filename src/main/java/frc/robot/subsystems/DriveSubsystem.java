@@ -124,28 +124,30 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
 		 * - sensor deltas are very small per update, so derivative error never gets large enough to be useful.
 		 * - sensor movement is very slow causing the derivative error to be near zero.
 		 */
-        int closedLoopTimeMs = 1;
-        m_talonsrxright.configClosedLoopPeriod(0, closedLoopTimeMs, DriveConstants.kTimeoutMs);
-        m_talonsrxright.configClosedLoopPeriod(1, closedLoopTimeMs, DriveConstants.kTimeoutMs);
+        final int closedLoopTimeMs = 1;
+    m_talonsrxright.configClosedLoopPeriod(0, closedLoopTimeMs, DriveConstants.kTimeoutMs);
+    m_talonsrxright.configClosedLoopPeriod(1, closedLoopTimeMs, DriveConstants.kTimeoutMs);
 
-		/* configAuxPIDPolarity(boolean invert, int timeoutMs)
-		 * false means talon's local output is PID0 + PID1, and other side Talon is PID0 - PID1
-		 * true means talon's local output is PID0 - PID1, and other side Talon is PID0 + PID1
-		 */
-		m_talonsrxright.configAuxPIDPolarity(false, DriveConstants.kTimeoutMs);
+    /*
+     * configAuxPIDPolarity(boolean invert, int timeoutMs) false means talon's local
+     * output is PID0 + PID1, and other side Talon is PID0 - PID1 true means talon's
+     * local output is PID0 - PID1, and other side Talon is PID0 + PID1
+     */
+    m_talonsrxright.configAuxPIDPolarity(false, DriveConstants.kTimeoutMs);
 
-		/* Initialize */
-		_firstCall = true;
-		_state = false;
-		_printCount = 0;
-		zeroHeading();
+    /* Initialize */
+    _firstCall = true;
+    _state = false;
+    _printCount = 0;
+    zeroHeading();
   }
 
-	@Override
+  @Override
   public void periodic() {
     // Update the odometry in the periodic block
-    m_odometry.update(Rotation2d.fromDegrees(getHeading()), m_talonsrxleft.getSelectedSensorPosition()*DriveConstants.kEncoderDistancePerPulse,
-			m_talonsrxright.getSelectedSensorPosition()*DriveConstants.kEncoderDistancePerPulse);
+    m_odometry.update(Rotation2d.fromDegrees(getHeading()),
+        m_talonsrxleft.getSelectedSensorPosition() * DriveConstants.kEncoderDistancePerPulse,
+        m_talonsrxright.getSelectedSensorPosition() * DriveConstants.kEncoderDistancePerPulse);
   }
 
   /**
@@ -163,8 +165,9 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
    * @return The current wheel speeds.
    */
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-		return new DifferentialDriveWheelSpeeds(m_talonsrxleft.getSelectedSensorVelocity()*DriveConstants.kEncoderDistancePerPulse
-			, m_talonsrxright.getSelectedSensorVelocity()*DriveConstants.kEncoderDistancePerPulse);
+    return new DifferentialDriveWheelSpeeds(
+        m_talonsrxleft.getSelectedSensorVelocity() * DriveConstants.kEncoderDistancePerPulse,
+        m_talonsrxright.getSelectedSensorVelocity() * DriveConstants.kEncoderDistancePerPulse);
   }
 
   /**
@@ -172,7 +175,7 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
    *
    * @param pose The pose to which to set the odometry.
    */
-  public void resetOdometry(Pose2d pose) {
+  public void resetOdometry(final Pose2d pose) {
     resetEncoders();
     m_odometry.resetPosition(pose, Rotation2d.fromDegrees(getHeading()));
   }
@@ -184,10 +187,10 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
    * @param rot the commanded rotation
    */
   public void arcadeDrive(double fwd, double rot) {
-		fwd = Deadband(fwd);
-		rot = Deadband(rot);
-		m_talonsrxleft.set(ControlMode.PercentOutput, fwd, DemandType.ArbitraryFeedForward, +rot);
-		m_talonsrxright.set(ControlMode.PercentOutput, fwd, DemandType.ArbitraryFeedForward, -rot);
+    fwd = Deadband(fwd);
+    rot = Deadband(rot);
+    m_talonsrxleft.set(ControlMode.PercentOutput, fwd, DemandType.ArbitraryFeedForward, +rot);
+    m_talonsrxright.set(ControlMode.PercentOutput, fwd, DemandType.ArbitraryFeedForward, -rot);
   }
 
   /**
@@ -203,41 +206,41 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
    *
    * @return the average of the two encoder readings
    */
-	@Log
+  @Log
   public double getAverageEncoderDistance() {
-		return (m_talonsrxleft.getSelectedSensorPosition()*DriveConstants.kEncoderDistancePerPulse
-		  + m_talonsrxright.getSelectedSensorPosition()*DriveConstants.kEncoderDistancePerPulse) / 2.0;
+    return (m_talonsrxleft.getSelectedSensorPosition() * DriveConstants.kEncoderDistancePerPulse
+        + m_talonsrxright.getSelectedSensorPosition() * DriveConstants.kEncoderDistancePerPulse) / 2.0;
   }
 
   /** Deadband 5 percent, used on the gamepad */
-	double Deadband(double value) {
-		/* Upper deadband */
-		if (value >= +0.05) 
-			return value;
-		
-		/* Lower deadband */
-		if (value <= -0.05)
-			return value;
-		
-		/* Outside deadband */
-		return 0;
-	}
+  double Deadband(final double value) {
+    /* Upper deadband */
+    if (value >= +0.05)
+      return value;
+
+    /* Lower deadband */
+    if (value <= -0.05)
+      return value;
+
+    /* Outside deadband */
+    return 0;
+  }
 
   /** Zero all sensors used. */
-	void zeroHeading() {
-		m_pigeon.setYaw(0, DriveConstants.kTimeoutMs);
-		m_pigeon.setAccumZAngle(0, DriveConstants.kTimeoutMs);
-		System.out.println("[Pigeon] All sensors are zeroed.\n");
-	}
+  void zeroHeading() {
+    m_pigeon.setYaw(0, DriveConstants.kTimeoutMs);
+    m_pigeon.setAccumZAngle(0, DriveConstants.kTimeoutMs);
+    System.out.println("[Pigeon] All sensors are zeroed.\n");
+  }
 
-	/**
+  /**
    * Returns the heading of the robot.
    *
    * @return the robot's heading in degrees, from 180 to 180
    */
-	@Log
+  @Log
   public double getHeading() {
-		double [] ypr = new double[3];
+    final double[] ypr = new double[3];
 		m_pigeon.getYawPitchRoll(ypr);
     return Math.IEEEremainder(ypr[0], 360);
   }
