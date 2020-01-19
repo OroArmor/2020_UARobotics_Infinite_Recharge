@@ -27,14 +27,16 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
 	@Log
 	private final WPI_TalonSRX m_talonsrxleft = new WPI_TalonSRX(DriveConstants.kLeftMotor1Port);
 	@Log
-	private final WPI_TalonSRX m_talonsrxleft2 = new WPI_TalonSRX(DriveConstants.kLeftMotor2Port);
+	private final WPI_VictorSPX m_talonsrxleft2 = new WPI_VictorSPX(DriveConstants.kLeftMotor2Port);
 	@Log
 	private final WPI_TalonSRX m_talonsrxright = new WPI_TalonSRX(DriveConstants.kRightMotor1Port);
 	@Log
   private final WPI_VictorSPX m_victorspxright = new WPI_VictorSPX(DriveConstants.kRightMotor2Port);
+  @Log
+	private final WPI_TalonSRX m_talonsrxright2 = new WPI_TalonSRX(DriveConstants.kPigeonPort);
 
   // Pigeon is plugged into the second talon on the left side
-  private final PigeonIMU m_pigeon = new PigeonIMU(m_talonsrxleft2);
+  private final PigeonIMU m_pigeon = new PigeonIMU(m_talonsrxright2);
 	
 	// Odometry class for tracking robot pose
   private final DifferentialDriveOdometry m_odometry;
