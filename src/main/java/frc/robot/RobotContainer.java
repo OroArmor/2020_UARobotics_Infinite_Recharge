@@ -30,6 +30,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ControlPanelSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 // Constant Imports
 import frc.robot.Constants.AutoConstants;
@@ -52,6 +53,8 @@ public class RobotContainer {
   private final ControlPanelSubsystem m_controlpanel = new ControlPanelSubsystem();
   @Log
   private final LEDSubsystem m_LED = new LEDSubsystem();
+  @Log
+  private final IntakeSubsystem m_intake = new IntakeSubsystem();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
@@ -77,6 +80,11 @@ public class RobotContainer {
         new RunCommand(() -> m_robotDrive
             .arcadeDrive(-m_driverController.getY(GenericHID.Hand.kLeft),
                          m_driverController.getX(GenericHID.Hand.kRight)), m_robotDrive));
+
+    m_intake.setDefaultCommand(
+        // Use right trigger to control the speed of the intake
+        new RunCommand(() -> m_intake
+            .setOutput(m_driverController.getRawAxis(3), m_intake)));
                          
     // Sets the LEDs to start up with a rainbow config
     m_LED.rainbow();
@@ -108,9 +116,9 @@ public class RobotContainer {
         // desired speed
         m_shooter::atSetpoint)).whenReleased(new InstantCommand(m_shooter::stopFeeder, m_shooter));
 
-    // Rainbow Pattern on LEDs when 'Y' button is pressed
-    new JoystickButton(m_driverController, Button.kY.value)
-      .whenPressed(new InstantCommand(m_LED::rainbow, m_LED));
+    // Spin up the shooter when the 'A' button is pressed
+    new JoystickButton(m_operatorController, Button.kBumperRight.value)
+      .whenPressed(new InstantCommand(m_intake::toggleIntakePosition, m_intake));
   }
 
 

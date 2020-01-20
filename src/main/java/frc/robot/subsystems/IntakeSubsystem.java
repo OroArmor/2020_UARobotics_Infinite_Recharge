@@ -27,11 +27,6 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable{
         setSetpoint(0);
     }
 
-    @Override
-    public void useOutput(double output, double setpoint) {
-        m_shooterMotor.setVoltage(output + m_shooterFeedforward.calculate(setpoint));
-    }
-
     public void setOutput(double speed) {
         @Log
         m_IntakeMotor.set(ControlMode.PercentOutput, speed);
@@ -41,7 +36,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable{
         m_ConveyorMotor2.set(ControlMode.PercentOutput, speed);
     }
 
-    public void setIntakePosition(int extend) {
+    public void toggleIntakePosition(int extend) {
         @Log
         m_intakeSolenoid1.set(DoubleSolenoid.Value.kForward);
         @Log
