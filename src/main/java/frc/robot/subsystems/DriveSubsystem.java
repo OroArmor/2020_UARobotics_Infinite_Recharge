@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.controller.PIDController;
 
 import frc.robot.Constants.DriveConstants;
 import io.github.oblarg.oblog.Loggable;
@@ -40,6 +41,9 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
 	
 	// Odometry class for tracking robot pose
   private final DifferentialDriveOdometry m_odometry;
+
+  // PID Controller for Driving straight with Gyro
+  private final PIDController m_gyropid = new PIDController(DriveConstants.kGyroPID, 0, 0);
 
   /** Tracking variables */
 	boolean _firstCall = false;
