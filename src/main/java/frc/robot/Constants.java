@@ -117,8 +117,9 @@ public final class Constants {
         public static final int kShooterMotorPort = 5;
         public static final int kFeederMotorPort = 6;
     
-        public static final double kShooterFreeRPS = 5300;
-        public static final double kShooterTargetRPS = 4000;
+        public static final double kShooterFarTrenchRPS = 6000;
+        public static final double kShooterNearTrenchRPS = 5000;
+        public static final double kShooterAutoLineRPS = 4000;
         public static final double kShooterToleranceRPS = 50;
     
         // These are not real PID gains, and will have to be tuned for your specific robot.
