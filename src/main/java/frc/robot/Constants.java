@@ -172,4 +172,14 @@ public final class Constants {
         public static final int kDriverControllerPort = 1;
         public static final int kOperatorControllerPort = 2;
     }
+
+    public static final class IntakeConstants {
+        public static final int kIntakeControllerPort = 1;
+        public static final int kConveyor1ControllerPort = 2;
+        public static final int kConveyor2ControllerPort = 3;
+        public static final int kSolenoid1ControllerPort = 1;
+        public static final int kSolenoid2ControllerPort = 2;
+        public static final int kSolenoid3ControllerPort = 3;
+        public static final int kSolenoid4ControllerPort = 4;
+    }
 }
