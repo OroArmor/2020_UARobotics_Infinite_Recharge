@@ -84,7 +84,7 @@ public class RobotContainer {
     m_intake.setDefaultCommand(
         // Use right trigger to control the speed of the intake
         new RunCommand(() -> m_intake
-            .setOutput(m_driverController.getRawAxis(3), m_intake)));
+            .setOutput(m_driverController.getRawAxis(3))));
                          
     // Sets the LEDs to start up with a rainbow config
     m_LED.rainbow();

@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import frc.robot.Constants.IntakeConstants;
-import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class IntakeSubsystem extends SubsystemBase implements Loggable{
     @Log
@@ -24,23 +23,27 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable{
     private final DoubleSolenoid m_intakeSolenoid2 = new DoubleSolenoid(IntakeConstants.kSolenoid3ControllerPort, IntakeConstants.kSolenoid4ControllerPort);
 
     public IntakeSubsystem() {
-        setSetpoint(0);
+        setOutput(0);
     }
 
+    @Log
     public void setOutput(double speed) {
-        @Log
-        m_IntakeMotor.set(ControlMode.PercentOutput, speed);
-        @Log
-        m_ConveyorMotor1.set(ControlMode.PercentOutput, speed);
-        @Log
-        m_ConveyorMotor2.set(ControlMode.PercentOutput, speed);
+        this.m_IntakeMotor.set(speed);
+        this.m_ConveyorMotor1.set(speed);
+        this.m_ConveyorMotor2.set(speed);
     }
 
-    public void toggleIntakePosition(int extend) {
-        @Log
-        m_intakeSolenoid1.set(DoubleSolenoid.Value.kForward);
-        @Log
-        m_intakeSolenoid2.set(extend);
+    @Log
+    public void toggleIntakePosition() {
+        if(this.m_intakeSolenoid1.get() == DoubleSolenoid.Value.kForward) {
+            this.m_intakeSolenoid1.set(DoubleSolenoid.Value.kReverse);
+            this.m_intakeSolenoid2.set(DoubleSolenoid.Value.kReverse);
+        }
+        else{
+            this.m_intakeSolenoid1.set(DoubleSolenoid.Value.kForward);
+            this.m_intakeSolenoid2.set(DoubleSolenoid.Value.kForward);
+        }
+        
     }
 }
 
