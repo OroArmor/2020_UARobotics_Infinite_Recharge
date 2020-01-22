@@ -31,6 +31,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ControlPanelSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ClimbSubsystem;
 
 // Constant Imports
 import frc.robot.Constants.ShooterConstants;
@@ -56,6 +57,8 @@ public class RobotContainer {
   private final LEDSubsystem m_LED = new LEDSubsystem();
   @Log
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
+  @Log
+  private final ClimbSubsystem m_climb = new ClimbSubsystem();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
@@ -96,6 +99,17 @@ public class RobotContainer {
       // Use right y axis to control the speed of the climber
       new RunCommand(() -> m_climb
           .setOutput(m_operatorController.getRawAxis(5))));
+
+    m_controlpanel.setDefaultCommand(
+      // Use right y axis to control the speed of the climber
+      new ConditionalCommand(
+        // Run the feeder
+        new InstantCommand(m_controlpanel::StartColorFind, m_controlpanel),
+        // Do nothing
+        new InstantCommand(),
+        // Determine which of the above to do based on whether the shooter has reached the
+        // desired speed
+        m_operatorController.getRawAxis(2) > .5))
                          
     // Sets the LEDs to start up with a rainbow config
     m_LED.rainbow();
@@ -159,13 +173,21 @@ public class RobotContainer {
       // desired speed
       m_shooter::atSetpoint)).whenReleased(new InstantCommand(m_shooter::stopFeeder, m_shooter));
 
-    // When right bumper is press rise/lower the intake
+    // When right bumper is pressed rise/lower the intake
     new JoystickButton(m_operatorController, Button.kBumperRight.value)
       .whenPressed(new InstantCommand(m_intake::toggleIntakePosition, m_intake));
 
-    // When right bumper is press rise/lower the intake
+    // When right bumper is pressed rise/lower the intake
     new JoystickButton(m_driverController, Button.kBumperRight.value)
       .whenPressed(new InstantCommand(m_intake::toggleIntakePosition, m_intake));
+
+    // When left bumper is pressed spin control panel
+    new JoystickButton(m_operatorController, Button.kBumperLeft.value)
+      .whenPressed(new InstantCommand(m_climb::spinWheel, m_climb));
+
+    // When left bumper is pressed spin control panel
+    new JoystickButton(m_driverController, Button.kBumperLeft.value)
+      .whenPressed(new InstantCommand(m_climb::spinWheel, m_climb));
 
   }
 

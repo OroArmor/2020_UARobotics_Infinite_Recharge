@@ -183,4 +183,8 @@ public final class Constants {
         public static final int kSolenoid3ControllerPort = 3;
         public static final int kSolenoid4ControllerPort = 4;
     }
+
+    public static final class ClimbConstants {
+        public static final int kClimbControllerPort = 1;
+    }
 }
