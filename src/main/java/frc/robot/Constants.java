@@ -130,9 +130,7 @@ public final class Constants {
         // On a real robot the feedforward constants should be empirically determined; these are
         // reasonable guesses.
         public static final double kSVolts = 0.05;
-        public static final double kVVoltSecondsPerRotation =
-            // Should have value 12V at free speed...
-            12.0 / kShooterFreeRPS;
+        public static final double kVVoltSecondsPerRotation = 12.0;
     
         public static final double kFeederSpeed = 0.5;
     }

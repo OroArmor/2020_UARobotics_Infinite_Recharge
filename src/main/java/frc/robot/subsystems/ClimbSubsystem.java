@@ -6,6 +6,7 @@ import io.github.oblarg.oblog.annotations.Log;
 import frc.robot.Constants.ClimbConstants;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClimbSubsystem extends SubsystemBase implements Loggable{
     @Log
@@ -17,6 +18,6 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable{
 
     @Log
     public void setOutput(double motorPercent) {
-        this.m_ClimbMotor.set(motorPercent)
+        this.m_ClimbMotor.set(motorPercent);
     }
 }

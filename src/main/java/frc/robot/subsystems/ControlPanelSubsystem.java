@@ -10,7 +10,7 @@ import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import com.revrobotics.ColorSensorV3;
@@ -33,7 +33,7 @@ public class ControlPanelSubsystem extends SubsystemBase implements Loggable{
   /**
    * Create a motor controller that will be used to spin the wheel
    */
-  private final TalonSRX spinwheel = new TalonSRX(ControlPanelConstants.kSpinWheelPort);
+  private final WPI_TalonSRX spinwheel = new WPI_TalonSRX(ControlPanelConstants.kSpinWheelPort);
 
   /**
    * A Rev Color Sensor V3 object is constructed with an I2C port as a parameter.
@@ -158,11 +158,9 @@ public class ControlPanelSubsystem extends SubsystemBase implements Loggable{
     return match.color;
   }
 
-  /* public void StartColorFind() {
+  public void StartColorFind(double joystickval) {
     byte index;
-    //if a color wheel operation is going, don't change it
-    if(seq.isRunning() == true) return;
-
+    
     String gameData = DriverStation.getInstance().getGameSpecificMessage();
 
     //get the color target
@@ -195,7 +193,17 @@ public class ControlPanelSubsystem extends SubsystemBase implements Loggable{
         //need to rotate around the table.  We look at it from the far left, and need to rotate it 3 slots left, or 1 right, over to be what needs to be under the sensor.
         index = (byte)((index + 1) % 4);
     
-        seq.addStep(new FindColorWheelSlot(ColorWheel[index]));
+        // no steps call real color find command
     }
-  } */
+  }
+
+  @Log
+  public void setOutput(double motorPercent) {
+      this.spinwheel.set(motorPercent);
+  }
+
+  @Log
+  public void rotateWheel() {
+      // this will eventually either be a command or spin the wheeel 3 times.
+  }
 }

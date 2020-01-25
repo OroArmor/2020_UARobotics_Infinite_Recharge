@@ -14,6 +14,7 @@ import static edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -92,24 +93,20 @@ public class RobotContainer {
 
     m_controlpanel.setDefaultCommand(
       // Use left x axis to control the speed of the control panel
-      new RunCommand(() -> m_controlpanel
+      new RunCommand(
+        () -> m_controlpanel
           .setOutput(m_operatorController.getRawAxis(0))));
 
     m_climb.setDefaultCommand(
       // Use right y axis to control the speed of the climber
-      new RunCommand(() -> m_climb
+      new RunCommand(
+        () -> m_climb
           .setOutput(m_operatorController.getRawAxis(5))));
 
     m_controlpanel.setDefaultCommand(
-      // Use right y axis to control the speed of the climber
-      new ConditionalCommand(
-        // Run the feeder
-        new InstantCommand(m_controlpanel::StartColorFind, m_controlpanel),
-        // Do nothing
-        new InstantCommand(),
-        // Determine which of the above to do based on whether the shooter has reached the
-        // desired speed
-        m_operatorController.getRawAxis(2) > .5))
+      new RunCommand(
+        () -> m_controlpanel
+          .StartColorFind(m_operatorController.getRawAxis(2))));
                          
     // Sets the LEDs to start up with a rainbow config
     m_LED.rainbow();
@@ -122,75 +119,54 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    // Spin up the shooter to Auto Line Speed when the 'Start' button is pressed
+    new JoystickButton(m_driverController, Button.kStart.value)
+      .or(new JoystickButton(m_operatorController, Button.kStart.value))
+      .whenActive(new InstantCommand(() -> {
+        m_shooter.enable();
+        m_shooter.setSetpoint(ShooterConstants.kShooterAutoLineRPS);
+      }, m_shooter));
     
-    // Spin up the shooter when the 'X' button is pressed
+    // Spin up the shooter to the near trench speed when the 'Back' button is pressed
+    new JoystickButton(m_driverController, Button.kBack.value)
+      .or(new JoystickButton(m_operatorController, Button.kBack.value))
+      .whenActive(new InstantCommand(() -> {
+        m_shooter.enable();
+        m_shooter.setSetpoint(ShooterConstants.kShooterNearTrenchRPS);
+      }, m_shooter));
+
+    // Spin up the shooter to far trench speed when the 'X' button is pressed.
     new JoystickButton(m_driverController, Button.kX.value)
-        .whenPressed(new InstantCommand(m_shooter::setSetpoint(ShooterConstants.kShooterAutoLineRPS), m_shooter))
-        .whenReleased(new InstantCommand(m_shooter::setSetpoint(0), m_shooter));
+      .or(new JoystickButton(m_operatorController, Button.kX.value))
+      .whenActive(new InstantCommand(() -> {
+        m_shooter.enable();
+        m_shooter.setSetpoint(ShooterConstants.kShooterFarTrenchRPS);
+      }, m_shooter));
 
-    // Spin up the shooter when the 'Y' button is pressed
-    new JoystickButton(m_driverController, Button.kY.value)
-     .whenPressed(new InstantCommand(m_shooter::setSetpoint(ShooterConstants.kShooterNearTrenchRPS), m_shooter))
-     .whenReleased(new InstantCommand(m_shooter::setSetpoint(0), m_shooter));
-
-    // Spin up the shooter when the 'B' button is pressed
+    // Stop the Shooter when the B button is pressed
     new JoystickButton(m_driverController, Button.kB.value)
-      .whenPressed(new InstantCommand(m_shooter::setSetpoint(ShooterConstants.kShooterFarTrenchRPS), m_shooter))
-      .whenReleased(new InstantCommand(m_shooter::setSetpoint(0), m_shooter));
-
-   // Spin up the shooter when the 'X' button is pressed
-    new JoystickButton(m_operatorController, Button.kX.value)
-      .whenPressed(new InstantCommand(m_shooter::setSetpoint(ShooterConstants.kShooterAutoLineRPS), m_shooter))
-      .whenReleased(new InstantCommand(m_shooter::setSetpoint(0), m_shooter));
-
-    // Spin up the shooter when the 'Y' button is pressed
-    new JoystickButton(m_operatorController, Button.kY.value)
-      .whenPressed(new InstantCommand(m_shooter::setSetpoint(ShooterConstants.kShooterNearTrenchRPS), m_shooter))
-      .whenReleased(new InstantCommand(m_shooter::setSetpoint(0), m_shooter));
-
-    // Spin up the shooter when the 'B' button is pressed
-    new JoystickButton(m_operatorController, Button.kB.value)
-      .whenPressed(new InstantCommand(m_shooter::setSetpoint(ShooterConstants.kShooterFarTrenchRPS), m_shooter))
-      .whenReleased(new InstantCommand(m_shooter::setSetpoint(0), m_shooter));
+      .whenPressed(new InstantCommand(m_shooter::disable, m_shooter));
 
     // Run the feeder when the 'A' button is held, but only if the shooter is at speed
-    new JoystickButton(m_driverController, Button.kA.value).whenPressed(new ConditionalCommand(
+    new JoystickButton(m_driverController, Button.kA.value)
+    .or(new JoystickButton(m_operatorController, Button.kA.value))  
+    .whenActive(new ConditionalCommand(
         // Run the feeder
         new InstantCommand(m_shooter::runFeeder, m_shooter),
         // Do nothing
         new InstantCommand(),
         // Determine which of the above to do based on whether the shooter has reached the
         // desired speed
-        m_shooter::atSetpoint)).whenReleased(new InstantCommand(m_shooter::stopFeeder, m_shooter));
+        m_shooter::atSetpoint)).whenInactive(new InstantCommand(m_shooter::stopFeeder, m_shooter));
 
-        // Run the feeder when the 'A' button is held, but only if the shooter is at speed
-    new JoystickButton(m_operatorController, Button.kA.value).whenPressed(new ConditionalCommand(
-      // Run the feeder
-      new InstantCommand(m_shooter::runFeeder, m_shooter),
-      // Do nothing
-      new InstantCommand(),
-      // Determine which of the above to do based on whether the shooter has reached the
-      // desired speed
-      m_shooter::atSetpoint)).whenReleased(new InstantCommand(m_shooter::stopFeeder, m_shooter));
-
-    // When right bumper is pressed rise/lower the intake
-    new JoystickButton(m_operatorController, Button.kBumperRight.value)
-      .whenPressed(new InstantCommand(m_intake::toggleIntakePosition, m_intake));
-
-    // When right bumper is pressed rise/lower the intake
-    new JoystickButton(m_driverController, Button.kBumperRight.value)
-      .whenPressed(new InstantCommand(m_intake::toggleIntakePosition, m_intake));
+    // When right bumper is pressed raise/lower the intake on both controllers
+    new JoystickButton(m_operatorController, Button.kBumperRight.value).or(new JoystickButton(m_driverController, Button.kBumperRight.value))
+      .whenActive(new InstantCommand(m_intake::toggleIntakePosition, m_intake));
 
     // When left bumper is pressed spin control panel
-    new JoystickButton(m_operatorController, Button.kBumperLeft.value)
-      .whenPressed(new InstantCommand(m_climb::spinWheel, m_climb));
-
-    // When left bumper is pressed spin control panel
-    new JoystickButton(m_driverController, Button.kBumperLeft.value)
-      .whenPressed(new InstantCommand(m_climb::spinWheel, m_climb));
-
+    new JoystickButton(m_operatorController, Button.kBumperLeft.value).or(new JoystickButton(m_driverController, Button.kBumperLeft.value))
+      .whenActive(new InstantCommand(m_controlpanel::rotateWheel, m_controlpanel));
   }
-
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
