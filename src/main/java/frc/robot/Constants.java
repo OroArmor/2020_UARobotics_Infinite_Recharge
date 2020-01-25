@@ -137,7 +137,7 @@ public final class Constants {
     
     public static final class ControlPanelConstants {
         public static final int kSolenoidPort = 0;
-        public static final int kSpinWheelPort = 0;
+        public static final int kSpinWheelPort = 7;
         public static final double kWheelSpeedFast = 0.6;
         public static final double kWheelSpeedSlow = 0.1;
         public static final double colorwheel_past = 2;
@@ -173,9 +173,9 @@ public final class Constants {
     }
 
     public static final class IntakeConstants {
-        public static final int kIntakeControllerPort = 1;
-        public static final int kConveyor1ControllerPort = 2;
-        public static final int kConveyor2ControllerPort = 3;
+        public static final int kIntakeControllerPort = 8;
+        public static final int kConveyor1ControllerPort = 9;
+        public static final int kConveyor2ControllerPort = 10;
         public static final int kSolenoid1ControllerPort = 1;
         public static final int kSolenoid2ControllerPort = 2;
         public static final int kSolenoid3ControllerPort = 3;
@@ -183,6 +183,6 @@ public final class Constants {
     }
 
     public static final class ClimbConstants {
-        public static final int kClimbControllerPort = 1;
+        public static final int kClimbControllerPort = 11;
     }
 }

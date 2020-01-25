@@ -19,9 +19,9 @@ public class ShooterSubsystem extends PIDSubsystem implements Loggable{
   @Log
   private final WPI_VictorSPX m_feederMotor = new WPI_VictorSPX(ShooterConstants.kFeederMotorPort);
   
-  private final Encoder m_shooterEncoder =
+  /* private final Encoder m_shooterEncoder =
       new Encoder(ShooterConstants.kEncoderPorts[0], ShooterConstants.kEncoderPorts[1],
-                  ShooterConstants.kEncoderReversed);
+                  ShooterConstants.kEncoderReversed); */
   private final SimpleMotorFeedforward m_shooterFeedforward =
       new SimpleMotorFeedforward(ShooterConstants.kSVolts,
                                  ShooterConstants.kVVoltSecondsPerRotation);
@@ -32,7 +32,7 @@ public class ShooterSubsystem extends PIDSubsystem implements Loggable{
   public ShooterSubsystem() {
     super(new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD));
     getController().setTolerance(ShooterConstants.kShooterToleranceRPS);
-    m_shooterEncoder.setDistancePerPulse(ShooterConstants.kEncoderDistancePerPulse);
+    //m_shooterEncoder.setDistancePerPulse(ShooterConstants.kEncoderDistancePerPulse);
   }
 
   @Override
@@ -42,7 +42,7 @@ public class ShooterSubsystem extends PIDSubsystem implements Loggable{
 
   @Override
   public double getMeasurement() {
-    return m_shooterEncoder.getRate();
+    return 0; //m_shooterEncoder.getRate();
   }
 
   public boolean atSetpoint() {

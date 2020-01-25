@@ -90,24 +90,24 @@ public class RobotContainer {
     m_intake.setDefaultCommand(
         // Use right trigger to control the speed of the intake
         new RunCommand(() -> m_intake
-            .setOutput(m_driverController.getRawAxis(3))));
+            .setOutput(m_driverController.getRawAxis(3)), m_intake));
 
     m_controlpanel.setDefaultCommand(
       // Use left x axis to control the speed of the control panel
       new RunCommand(
         () -> m_controlpanel
-          .setOutput(m_operatorController.getRawAxis(0))));
+          .setOutput(m_operatorController.getRawAxis(0)), m_controlpanel));
 
     m_climb.setDefaultCommand(
       // Use right y axis to control the speed of the climber
       new RunCommand(
         () -> m_climb
-          .setOutput(m_operatorController.getRawAxis(5))));
+          .setOutput(m_operatorController.getRawAxis(5)), m_climb));
 
     m_controlpanel.setDefaultCommand(
       new RunCommand(
         () -> m_controlpanel
-          .StartColorFind(m_operatorController.getRawAxis(2))));
+          .StartColorFind(m_operatorController.getRawAxis(2)), m_controlpanel));
                          
     // Sets the LEDs to start up with a rainbow config
     m_LED.rainbow();
