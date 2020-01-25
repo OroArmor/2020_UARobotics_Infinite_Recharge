@@ -164,7 +164,7 @@ public final class Constants {
     }
     
     public static final class AutoAimConstants {
-        public static final double kP = 0.03;
+        public static final double kP = 0.0185;
     }
 
     public static final class OIConstants {

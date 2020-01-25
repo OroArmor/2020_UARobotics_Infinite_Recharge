@@ -19,9 +19,10 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
-
+import frc.robot.commands.AutoAim;
 // Command Imports
 import frc.robot.commands.ExampleCommand;
 
@@ -166,6 +167,18 @@ public class RobotContainer {
     // When left bumper is pressed spin control panel
     new JoystickButton(m_operatorController, Button.kBumperLeft.value).or(new JoystickButton(m_driverController, Button.kBumperLeft.value))
       .whenActive(new InstantCommand(m_controlpanel::rotateWheel, m_controlpanel));
+
+    // Auto Aim when Y button is pressed
+    new JoystickButton(m_driverController, Button.kY.value)
+      .whileHeld(new AutoAim(m_robotDrive, m_shooter));
+    
+    // Create "button" from POV Hat in up direction.  Use both of the angles to the left and right also.
+    new POVButton(m_driverController, 315).or(new POVButton(m_driverController, 0)).or(new POVButton(m_driverController, 45))
+      .whenActive(new InstantCommand());
+    
+    // Create "button" from POV Hat in down direction.  Use both of the angles to the left and right also.
+    new POVButton(m_driverController, 225).or(new POVButton(m_driverController, 180)).or(new POVButton(m_driverController, 135))
+      .whenActive(new InstantCommand());
   }
 
   /**

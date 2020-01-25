@@ -43,11 +43,15 @@ public class AutoAim extends CommandBase implements Loggable{
     {
       m_robotDrive.arcadeDrive(0,pid.calculate(tx,0));
     }
+    else
+    {
+      m_robotDrive.arcadeDrive(0,0);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_shooter.disable();
+    m_robotDrive.arcadeDrive(0,0);
   }
 }
