@@ -199,6 +199,19 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
     m_talonsrxright.set(ControlMode.PercentOutput, fwd, DemandType.ArbitraryFeedForward, -rot);
   }
 
+   /**
+   * Drives the robot using tank controls.
+   *
+   * @param left the commanded left side drivetrain power
+   * @param right the commanded right side drivetrain power
+   */
+  public void tankDrive(double left, double right) {
+    left = Deadband(left);
+    right = Deadband(right);
+    m_talonsrxleft.set(ControlMode.PercentOutput, left);
+    m_talonsrxright.set(ControlMode.PercentOutput, right);
+  }
+
   /**
    * Resets the drive encoders to currently read a position of 0.
    */
@@ -249,5 +262,10 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
     final double[] ypr = new double[3];
 		m_pigeon.getYawPitchRoll(ypr);
     return Math.IEEEremainder(ypr[0], 360);
+  }
+
+  // Drives straight specified distance 
+  public void drivestraight() {
+    
   }
 }
