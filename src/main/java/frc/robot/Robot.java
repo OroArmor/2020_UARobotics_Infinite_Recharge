@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import io.github.oblarg.oblog.Logger;
+import frc.robot.utils.CANDeviceFinder;
+import java.io.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -35,6 +37,7 @@ public class Robot extends TimedRobot {
     // The first argument is the root container
     // The second argument is whether logging and config should be given separate tabs
     Logger.configureLoggingAndConfig(m_robotContainer, true);
+    CANDeviceFinder canDeviceFinder = new CANDeviceFinder();
   }
 
   /**

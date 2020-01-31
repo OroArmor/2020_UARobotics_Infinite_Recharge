@@ -7,10 +7,21 @@
 
 package frc.robot;
 
+import java.util.List;
+import java.nio.file.Path;
+import java.io.IOException;
+
 // WPI Imports
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import static edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -18,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import io.github.oblarg.oblog.annotations.Config;
@@ -36,6 +48,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 
 // Constant Imports
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OIConstants;
@@ -47,6 +60,7 @@ import frc.robot.Constants.OIConstants;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   @Log
@@ -187,7 +201,45 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
+    
+    String trajectoryJSON = "paths/YourPath.wpilib.json";
+    Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+    //Trajectory trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+
+/*     RamseteCommand ramseteCommand = new RamseteCommand(
+        trajectory,
+        m_robotDrive::getPose,
+        new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
+        new SimpleMotorFeedforward(DriveConstants.ksVolts,
+                                   DriveConstants.kvVoltSecondsPerMeter,
+                                   DriveConstants.kaVoltSecondsSquaredPerMeter),
+        DriveConstants.kDriveKinematics,
+        m_robotDrive::getWheelSpeeds,
+        new PIDController(DriveConstants.kPDriveVel, 0, 0),
+        new PIDController(DriveConstants.kPDriveVel, 0, 0),
+        // RamseteCommand passes volts to the callback
+        m_robotDrive::tankDriveVolts,
+        m_robotDrive
+    ); */
+
     return m_autoCommand;
+  }
+}
+
+public static void checkTheCANBus() {
+  if (OIConstants.competitionRobot) {
+    String[] devicesIWantToSee = new String[] {
+        "SRX 1", "SPX 2", "SPX 3", "SPX 4",
+        "SRX 5", "SPX 6", "SPX 7", "SPX 8",
+        "SRX 9", "SPX 10", "SPX 11", "SPX 12",
+        "SRX 13", "SRX 14", "SRX 15", 
+        "PCM 0", "PDP 0"};
+    for (String device : devicesIWantToSee) {
+      if (!Robot.canDeviceFinder.isDevicePresent(device)) {
+        logger.error("Device {} cannot be found on the CAN bus", device);
+      }
+    }
+  } else {
+    logger.info("mule board: skipping CAN bus check");
   }
 }

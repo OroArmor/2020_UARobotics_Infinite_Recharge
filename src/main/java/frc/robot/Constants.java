@@ -32,7 +32,7 @@ public final class Constants {
         public static final boolean kRightEncoderReversed = true;
     
         public static final int kEncoderCPR = 4096;
-        public static final double kWheelDiameterMeters = 0.15;
+        public static final double kWheelDiameterMeters = 0.2032;
         public static final double kEncoderDistancePerPulse =
             // Assumes the encoders are directly mounted on the wheel shafts
             (kWheelDiameterMeters * Math.PI) / (double) kEncoderCPR;
@@ -164,12 +164,13 @@ public final class Constants {
     }
     
     public static final class AutoAimConstants {
-        public static final double kP = 0.0185;
+        public static final double kP = 0.01;
     }
 
     public static final class OIConstants {
         public static final int kDriverControllerPort = 1;
         public static final int kOperatorControllerPort = 2;
+        public static final boolean competitionRobot = false;
     }
 
     public static final class IntakeConstants {

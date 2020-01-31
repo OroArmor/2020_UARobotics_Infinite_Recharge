@@ -6,6 +6,7 @@ import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
+import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
@@ -265,7 +266,10 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
   }
 
   // Drives straight specified distance 
-  public void drivestraight() {
-    
+  public void drivestraight(double _targetAngle, double target_meters) {
+    // assumes encoders have been reset
+    Double target_sensorUnits = target_meters * DriveConstants.kEncoderDistancePerPulse;
+    m_talonsrxright.set(ControlMode.MotionMagic, target_sensorUnits, DemandType.AuxPID, _targetAngle);
+		m_talonsrxleft.follow(m_talonsrxright, FollowerType.AuxOutput1);
   }
 }

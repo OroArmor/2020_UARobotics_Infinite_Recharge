@@ -41,7 +41,7 @@ public class AutoAim extends CommandBase implements Loggable{
 
     if (tv == 1)
     {
-      m_robotDrive.arcadeDrive(0,pid.calculate(tx,0));
+      m_robotDrive.arcadeDrive(0,pid.calculate(tx,0) + 0.2);
     }
     else
     {
