@@ -115,7 +115,8 @@ public final class Constants {
             1.0 / (double) kEncoderCPR;
     
         public static final int kShooterMotorPort = 5;
-        public static final int kFeederMotorPort = 6;
+        public static final int kShooterMotorPort2 = 6;
+        public static final int kFeederMotorPort = 22;
     
         public static final double kShooterFarTrenchRPS = 6000;
         public static final double kShooterNearTrenchRPS = 5000;
