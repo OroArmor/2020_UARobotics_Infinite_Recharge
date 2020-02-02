@@ -29,7 +29,7 @@ public class AutoAim extends CommandBase implements Loggable{
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_shooter.enable();
+    m_shooter.setRPM(4500);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

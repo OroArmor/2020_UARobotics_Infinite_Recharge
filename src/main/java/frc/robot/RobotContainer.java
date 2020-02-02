@@ -110,7 +110,7 @@ public class RobotContainer {
           .StartColorFind(m_operatorController.getRawAxis(2)), m_controlpanel));
                          
     // Sets the LEDs to start up with a rainbow config
-    m_LED.rainbow();
+    //m_LED.rainbow();
   }
 
   /**
@@ -124,29 +124,28 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kStart.value)
       .or(new JoystickButton(m_operatorController, Button.kStart.value))
       .whenActive(new InstantCommand(() -> {
-        m_shooter.enable();
-        m_shooter.setSetpoint(ShooterConstants.kShooterAutoLineRPS);
+        m_shooter.setRPM(ShooterConstants.kShooterAutoLineRPM);
       }, m_shooter));
     
     // Spin up the shooter to the near trench speed when the 'Back' button is pressed
     new JoystickButton(m_driverController, Button.kBack.value)
       .or(new JoystickButton(m_operatorController, Button.kBack.value))
       .whenActive(new InstantCommand(() -> {
-        m_shooter.enable();
-        m_shooter.setSetpoint(ShooterConstants.kShooterNearTrenchRPS);
+        m_shooter.setRPM(ShooterConstants.kShooterNearTrenchRPM);
       }, m_shooter));
 
     // Spin up the shooter to far trench speed when the 'X' button is pressed.
     new JoystickButton(m_driverController, Button.kX.value)
       .or(new JoystickButton(m_operatorController, Button.kX.value))
       .whenActive(new InstantCommand(() -> {
-        m_shooter.enable();
-        m_shooter.setSetpoint(ShooterConstants.kShooterFarTrenchRPS);
+        m_shooter.setRPM(ShooterConstants.kShooterFarTrenchRPM);
       }, m_shooter));
 
     // Stop the Shooter when the B button is pressed
     new JoystickButton(m_driverController, Button.kB.value)
-      .whenPressed(new InstantCommand(m_shooter::disable, m_shooter));
+      .whenPressed(new InstantCommand(() -> {
+        m_shooter.setRPM(0);
+      }, m_shooter));
 
     // Run the feeder when the 'A' button is held, but only if the shooter is at speed
     new JoystickButton(m_driverController, Button.kA.value)

@@ -110,20 +110,17 @@ public final class Constants {
         public static final int[] kEncoderPorts = new int[]{5, 6};
         public static final boolean kEncoderReversed = false;
         public static final int kEncoderCPR = 4096;
-        public static final double kEncoderDistancePerPulse =
-            // Distance units will be rotations
-            1.0 / (double) kEncoderCPR;
+        public static final double kGearRatio = 4.0;
         // 18730 (775pro RPM) / 600 = 31.21666
         // 4096 (sensor units per rotation) / 4 = 1024 * 31.21666 = 31965.866
-        //
         public static final int kShooterMotorPort = 20;
         public static final int kShooterMotorPort2 = 21;
         public static final int kFeederMotorPort = 22;
     
-        public static final double kShooterFarTrenchRPS = 6000;
-        public static final double kShooterNearTrenchRPS = 5000;
-        public static final double kShooterAutoLineRPS = 4000;
-        public static final double kShooterToleranceRPS = 50;
+        public static final double kShooterFarTrenchRPM = 6000;
+        public static final double kShooterNearTrenchRPM = 5000;
+        public static final double kShooterAutoLineRPM = 4000;
+        public static final double kShooterToleranceRPM = 50;
     
         // These are not real PID gains, and will have to be tuned for your specific robot.
         public static final double kP = .001;

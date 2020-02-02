@@ -4,57 +4,36 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import frc.robot.Constants.ShooterConstants;
 
-public class ShooterSubsystem extends PIDSubsystem implements Loggable{
-  // TODO need to change the lines below to our actual motor controllers 
+public class ShooterSubsystem extends SubsystemBase implements Loggable{ 
   @Log
   private final WPI_TalonSRX m_shooterMotor = new WPI_TalonSRX(ShooterConstants.kShooterMotorPort);
   private final WPI_VictorSPX m_shooterMotor2 = new WPI_VictorSPX(ShooterConstants.kShooterMotorPort2);
   @Log
   private final WPI_VictorSPX m_feederMotor = new WPI_VictorSPX(ShooterConstants.kFeederMotorPort);
   
-  /* private final Encoder m_shooterEncoder =
-      new Encoder(ShooterConstants.kEncoderPorts[0], ShooterConstants.kEncoderPorts[1],
-                  ShooterConstants.kEncoderReversed); */
-  private final SimpleMotorFeedforward m_shooterFeedforward =
-      new SimpleMotorFeedforward(ShooterConstants.kSVolts,
-                                 ShooterConstants.kVVoltSecondsPerRotation);
-
   /**
    * The shooter subsystem for the robot.
    */
   public ShooterSubsystem() {
-    super(new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD));
-    getController().setTolerance(ShooterConstants.kShooterToleranceRPS);
-
     m_shooterMotor2.follow(m_shooterMotor);
     m_shooterMotor2.setInverted(InvertType.OpposeMaster);
-    //m_shooterEncoder.setDistancePerPulse(ShooterConstants.kEncoderDistancePerPulse);
   }
 
-  @Override
-  public void useOutput(double output, double setpoint) {
-    m_shooterMotor.setVoltage(output + m_shooterFeedforward.calculate(setpoint));
-  }
-
-  @Log
-  @Override
-  public double getMeasurement() {
-    return m_shooterMotor.getSelectedSensorVelocity();
-  }
-  
   @Log
   public boolean atSetpoint() {
-    return m_controller.atSetpoint();
+    return TalontoRPM(m_shooterMotor.getClosedLoopError()) < ShooterConstants.kShooterToleranceRPM;
   }
 
   public void runFeeder() {
@@ -65,6 +44,12 @@ public class ShooterSubsystem extends PIDSubsystem implements Loggable{
     m_feederMotor.set(0);
   }
   public void setRPM(double RPM) {
-    this.setSetpoint(RPM);
+    m_shooterMotor.set(ControlMode.Velocity, RPMtoTalon(RPM));
+  }
+  public double RPMtoTalon(double RPM) {
+    return (RPM * ShooterConstants.kEncoderCPR) / (600 * ShooterConstants.kGearRatio);
+  }
+  public double TalontoRPM(double TalonUnits) {
+    return (TalonUnits * 600 * ShooterConstants.kGearRatio) / ShooterConstants.kEncoderCPR;
   }
 }
