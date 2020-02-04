@@ -47,9 +47,9 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable{
     m_shooterMotor.set(ControlMode.Velocity, RPMtoTalon(RPM));
   }
   public double RPMtoTalon(double RPM) {
-    return (RPM * ShooterConstants.kEncoderCPR) / (600 * ShooterConstants.kGearRatio);
+    return (RPM * ShooterConstants.kEncoderCPR) / (600);
   }
   public double TalontoRPM(double TalonUnits) {
-    return (TalonUnits * 600 * ShooterConstants.kGearRatio) / ShooterConstants.kEncoderCPR;
+    return (TalonUnits * 600) / ShooterConstants.kEncoderCPR;
   }
 }

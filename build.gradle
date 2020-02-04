@@ -50,7 +50,7 @@ dependencies {
     implementation wpi.deps.wpilib()
     nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
-    implementation "com.github.Oblarg.Oblog:lib:master-SNAPSHOT"
+    implementation "com.github.Oblarg.Oblog:lib:3.0.3"
 
 
     implementation wpi.deps.vendor.java()

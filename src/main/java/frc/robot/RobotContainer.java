@@ -65,10 +65,8 @@ public class RobotContainer {
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
   // The driver's controller
-  @Config
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   // The operator's controller
-  @Config
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
 
   /**
