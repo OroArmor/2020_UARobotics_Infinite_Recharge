@@ -19,7 +19,9 @@ import frc.robot.Constants.ShooterConstants;
 public class ShooterSubsystem extends SubsystemBase implements Loggable{ 
   @Log
   private final WPI_TalonSRX m_shooterMotor = new WPI_TalonSRX(ShooterConstants.kShooterMotorPort);
+
   private final WPI_VictorSPX m_shooterMotor2 = new WPI_VictorSPX(ShooterConstants.kShooterMotorPort2);
+
   @Log
   private final WPI_VictorSPX m_feederMotor = new WPI_VictorSPX(ShooterConstants.kFeederMotorPort);
   
@@ -29,6 +31,14 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable{
   public ShooterSubsystem() {
     m_shooterMotor2.follow(m_shooterMotor);
     m_shooterMotor2.setInverted(InvertType.OpposeMaster);
+  }
+
+  @Log
+  public void setPID(double kP, double kI, double kD, double kF) {
+    m_shooterMotor.config_kP(0, kP, 30);
+    m_shooterMotor.config_kI(0, kI, 30);
+		m_shooterMotor.config_kD(0, kD, 30);
+		m_shooterMotor.config_kF(0, kF, 30);
   }
 
   @Log
@@ -43,13 +53,22 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable{
   public void stopFeeder() {
     m_feederMotor.set(0);
   }
+
+  @Log
   public void setRPM(double RPM) {
     m_shooterMotor.set(ControlMode.Velocity, RPMtoTalon(RPM));
   }
+
   public double RPMtoTalon(double RPM) {
     return (RPM * ShooterConstants.kEncoderCPR) / (600);
   }
+
   public double TalontoRPM(double TalonUnits) {
     return (TalonUnits * 600) / ShooterConstants.kEncoderCPR;
+  }
+
+  @Log
+  public double getShooterRPM(){
+    return TalontoRPM(m_shooterMotor.getSelectedSensorVelocity());
   }
 }
