@@ -27,11 +27,9 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
 	// The motors on the left and right side of the drivetrain
 	@Log
 	private final WPI_TalonSRX m_talonsrxleft = new WPI_TalonSRX(DriveConstants.kLeftMotor1Port);
-	@Log
 	private final WPI_VictorSPX m_talonsrxleft2 = new WPI_VictorSPX(DriveConstants.kLeftMotor2Port);
 	@Log
 	private final WPI_TalonSRX m_talonsrxright = new WPI_TalonSRX(DriveConstants.kRightMotor1Port);
-	@Log
   private final WPI_VictorSPX m_victorspxright = new WPI_VictorSPX(DriveConstants.kRightMotor2Port);
   @Log
 	private final WPI_TalonSRX m_talonsrxright2 = new WPI_TalonSRX(DriveConstants.kPigeonPort);

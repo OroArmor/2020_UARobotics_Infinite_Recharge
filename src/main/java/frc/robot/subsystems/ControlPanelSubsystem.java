@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import io.github.oblarg.oblog.Loggable;
-import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 
@@ -49,7 +48,6 @@ public class ControlPanelSubsystem extends SubsystemBase implements Loggable{
    * with given confidence range.
    */
   private final ColorMatch m_colorMatcher = new ColorMatch();
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   /**
    * Note: Any example colors should be calibrated as the user needs, these are
    * here as a basic example.
@@ -103,7 +101,7 @@ public class ControlPanelSubsystem extends SubsystemBase implements Loggable{
         }
         else {
             state = State.COLOR_ROTATE_FINAL;
-            target_rotation = ControlPanelConstants.colorwheel_past + m_robotDrive.getAverageEncoderDistance();
+            target_rotation = ControlPanelConstants.colorwheel_past; // + m_robotDrive.getAverageEncoderDistance();
         }
     }
     else if ( state == State.COLOR_ROTATE_FINAL ) {

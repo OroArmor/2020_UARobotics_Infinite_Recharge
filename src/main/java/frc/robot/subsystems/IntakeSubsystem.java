@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import io.github.oblarg.oblog.Loggable;
-import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DoubleSolenoid;

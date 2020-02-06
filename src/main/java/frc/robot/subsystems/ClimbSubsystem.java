@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import io.github.oblarg.oblog.Loggable;
-import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 import frc.robot.Constants.ClimbConstants;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
