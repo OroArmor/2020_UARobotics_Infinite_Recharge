@@ -182,6 +182,11 @@ public class RobotContainer {
       .whenActive(new InstantCommand());
   }
 
+  @Config(name="shooterPID")
+  public void setPID(double kP, double kI, double kD, double kF) {
+    m_shooter.getController().setPID(kP, kI, kD);
+  }
+  
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
