@@ -122,27 +122,31 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kStart.value)
       .or(new JoystickButton(m_operatorController, Button.kStart.value))
       .whenActive(new InstantCommand(() -> {
-        m_shooter.setRPM(ShooterConstants.kShooterAutoLineRPM);
+        m_shooter.setSetpoint(ShooterConstants.kShooterAutoLineRPM);
+        m_shooter.enable();
       }, m_shooter));
     
     // Spin up the shooter to the near trench speed when the 'Back' button is pressed
     new JoystickButton(m_driverController, Button.kBack.value)
       .or(new JoystickButton(m_operatorController, Button.kBack.value))
       .whenActive(new InstantCommand(() -> {
-        m_shooter.setRPM(ShooterConstants.kShooterNearTrenchRPM);
+        m_shooter.setSetpoint(ShooterConstants.kShooterNearTrenchRPM);
+        m_shooter.enable();
       }, m_shooter));
 
     // Spin up the shooter to far trench speed when the 'X' button is pressed.
     new JoystickButton(m_driverController, Button.kX.value)
       .or(new JoystickButton(m_operatorController, Button.kX.value))
       .whenActive(new InstantCommand(() -> {
-        m_shooter.setRPM(ShooterConstants.kShooterFarTrenchRPM);
+        m_shooter.setSetpoint(ShooterConstants.kShooterFarTrenchRPM);
+        m_shooter.enable();
       }, m_shooter));
 
     // Stop the Shooter when the B button is pressed
     new JoystickButton(m_driverController, Button.kB.value)
       .whenPressed(new InstantCommand(() -> {
-        m_shooter.setRPM(0);
+        m_shooter.setSetpoint(0);
+        m_shooter.disable();
       }, m_shooter));
 
     // Run the feeder when the 'A' button is held, but only if the shooter is at speed
