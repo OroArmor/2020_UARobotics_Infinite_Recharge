@@ -7,7 +7,10 @@
 
 package frc.robot;
 
+import java.io.IOException;
+
 // WPI Imports
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import static edu.wpi.first.wpilibj.XboxController.Button;
@@ -20,11 +23,13 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
-import frc.robot.commands.AutoAim;
+
 // Command Imports
-import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.AutoAim;
 
 // Subsystem Imports
 import frc.robot.subsystems.ExampleSubsystem;
@@ -62,7 +67,7 @@ public class RobotContainer {
   @Log
   private final ClimbSubsystem m_climb = new ClimbSubsystem();
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -109,6 +114,9 @@ public class RobotContainer {
                          
     // Sets the LEDs to start up with a rainbow config
     //m_LED.rainbow();
+
+    autoChooser.addOption("Auto Aim", new AutoAim(m_robotDrive, m_shooter));
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   /**
@@ -194,6 +202,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return autoChooser.getSelected();
   }
 }

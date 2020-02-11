@@ -16,6 +16,14 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.Filesystem;
+import java.nio.file.Paths;
+import java.io.IOException;
 
 import frc.robot.Constants.DriveConstants;
 import io.github.oblarg.oblog.Loggable;
@@ -43,6 +51,12 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
   // PID Controller for Driving straight with Gyro
   private final PIDController m_gyropid = new PIDController(DriveConstants.kGyroPID, 0, 0);
 
+  // Using onboard feedforward since it is more accurate than Talon Feedforward
+  private final SimpleMotorFeedforward m_driveFeedforward =
+      new SimpleMotorFeedforward(DriveConstants.kS,
+                                 DriveConstants.kV,
+                                 DriveConstants.kA);
+
   /** Tracking variables */
 	boolean _firstCall = false;
 	boolean _state = false;
@@ -67,7 +81,14 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
 		m_talonsrxright.configFactoryDefault();
 		m_talonsrxleft.configFactoryDefault();
 		m_pigeon.configFactoryDefault();
-		
+    
+    // Set Ramping
+
+    m_talonsrxleft.configClosedloopRamp(DriveConstants.kClosedRamp);
+    m_talonsrxleft.configClosedloopRamp(DriveConstants.kOpenRamp);
+    m_talonsrxright.configClosedloopRamp(DriveConstants.kClosedRamp);
+    m_talonsrxright.configClosedloopRamp(DriveConstants.kOpenRamp);
+
 		/* Set Neutral Mode */
 		m_talonsrxleft.setNeutralMode(NeutralMode.Brake);
 		m_talonsrxright.setNeutralMode(NeutralMode.Brake);
@@ -149,9 +170,10 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
-    m_odometry.update(Rotation2d.fromDegrees(getHeading()),
-        m_talonsrxleft.getSelectedSensorPosition() * DriveConstants.kEncoderDistancePerPulse,
-        m_talonsrxright.getSelectedSensorPosition() * DriveConstants.kEncoderDistancePerPulse);
+    m_odometry.update(
+      Rotation2d.fromDegrees(getHeading()),
+      m_talonsrxleft.getSelectedSensorPosition() * DriveConstants.kEncoderDistancePerPulse,
+      m_talonsrxright.getSelectedSensorPosition() * DriveConstants.kEncoderDistancePerPulse);
   }
 
   /**
@@ -260,6 +282,67 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
     final double[] ypr = new double[3];
 		m_pigeon.getYawPitchRoll(ypr);
     return Math.IEEEremainder(ypr[0], 360);
+  }
+
+  public void tankDriveVelocity(double leftVelocity, double rightVelocity) {
+    var leftAccel = (leftVelocity - stepsPerDecisecToMetersPerSec(m_talonsrxleft.getSelectedSensorVelocity())) / 20;
+    var rightAccel = (rightVelocity - stepsPerDecisecToMetersPerSec(m_talonsrxright.getSelectedSensorVelocity())) / 20;
+    
+    var leftFeedForwardVolts = m_driveFeedforward.calculate(leftVelocity, leftAccel);
+    var rightFeedForwardVolts = m_driveFeedforward.calculate(rightVelocity, rightAccel);
+
+    m_talonsrxleft.set(
+        ControlMode.Velocity, 
+        metersPerSecToStepsPerDecisec(leftVelocity), 
+        DemandType.ArbitraryFeedForward,
+        leftFeedForwardVolts / 12);
+    m_talonsrxright.set(
+        ControlMode.Velocity,
+        metersPerSecToStepsPerDecisec(rightVelocity),
+        DemandType.ArbitraryFeedForward,
+        rightFeedForwardVolts / 12);
+  }
+
+    /**
+   * Converts from encoder steps to meters.
+   * 
+   * @param steps encoder steps to convert
+   * @return meters
+   */
+  public static double stepsToMeters(int steps) {
+    return (DriveConstants.WHEEL_CIRCUMFERENCE_METERS / DriveConstants.SENSOR_UNITS_PER_ROTATION) * steps;
+  }
+
+  /**
+   * Converts from encoder units per 100 milliseconds to meters per second.
+   * @param stepsPerDecisec steps per decisecond
+   * @return meters per second
+   */
+  public static double stepsPerDecisecToMetersPerSec(int stepsPerDecisec) {
+    return stepsToMeters(stepsPerDecisec * 10);
+  }
+
+  /**
+   * Converts from meters to encoder units.
+   * @param meters meters
+   * @return encoder units
+   */
+  public static double metersToSteps(double meters) {
+    return (meters / DriveConstants.WHEEL_CIRCUMFERENCE_METERS) * DriveConstants.SENSOR_UNITS_PER_ROTATION;
+  }
+
+  /**
+   * Convers from meters per second to encoder units per 100 milliseconds.
+   * @param metersPerSec meters per second
+   * @return encoder units per decisecond
+   */
+  public static double metersPerSecToStepsPerDecisec(double metersPerSec) {
+    return metersToSteps(metersPerSec) * .1d;
+  }
+
+  protected static Trajectory loadTrajectory(String trajectoryName) throws IOException {
+    return TrajectoryUtil.fromPathweaverJson(
+        Filesystem.getDeployDirectory().toPath().resolve(Paths.get("paths", "output", trajectoryName + ".wpilib.json")));
   }
 
   // Drives straight specified distance 

@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.util.Units;
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants.  This class should not be used for any other purpose.  All constants should be
@@ -30,7 +31,19 @@ public final class Constants {
         public static final int[] kRightEncoderPorts = new int[]{3, 4};
         public static final boolean kLeftEncoderReversed = false;
         public static final boolean kRightEncoderReversed = true;
-    
+
+        public static final double kOpenRamp = 0.2;
+        public static final double kClosedRamp = 0.2;
+        
+        public static final int SENSOR_UNITS_PER_ROTATION = 4096;
+        public static final double WHEEL_DIAMETER_INCHES = 8d;
+        public static final double WHEEL_CIRCUMFERENCE_INCHES = WHEEL_DIAMETER_INCHES * Math.PI;
+        public static final double WHEEL_CIRCUMFERENCE_METERS = Units.inchesToMeters(WHEEL_DIAMETER_INCHES) * Math.PI;
+
+        public static final double TRACK_WIDTH_METERS = 0.69;
+        public static final DifferentialDriveKinematics kDriveKinematics =
+            new DifferentialDriveKinematics(TRACK_WIDTH_METERS);
+
         public static final int kEncoderCPR = 4096;
         public static final double kWheelDiameterMeters = 0.15;
         public static final double kEncoderDistancePerPulse =
@@ -88,22 +101,17 @@ public final class Constants {
         public final static int kSlot_Velocit = SLOT_2;
         public final static int kSlot_MotProf = SLOT_3;
         
-        // Motion Profiling Constants
-        // These are example values only - DO NOT USE THESE FOR YOUR OWN ROBOT!
-        // These characterization values MUST be determined either experimentally or theoretically
-        // for *your* robot's drive.
-        // The Robot Characterization Toolsuite provides a convenient tool for obtaining these
-        // values for your robot.
-        public static final double ksVolts = 0.22;
-        public static final double kvVoltSecondsPerMeter = 1.98;
-        public static final double kaVoltSecondsSquaredPerMeter = 0.2;
+        /** Voltage needed to overcome the motor’s static friction. kS */
+        public static final double kS = 0.829;
+
+        /** Voltage needed to hold (or "cruise") at a given constant velocity. kV */
+        public static final double kV = 3.04;
+
+        /** Voltage needed to induce a given acceleration in the motor shaft. kA */
+        public static final double kA = 0.676;
 
         // Example value only - as above, this must be tuned for your drive!
-        public static final double kPDriveVel = 8.5;
-
-        public static final double kTrackwidthMeters = 0.69;
-        public static final DifferentialDriveKinematics kDriveKinematics =
-            new DifferentialDriveKinematics(kTrackwidthMeters);
+        public static final double kPDriveVel = 8.5;        
     }
     
     public static final class ShooterConstants {

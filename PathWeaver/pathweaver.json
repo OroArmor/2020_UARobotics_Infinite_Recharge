@@ -1,5 +1,5 @@
 {
-  "lengthUnit": "Foot",
+  "lengthUnit": "Meter",
   "maxVelocity": 10.0,
   "maxAcceleration": 10.0,
   "wheelBase": 2.0,
