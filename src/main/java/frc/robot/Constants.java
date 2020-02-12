@@ -27,8 +27,6 @@ public final class Constants {
         public static final int kRightMotor2Port = 4;
         public static final int kPigeonPort = 0;
     
-        public static final int[] kLeftEncoderPorts = new int[]{1, 2};
-        public static final int[] kRightEncoderPorts = new int[]{3, 4};
         public static final boolean kLeftEncoderReversed = false;
         public static final boolean kRightEncoderReversed = true;
 
@@ -111,11 +109,21 @@ public final class Constants {
         public static final double kA = 0.676;
 
         // Example value only - as above, this must be tuned for your drive!
-        public static final double kPDriveVel = 8.5;        
+        public static final double kPDriveVel = 8.5;       
+        
+        public static final double kTurnP = 1;
+        public static final double kTurnI = 0;
+        public static final double kTurnD = 0;
+
+        public static final double kMaxTurnRateDegPerS = 100;
+        public static final double kMaxTurnAccelerationDegPerSSquared = 300;
+
+        public static final double kTurnToleranceDeg = 5;
+        public static final double kTurnRateToleranceDegPerS = 10; // degrees per second
     }
     
     public static final class ShooterConstants {
-        public static final int[] kEncoderPorts = new int[]{5, 6};
+        public static final int[] kEncoderPorts = new int[]{8, 9};
         public static final boolean kEncoderReversed = false;
         public static final double kGearRatio = 2.0;
         // 18730 (775pro RPM) / 600 = 31.21666
@@ -129,7 +137,7 @@ public final class Constants {
         public static final double kShooterAutoLineRPM = 1000;
         public static final double kShooterToleranceRPM = 50;
         
-        public static final int kEncoderCPR = 4096;
+        public static final int kEncoderCPR = 2048;
         public static final double kWheelDiameterInches = 4;
         public static final double kEncoderDistancePerPulse =
             // Assumes the encoders are directly mounted on the wheel shafts

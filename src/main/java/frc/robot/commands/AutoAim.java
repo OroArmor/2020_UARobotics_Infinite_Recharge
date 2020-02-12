@@ -13,15 +13,17 @@ import io.github.oblarg.oblog.annotations.Log;
 import frc.robot.Constants.AutoAimConstants;
 
 public class AutoAim extends CommandBase implements Loggable{
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final ShooterSubsystem m_shooter = new ShooterSubsystem();
+  private final DriveSubsystem m_robotDrive;
+  private final ShooterSubsystem m_shooter;
   private final PIDController pid = new PIDController(AutoAimConstants.kP, 0, 0);
   /**
    * Creates a new AutoAimCommand.
    * @param m_shooter
    * @param m_robotDrive The subsystem used by this command.
    */
-  public AutoAim(DriveSubsystem m_robotDrive, ShooterSubsystem m_shooter) {
+  public AutoAim(DriveSubsystem robotDrive, ShooterSubsystem shooter) {
+    m_robotDrive = robotDrive;
+    m_shooter = shooter;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_robotDrive, m_shooter);
   }
