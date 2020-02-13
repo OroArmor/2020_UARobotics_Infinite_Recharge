@@ -11,17 +11,24 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj.geometry.Transform2d;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.DriverStation;
 import java.nio.file.Paths;
 import java.io.IOException;
 
@@ -29,6 +36,7 @@ import frc.robot.Constants.DriveConstants;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveSubsystem extends SubsystemBase implements Loggable{
   // TODO Need to fill in which Motor Controllers are actually being used on the drive
@@ -61,7 +69,9 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
 	boolean _firstCall = false;
 	boolean _state = false;
 	double _targetAngle = 0;
-	int _printCount = 0;
+  int _printCount = 0;
+  private Pose2d savedPose;
+  private Trajectory straightTrajectory;
 
   /**
    * Creates a new DriveSubsystem.
@@ -167,6 +177,13 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
     zeroHeading();
   }
 
+  public void resetOdometry() {
+    resetEncoders();
+    m_pigeon.setYaw(0, DriveConstants.kTimeoutMs);
+    savedPose = new Pose2d(0, 0, Rotation2d.fromDegrees(getHeading()));
+    m_odometry.resetPosition(savedPose, Rotation2d.fromDegrees(getHeading()));
+  }
+
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
@@ -174,6 +191,7 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
       Rotation2d.fromDegrees(getHeading()),
       m_talonsrxleft.getSelectedSensorPosition() * DriveConstants.kEncoderDistancePerPulse,
       m_talonsrxright.getSelectedSensorPosition() * DriveConstants.kEncoderDistancePerPulse);
+    SmartDashboard.putString("Pose", m_odometry.getPoseMeters().toString());
   }
 
   /**
@@ -272,6 +290,18 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
     System.out.println("[Pigeon] All sensors are zeroed.\n");
   }
 
+  public Pose2d getCurrentPose() {
+    return m_odometry.getPoseMeters();
+  }
+
+  public void saveCurrentPose() {
+    savedPose = getCurrentPose();
+  }
+
+  public Pose2d getSavedPose() {
+    return savedPose;
+  }
+
   /**
    * Returns the heading of the robot.
    *
@@ -301,6 +331,29 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
         metersPerSecToStepsPerDecisec(rightVelocity),
         DemandType.ArbitraryFeedForward,
         rightFeedForwardVolts / 12);
+  }
+
+  /**
+   * Creates a command to follow a Trajectory on the drivetrain.
+   * @param trajectory trajectory to follow
+   * @return command that will run the trajectory
+   */
+  public Command createCommandForTrajectory(String trajname) {
+    try {
+      straightTrajectory = loadTrajectory(trajname);
+    } catch (IOException e) {
+      DriverStation.reportError("Failed to load auto trajectory: " + trajname, false);
+    }
+    Transform2d transform = new Pose2d(0, 0, Rotation2d.fromDegrees(0)).minus(straightTrajectory.getInitialPose());
+    Trajectory trajectory = straightTrajectory.transformBy(transform);
+    return new RamseteCommand(
+            trajectory,
+            this::getCurrentPose,
+            new RamseteController(DriveConstants.RAMSETE_B, DriveConstants.RAMSETE_ZETA),
+            DriveConstants.kDriveKinematics,
+            this::tankDriveVelocity,
+            this)
+        .andThen(new InstantCommand(() -> arcadeDrive(0, 0), this));
   }
 
     /**

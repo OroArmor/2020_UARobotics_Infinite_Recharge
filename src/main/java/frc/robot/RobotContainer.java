@@ -178,8 +178,10 @@ public class RobotContainer {
       .whenActive(new InstantCommand(m_controlpanel::rotateWheel, m_controlpanel));
 
     // Auto Aim when Y button is pressed
-    new JoystickButton(m_driverController, Button.kY.value)
-      .whileHeld(new AutoAim(m_robotDrive, m_shooter));
+    /* new JoystickButton(m_driverController, Button.kY.value)
+      .whileHeld(new AutoAim(m_robotDrive, m_shooter)); */
+    new JoystickButton(m_driverController, Button.kY.value).whenPressed(() ->
+      m_robotDrive.createCommandForTrajectory("LS to CP"));
     
     // Create "button" from POV Hat in up direction.  Use both of the angles to the left and right also.
     new POVButton(m_driverController, 315).or(new POVButton(m_driverController, 0)).or(new POVButton(m_driverController, 45))

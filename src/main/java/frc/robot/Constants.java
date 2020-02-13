@@ -120,6 +120,10 @@ public final class Constants {
 
         public static final double kTurnToleranceDeg = 5;
         public static final double kTurnRateToleranceDegPerS = 10; // degrees per second
+
+        // Baseline values for a RAMSETE follower in units of meters and seconds
+        public static final double RAMSETE_B = 2;
+        public static final double RAMSETE_ZETA = 0.7;
     }
     
     public static final class ShooterConstants {
