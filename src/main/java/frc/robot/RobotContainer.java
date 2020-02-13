@@ -58,8 +58,8 @@ public class RobotContainer {
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   @Log
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  @Log
-  private final ControlPanelSubsystem m_controlpanel = new ControlPanelSubsystem();
+ /*  @Log
+  private final ControlPanelSubsystem m_controlpanel = new ControlPanelSubsystem(); */
   @Log
   private final LEDSubsystem m_LED = new LEDSubsystem();
   @Log
@@ -95,11 +95,11 @@ public class RobotContainer {
         new RunCommand(() -> m_intake
             .setOutput(m_driverController.getRawAxis(3)), m_intake));
 
-    m_controlpanel.setDefaultCommand(
+/*     m_controlpanel.setDefaultCommand(
       // Use left x axis to control the speed of the control panel
       new RunCommand(
         () -> m_controlpanel
-          .setOutput(m_operatorController.getRawAxis(0)), m_controlpanel));
+          .setOutput(m_operatorController.getRawAxis(0)), m_controlpanel)); */
 
     m_climb.setDefaultCommand(
       // Use right y axis to control the speed of the climber
@@ -107,10 +107,10 @@ public class RobotContainer {
         () -> m_climb
           .setOutput(m_operatorController.getRawAxis(5)), m_climb));
 
-    m_controlpanel.setDefaultCommand(
+/*     m_controlpanel.setDefaultCommand(
       new RunCommand(
         () -> m_controlpanel
-          .StartColorFind(m_operatorController.getRawAxis(2)), m_controlpanel));
+          .StartColorFind(m_operatorController.getRawAxis(2)), m_controlpanel)); */
                          
     // Sets the LEDs to start up with a rainbow config
     //m_LED.rainbow();
@@ -173,14 +173,14 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, Button.kBumperRight.value).or(new JoystickButton(m_driverController, Button.kBumperRight.value))
       .whenActive(new InstantCommand(m_intake::toggleIntakePosition, m_intake));
 
-    // When left bumper is pressed spin control panel
+/*     // When left bumper is pressed spin control panel
     new JoystickButton(m_operatorController, Button.kBumperLeft.value).or(new JoystickButton(m_driverController, Button.kBumperLeft.value))
-      .whenActive(new InstantCommand(m_controlpanel::rotateWheel, m_controlpanel));
+      .whenActive(new InstantCommand(m_controlpanel::rotateWheel, m_controlpanel)); */
 
     // Auto Aim when Y button is pressed
-    new JoystickButton(m_driverController, Button.kY.value)
+    /* new JoystickButton(m_driverController, Button.kY.value)
       .whileHeld(new AutoAim(m_robotDrive, m_shooter));
-    
+     */
     // Create "button" from POV Hat in up direction.  Use both of the angles to the left and right also.
     new POVButton(m_driverController, 315).or(new POVButton(m_driverController, 0)).or(new POVButton(m_driverController, 45))
       .whenActive(new InstantCommand());

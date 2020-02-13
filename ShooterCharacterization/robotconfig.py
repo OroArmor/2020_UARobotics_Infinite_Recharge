@@ -28,6 +28,7 @@
     # Ports for the flywheel encoder
     "encoderPorts": [8, 9],
     # Whether the encoder is inverted
-    "encoderInverted": False,
+    "encoderInverted": True,
 }
+
 
