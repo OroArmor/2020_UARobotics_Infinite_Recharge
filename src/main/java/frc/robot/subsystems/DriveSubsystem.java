@@ -195,15 +195,6 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
   }
 
   /**
-   * Returns the currently-estimated pose of the robot.
-   *
-   * @return The pose.
-   */
-  public Pose2d getPose() {
-    return m_odometry.getPoseMeters();
-  }
-
-  /**
    * Returns the current wheel speeds of the robot.
    *
    * @return The current wheel speeds.
