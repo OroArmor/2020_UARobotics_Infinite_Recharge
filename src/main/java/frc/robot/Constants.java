@@ -199,7 +199,7 @@ public final class Constants {
     }
 
     public static final class IntakeConstants {
-        public static final int kIntakeControllerPort = 8;
+        public static final int kIntakeControllerPort = 5;
         public static final int kConveyor1ControllerPort = 9;
         public static final int kConveyor2ControllerPort = 10;
         public static final int kSolenoid1ControllerPort = 1;

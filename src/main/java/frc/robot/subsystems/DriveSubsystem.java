@@ -42,13 +42,11 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
   // TODO Need to fill in which Motor Controllers are actually being used on the drive
 	// The motors on the left and right side of the drivetrain
 	@Log
-	private final WPI_TalonSRX m_talonsrxleft = new WPI_TalonSRX(DriveConstants.kLeftMotor1Port);
-	private final WPI_VictorSPX m_talonsrxleft2 = new WPI_VictorSPX(DriveConstants.kLeftMotor2Port);
+	private final WPI_TalonSRX m_talonsrxleft = new WPI_TalonSRX(DriveConstants.kLeftMotor2Port);
+	private final WPI_VictorSPX m_victorspxleft = new WPI_VictorSPX(DriveConstants.kLeftMotor1Port);
 	@Log
-	private final WPI_TalonSRX m_talonsrxright = new WPI_TalonSRX(DriveConstants.kRightMotor1Port);
-  private final WPI_VictorSPX m_victorspxright = new WPI_VictorSPX(DriveConstants.kRightMotor2Port);
-  @Log
-	private final WPI_TalonSRX m_talonsrxright2 = new WPI_TalonSRX(DriveConstants.kPigeonPort);
+	private final WPI_TalonSRX m_talonsrxright = new WPI_TalonSRX(DriveConstants.kRightMotor2Port);
+  private final WPI_TalonSRX m_talonsrxright2 = new WPI_TalonSRX(DriveConstants.kRightMotor1Port);
 
   // Pigeon is plugged into the second talon on the left side
   private final PigeonIMU m_pigeon = new PigeonIMU(m_talonsrxright2);
@@ -80,8 +78,8 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
 		m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
 
 			// Set followers
-		m_talonsrxleft2.set(ControlMode.Follower, DriveConstants.kLeftMotor1Port);
-		m_victorspxright.set(ControlMode.Follower, DriveConstants.kRightMotor1Port);
+		m_victorspxleft.set(ControlMode.Follower, DriveConstants.kLeftMotor1Port);
+		m_talonsrxright2.set(ControlMode.Follower, DriveConstants.kRightMotor1Port);
 
     /* Disable all motor controllers */
 		m_talonsrxright.set(ControlMode.PercentOutput, 0);
