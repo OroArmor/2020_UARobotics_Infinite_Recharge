@@ -209,6 +209,7 @@ public final class Constants {
     }
 
     public static final class ClimbConstants {
-        public static final int kClimbControllerPort = 11;
+        public static final int kClimbControllerPort = 10;
+        public static final int kClimbController2Port = 11;
     }
 }
