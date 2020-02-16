@@ -111,7 +111,7 @@ public final class Constants {
         // Example value only - as above, this must be tuned for your drive!
         public static final double kPDriveVel = 8.5;       
         
-        public static final double kTurnP = 1;
+        public static final double kTurnP = .004;
         public static final double kTurnI = 0;
         public static final double kTurnD = 0;
 

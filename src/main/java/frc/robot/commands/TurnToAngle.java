@@ -34,6 +34,16 @@ public class TurnToAngle extends PIDCommand {
     // setpoint before it is considered as having reached the reference
     getController()
         .setTolerance(DriveConstants.kTurnToleranceDeg, DriveConstants.kTurnRateToleranceDegPerS);
+
+/*     private double addConstant(double output) {
+      double constant = 0.2;
+      if (output > 0) {
+        return output + constant;
+      }
+      else {
+        return output - constant;
+      }
+    } */
   }
 
   @Override

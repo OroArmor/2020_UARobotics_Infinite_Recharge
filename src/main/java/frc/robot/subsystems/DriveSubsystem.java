@@ -209,6 +209,7 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
    *
    * @param pose The pose to which to set the odometry.
    */
+  @Config
   public void resetOdometry(final Pose2d pose) {
     resetEncoders();
     m_odometry.resetPosition(pose, Rotation2d.fromDegrees(getHeading()));
@@ -291,6 +292,7 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
   }
 
   /** Zero all sensors used. */
+  @Config
   void zeroHeading() {
     m_pigeon.setYaw(0, DriveConstants.kTimeoutMs);
     m_pigeon.setAccumZAngle(0, DriveConstants.kTimeoutMs);

@@ -6,17 +6,17 @@
     # 'WPI_VictorSPX'
     # Note: The first motor on each side should always be a Talon SRX/FX, as the
     # VictorSPX does not support encoder connections
-    "rightControllerTypes": ["WPI_TalonSRX", "WPI_VictorSPX"],
+    "rightControllerTypes": ["WPI_TalonSRX", "WPI_TalonSRX"],
     "leftControllerTypes": ["WPI_TalonSRX", "WPI_VictorSPX"],
     # Note: The first id in the list of ports should be the one with an encoder
     # Ports for the left-side motors
-    "leftMotorPorts": [1, 2],
+    "leftMotorPorts": [2, 1],
     # Ports for the right-side motors
-    "rightMotorPorts": [3, 4],
+    "rightMotorPorts": [4, 3],
     # Inversions for the left-side motors
     "leftMotorsInverted": [False, False],
     # Inversions for the right side motors
-    "rightMotorsInverted": [True, True],
+    "rightMotorsInverted": [False, False],
     # Wheel diameter (in units of your choice - will dictate units of analysis)
     "wheelDiameter": 0.2032,
     # If your robot has only one encoder, set all right encoder fields to `None`
@@ -27,7 +27,7 @@
     # Whether the left encoder is inverted
     "leftEncoderInverted": True,
     # Whether the right encoder is inverted:
-    "rightEncoderInverted": True,
+    "rightEncoderInverted": False,
     # Your gyro type (one of "NavX", "Pigeon", "ADXRS450", "AnalogGyro", or "None")
     "gyroType": "Pigeon",
     # Whatever you put into the constructor of your gyro
@@ -39,6 +39,9 @@
     # "new WPI_TalonSRX(3)" (Pigeon on a Talon SRX),
     # "leftSlave" (Pigeon on the left slave Talon SRX/FX),
     # "" (NavX using default SPI, ADXRS450 using onboard CS0, or no gyro)
-    "gyroPort": "0",
+    "gyroPort": "3",
 }
+
+
+
 

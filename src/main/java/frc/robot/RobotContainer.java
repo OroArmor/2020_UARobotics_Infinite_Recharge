@@ -31,7 +31,8 @@ import io.github.oblarg.oblog.annotations.Log;
 
 // Command Imports
 import frc.robot.commands.AutoAim;
-
+import frc.robot.commands.TurnToAngle;
+import frc.robot.commands.TurnToAngleProfiled;
 // Subsystem Imports
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -188,11 +189,11 @@ public class RobotContainer {
      */
     // Create "button" from POV Hat in up direction.  Use both of the angles to the left and right also.
     new POVButton(m_driverController, 315).or(new POVButton(m_driverController, 0)).or(new POVButton(m_driverController, 45))
-      .whenActive(new InstantCommand());
+      .whenActive(new TurnToAngle(90, m_robotDrive).withTimeout(5));
     
     // Create "button" from POV Hat in down direction.  Use both of the angles to the left and right also.
     new POVButton(m_driverController, 225).or(new POVButton(m_driverController, 180)).or(new POVButton(m_driverController, 135))
-      .whenActive(new InstantCommand());
+      .whenActive(new TurnToAngle(-90, m_robotDrive).withTimeout(5));
   }
 
   @Config(name="shooterPID")
