@@ -10,6 +10,7 @@ package frc.robot;
 import java.io.IOException;
 
 // WPI Imports
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -80,6 +81,9 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    // Limelight Setup
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(1);
 
     // Configure default commands
     // Set the default drive command to split-stick arcade drive

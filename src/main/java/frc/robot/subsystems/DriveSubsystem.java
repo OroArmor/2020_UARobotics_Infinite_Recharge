@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.DriverStation;
 import java.nio.file.Paths;
@@ -237,6 +238,23 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
     right = Deadband(right);
     m_talonsrxleft.set(ControlMode.PercentOutput, left);
     m_talonsrxright.set(ControlMode.PercentOutput, right);
+  }
+
+  /**
+   * Attempts to follow the given drive states using offboard PID. THIS IS UNTESTED
+   *
+   * @param left The left wheel state.
+   * @param right The right wheel state.
+   */
+  public void setDriveStates(TrapezoidProfile.State left, TrapezoidProfile.State right) {
+    m_talonsrxleft.set(ControlMode.Position,
+                             left.position,
+                             DemandType.ArbitraryFeedForward,
+                             m_driveFeedforward.calculate(left.velocity));
+    m_talonsrxright.set(ControlMode.Position,
+                              right.position,
+                              DemandType.ArbitraryFeedForward,
+                              m_driveFeedforward.calculate(right.velocity));
   }
 
   /**
