@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     // The first argument is the root container
     // The second argument is whether logging and config should be given separate tabs
-    Logger.configureLoggingAndConfig(m_robotContainer, true);
+    Logger.configureLoggingAndConfig(m_robotContainer, false);
   }
 
   /**

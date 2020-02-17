@@ -24,7 +24,7 @@ public class TurnToAngle extends PIDCommand {
         // Set reference to target
         targetAngleDegrees,
         // Pipe output to turn robot
-        output -> drive.arcadeDrive(0, output),
+        (output, drive) -> this.useOutput,
         // Require the drive
         drive);
 
@@ -34,16 +34,6 @@ public class TurnToAngle extends PIDCommand {
     // setpoint before it is considered as having reached the reference
     getController()
         .setTolerance(DriveConstants.kTurnToleranceDeg, DriveConstants.kTurnRateToleranceDegPerS);
-
-/*     private double addConstant(double output) {
-      double constant = 0.2;
-      if (output > 0) {
-        return output + constant;
-      }
-      else {
-        return output - constant;
-      }
-    } */
   }
 
   @Override
@@ -51,4 +41,13 @@ public class TurnToAngle extends PIDCommand {
     // End when the controller is at the reference.
     return getController().atSetpoint();
   }
+
+  public void useOutput(double output, DriveSubsystem drive) {
+    if (output > 0) {
+        drive.arcadeDrive(0, output + DriveConstants.turnfriction);
+    } else if (output < 0) {
+        drive.arcadeDrive(0, output - DriveConstants.turnfriction);
+    } else {
+        drive.arcadeDrive(0, output);
+    }
 }

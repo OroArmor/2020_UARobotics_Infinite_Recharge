@@ -121,6 +121,9 @@ public class RobotContainer {
     // Sets the LEDs to start up with a rainbow config
     //m_LED.rainbow();
 
+    // Makes sure climber is not inverted
+    m_climb.invertclimber(false);
+
     autoChooser.addOption("Auto Aim", new AutoAim(m_robotDrive, m_shooter));
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
