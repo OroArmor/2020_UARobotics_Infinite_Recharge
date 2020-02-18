@@ -6,6 +6,7 @@ import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
+import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
@@ -92,11 +93,10 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
 		m_pigeon.configFactoryDefault();
     
     // Set Ramping
-
     m_talonsrxleft.configClosedloopRamp(DriveConstants.kClosedRamp);
-    m_talonsrxleft.configClosedloopRamp(DriveConstants.kOpenRamp);
+    m_talonsrxleft.configOpenloopRamp(DriveConstants.kOpenRamp);
     m_talonsrxright.configClosedloopRamp(DriveConstants.kClosedRamp);
-    m_talonsrxright.configClosedloopRamp(DriveConstants.kOpenRamp);
+    m_talonsrxright.configOpenloopRamp(DriveConstants.kOpenRamp);
 
 		/* Set Neutral Mode */
 		m_talonsrxleft.setNeutralMode(NeutralMode.Brake);
@@ -142,6 +142,14 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
 		m_talonsrxleft.configPeakOutputReverse(-1.0, DriveConstants.kTimeoutMs);
 		m_talonsrxright.configPeakOutputForward(+1.0, DriveConstants.kTimeoutMs);
 		m_talonsrxright.configPeakOutputReverse(-1.0, DriveConstants.kTimeoutMs);
+
+    /* FPID Gains for distance servo */
+		m_talonsrxright.config_kP(DriveConstants.kSlot_Distanc, DriveConstants.kGains_Distanc.kP, DriveConstants.kTimeoutMs);
+		m_talonsrxright.config_kI(DriveConstants.kSlot_Distanc, DriveConstants.kGains_Distanc.kI, DriveConstants.kTimeoutMs);
+		m_talonsrxright.config_kD(DriveConstants.kSlot_Distanc, DriveConstants.kGains_Distanc.kD, DriveConstants.kTimeoutMs);
+		m_talonsrxright.config_kF(DriveConstants.kSlot_Distanc, DriveConstants.kGains_Distanc.kF, DriveConstants.kTimeoutMs);
+		m_talonsrxright.config_IntegralZone(DriveConstants.kSlot_Distanc, DriveConstants.kGains_Distanc.kIzone, DriveConstants.kTimeoutMs);
+		m_talonsrxright.configClosedLoopPeakOutput(DriveConstants.kSlot_Distanc, DriveConstants.kGains_Distanc.kPeakOutput, DriveConstants.kTimeoutMs);
 
 		/* FPID Gains for turn servo */
 		m_talonsrxright.config_kP(DriveConstants.kSlot_Turning, DriveConstants.kGains_Turning.kP, DriveConstants.kTimeoutMs);
@@ -404,11 +412,22 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
 
   protected static Trajectory loadTrajectory(String trajectoryName) throws IOException {
     return TrajectoryUtil.fromPathweaverJson(
-        Filesystem.getDeployDirectory().toPath().resolve(Paths.get("paths", "output", trajectoryName + ".wpilib.json")));
+        Filesystem.getDeployDirectory().toPath().resolve(Paths.get("paths", trajectoryName + ".wpilib.json")));
   }
 
-  // Drives straight specified distance 
-  public void drivestraight() {
-    
+  // Drives straight specified distance in inches
+  public void drivestraight(double distance) {
+    double target_sensorUnits = (distance * DriveConstants.SENSOR_UNITS_PER_ROTATION) / DriveConstants.WHEEL_CIRCUMFERENCE_INCHES ;
+    m_talonsrxright.set(ControlMode.Position, target_sensorUnits, DemandType.AuxPID, m_talonsrxright.getSelectedSensorPosition(1));
+		m_talonsrxleft.follow(m_talonsrxright, FollowerType.AuxOutput1);
+  }
+
+  // Sets up the talons to drive straightDistance with aux pid from Pigeon 
+  public void distancesetup() {
+    resetEncoders();
+				
+    /* Determine which slot affects which PID */
+    m_talonsrxright.selectProfileSlot(DriveConstants.kSlot_Distanc, DriveConstants.PID_PRIMARY);
+    m_talonsrxright.selectProfileSlot(DriveConstants.kSlot_Turning, DriveConstants.PID_TURN);
   }
 }

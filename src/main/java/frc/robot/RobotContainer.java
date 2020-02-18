@@ -161,37 +161,48 @@ public class RobotContainer {
 
     // Stop the Shooter when the B button is pressed
     new JoystickButton(m_driverController, Button.kB.value)
-      .whenPressed(new InstantCommand(() -> {
+      .or(new JoystickButton(m_operatorController, Button.kB.value))
+      .whenActive(new InstantCommand(() -> {
         m_shooter.setSetpoint(0);
         m_shooter.disable();
       }, m_shooter));
 
     // Run the feeder when the 'A' button is held, but only if the shooter is at speed
     new JoystickButton(m_driverController, Button.kA.value)
-    .or(new JoystickButton(m_operatorController, Button.kA.value))  
-    .whenActive(new ConditionalCommand(
-        // Run the feeder
-        new InstantCommand(m_shooter::runFeeder, m_shooter),
-        // Do nothing
-        new InstantCommand(),
-        // Determine which of the above to do based on whether the shooter has reached the
-        // desired speed
-        m_shooter::atSetpoint)).whenInactive(new InstantCommand(m_shooter::stopFeeder, m_shooter));
+      .or(new JoystickButton(m_operatorController, Button.kA.value))  
+      .whileActiveOnce(new ConditionalCommand(
+          // Run the feeder
+          new InstantCommand(m_shooter::runFeeder, m_shooter),
+          // Do nothing
+          new InstantCommand(),
+          // Determine which of the above to do based on whether the shooter has reached the
+          // desired speed
+          m_shooter::atSetpoint)).whenInactive(new InstantCommand(m_shooter::stopFeeder, m_shooter));
 
-    // When right bumper is pressed raise/lower the intake on both controllers
+    // When right bumper is pressed raise/lower the intake and stop/start the conveyor and intake on both controllers
     new JoystickButton(m_operatorController, Button.kBumperRight.value).or(new JoystickButton(m_driverController, Button.kBumperRight.value))
       .whenActive(new InstantCommand(m_intake::toggleIntakePosition, m_intake)
       .alongWith(new InstantCommand(m_intake::toggleIntakeWheels, m_intake),
       new InstantCommand(m_intake::toggleConveyor, m_intake)));
 
-/*     // When left bumper is pressed spin control panel
+    /*     // When left bumper is pressed spin control panel
     new JoystickButton(m_operatorController, Button.kBumperLeft.value).or(new JoystickButton(m_driverController, Button.kBumperLeft.value))
       .whenActive(new InstantCommand(m_controlpanel::rotateWheel, m_controlpanel)); */
+
+    new JoystickButton(m_operatorController, Button.kBumperLeft.value).or(new JoystickButton(m_driverController, Button.kBumperLeft.value))
+      .whenActive(new InstantCommand(() -> {
+        m_robotDrive.distancesetup();
+        m_robotDrive.drivestraight(120);
+      }, m_robotDrive));
 
     // Auto Aim when Y button is pressed
     /* new JoystickButton(m_driverController, Button.kY.value)
       .whileHeld(new AutoAim(m_robotDrive, m_shooter));
      */
+
+    new JoystickButton(m_driverController, Button.kY.value).whenPressed(() ->
+      m_robotDrive.createCommandForTrajectory("LS to CP"));
+     
     // Create "button" from POV Hat in up direction.  Use both of the angles to the left and right also.
     new POVButton(m_driverController, 315).or(new POVButton(m_driverController, 0)).or(new POVButton(m_driverController, 45))
       .whenActive(new TurnToAngle(90, m_robotDrive).withTimeout(5));
