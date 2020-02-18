@@ -114,7 +114,7 @@ public final class Constants {
         public static final double kTurnP = .004;
         public static final double kTurnI = 0;
         public static final double kTurnD = 0;
-        public static final double turnfriction = 0.2;
+        public static final double kTurnFriction = 0.2;
 
         public static final double kMaxTurnRateDegPerS = 100;
         public static final double kMaxTurnAccelerationDegPerSSquared = 300;
@@ -207,6 +207,9 @@ public final class Constants {
         public static final int kSolenoid2ControllerPort = 1;
         public static final int kSolenoid3ControllerPort = 4;
         public static final int kSolenoid4ControllerPort = 5;
+
+        public static final double kIntakeMotorSpeed = 0.5;
+        public static final double kConveyorMotorSpeed = 0.8;
     }
 
     public static final class ClimbConstants {

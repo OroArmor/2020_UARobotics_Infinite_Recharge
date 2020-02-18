@@ -10,6 +10,7 @@ import frc.robot.subsystems.DriveSubsystem;
  * A command that will turn the robot to the specified angle.
  */
 public class TurnToAngle extends PIDCommand {
+  private final DriveSubsystem drive;
   /**
    * Turns to robot to the specified angle.
    *
@@ -24,9 +25,18 @@ public class TurnToAngle extends PIDCommand {
         // Set reference to target
         targetAngleDegrees,
         // Pipe output to turn robot
-        (output, drive) -> this.useOutput,
+        output -> {
+          if (output > 0) {
+              drive.arcadeDrive(0, output + DriveConstants.kTurnFriction);
+          } else if (output < 0) {
+              drive.arcadeDrive(0, output - DriveConstants.kTurnFriction);
+          } else {
+              drive.arcadeDrive(0, output);
+          }
+        },
         // Require the drive
         drive);
+    this.drive = drive;
 
     // Set the controller to be continuous (because it is an angle controller)
     getController().enableContinuousInput(-180, 180);
@@ -41,13 +51,4 @@ public class TurnToAngle extends PIDCommand {
     // End when the controller is at the reference.
     return getController().atSetpoint();
   }
-
-  public void useOutput(double output, DriveSubsystem drive) {
-    if (output > 0) {
-        drive.arcadeDrive(0, output + DriveConstants.turnfriction);
-    } else if (output < 0) {
-        drive.arcadeDrive(0, output - DriveConstants.turnfriction);
-    } else {
-        drive.arcadeDrive(0, output);
-    }
 }
