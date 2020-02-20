@@ -5,11 +5,13 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Log;
 
 /**
  * A command that will turn the robot to the specified angle.
  */
-public class TurnToAngle extends PIDCommand {
+public class TurnToAngle extends PIDCommand implements Loggable{
   private final DriveSubsystem drive;
   /**
    * Turns to robot to the specified angle.
@@ -46,9 +48,20 @@ public class TurnToAngle extends PIDCommand {
         .setTolerance(DriveConstants.kTurnToleranceDeg, DriveConstants.kTurnRateToleranceDegPerS);
   }
 
+  @Log
   @Override
   public boolean isFinished() {
     // End when the controller is at the reference.
     return getController().atSetpoint();
+  }
+
+  @Log
+  public double getPositionError() {
+    return getController().getPositionError();
+  }
+
+  @Log
+  public double getVelocityError() {
+    return getController().getVelocityError();
   }
 }
