@@ -182,8 +182,8 @@ public class RobotContainer {
     // When right bumper is pressed raise/lower the intake and stop/start the conveyor and intake on both controllers
     new JoystickButton(m_operatorController, Button.kBumperRight.value).or(new JoystickButton(m_driverController, Button.kBumperRight.value))
       .whenActive(new InstantCommand(m_intake::toggleIntakePosition, m_intake)
-      .alongWith(new InstantCommand(m_intake::toggleIntakeWheels, m_intake),
-      new InstantCommand(m_intake::toggleConveyor, m_intake)));
+      .andThen(new InstantCommand(m_intake::toggleIntakeWheels, m_intake))
+      .andThen(new InstantCommand(m_intake::toggleConveyor, m_intake)));
 
     /*     // When left bumper is pressed spin control panel
     new JoystickButton(m_operatorController, Button.kBumperLeft.value).or(new JoystickButton(m_driverController, Button.kBumperLeft.value))

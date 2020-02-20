@@ -56,7 +56,6 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable{
         else{
             this.m_IntakeMotor.set(IntakeConstants.kIntakeMotorSpeed);
         }
-        
     }
 
     @Log

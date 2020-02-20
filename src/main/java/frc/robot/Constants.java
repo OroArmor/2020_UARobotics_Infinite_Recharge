@@ -111,10 +111,10 @@ public final class Constants {
         // Example value only - as above, this must be tuned for your drive!
         public static final double kPDriveVel = 8.5;       
         
-        public static final double kTurnP = .004;
+        public static final double kTurnP = .001;
         public static final double kTurnI = 0;
         public static final double kTurnD = 0;
-        public static final double kTurnFriction = 0.2;
+        public static final double kTurnFriction = 0.35;
 
         public static final double kMaxTurnRateDegPerS = 100;
         public static final double kMaxTurnAccelerationDegPerSSquared = 300;
@@ -164,7 +164,7 @@ public final class Constants {
     
     public static final class ControlPanelConstants {
         public static final int kSolenoidPort = 0;
-        public static final int kSpinWheelPort = 7;
+        public static final int kSpinWheelPort = 33;
         public static final double kWheelSpeedFast = 0.6;
         public static final double kWheelSpeedSlow = 0.1;
         public static final double colorwheel_past = 2;
@@ -201,15 +201,15 @@ public final class Constants {
 
     public static final class IntakeConstants {
         public static final int kIntakeControllerPort = 5;
-        public static final int kConveyor1ControllerPort = 9;
-        public static final int kConveyor2ControllerPort = 10;
+        public static final int kConveyor1ControllerPort = 7;
+        public static final int kConveyor2ControllerPort = 8;
         public static final int kSolenoid1ControllerPort = 0;
         public static final int kSolenoid2ControllerPort = 1;
         public static final int kSolenoid3ControllerPort = 4;
         public static final int kSolenoid4ControllerPort = 5;
 
         public static final double kIntakeMotorSpeed = 0.5;
-        public static final double kConveyorMotorSpeed = 0.8;
+        public static final double kConveyorMotorSpeed = 1.0;
     }
 
     public static final class ClimbConstants {
