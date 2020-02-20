@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
@@ -34,7 +35,6 @@ import frc.robot.commands.AutoAim;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.commands.TurnToAngleProfiled;
 // Subsystem Imports
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
@@ -54,8 +54,6 @@ import frc.robot.Constants.OIConstants;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   @Log
   private final ShooterSubsystem m_shooter = new ShooterSubsystem();
   @Log
@@ -68,6 +66,12 @@ public class RobotContainer {
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
   @Log
   private final ClimbSubsystem m_climb = new ClimbSubsystem();
+
+  @Log.PDP
+  PowerDistributionPanel m_PDP = new PowerDistributionPanel(0);
+  
+  // Creating this so we get logging in the Command
+  Command m_TurnToAngle = new TurnToAngle(0, m_robotDrive);
 
   private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
@@ -181,9 +185,9 @@ public class RobotContainer {
 
     // When right bumper is pressed raise/lower the intake and stop/start the conveyor and intake on both controllers
     new JoystickButton(m_operatorController, Button.kBumperRight.value).or(new JoystickButton(m_driverController, Button.kBumperRight.value))
-      .whenActive(new InstantCommand(m_intake::toggleIntakePosition, m_intake)
-      .andThen(new InstantCommand(m_intake::toggleIntakeWheels, m_intake))
-      .andThen(new InstantCommand(m_intake::toggleConveyor, m_intake)));
+      .whenActive(new InstantCommand(() -> m_intake.toggleIntakePosition(true), m_intake)
+      .andThen(new InstantCommand(() -> m_intake.toggleIntakeWheels(true), m_intake))
+      .andThen(new InstantCommand(() -> m_intake.toggleConveyor(true), m_intake)));
 
     /*     // When left bumper is pressed spin control panel
     new JoystickButton(m_operatorController, Button.kBumperLeft.value).or(new JoystickButton(m_driverController, Button.kBumperLeft.value))

@@ -12,28 +12,27 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.RobotState;
 
 public class ClimbSubsystem extends SubsystemBase implements Loggable{
-    @Log
+    @Config(name="ClimbMotorLeft")
     //private final WPI_TalonSRX m_ClimbMotor = new WPI_TalonSRX(ClimbConstants.kClimbControllerPort);
-    private final WPI_VictorSPX m_ClimbMotor = new WPI_VictorSPX(ClimbConstants.kClimbControllerPort);
+    private final WPI_VictorSPX m_LeftClimbMotor = new WPI_VictorSPX(ClimbConstants.kClimbLeftControllerPort);
     
-    @Log
+    @Config(name="ClimbMotorRight")
     //private final WPI_TalonSRX m_ClimbMotor2 = new WPI_TalonSRX(ClimbConstants.kClimbController2Port);
-    private final WPI_VictorSPX m_ClimbMotor2 = new WPI_VictorSPX(ClimbConstants.kClimbController2Port);
+    private final WPI_VictorSPX m_RightClimbMotor = new WPI_VictorSPX(ClimbConstants.kClimbRightControllerPort);
 
     private int climbinvert = 1;
 
     public ClimbSubsystem() {
-        m_ClimbMotor2.setInverted(true);
+        m_RightClimbMotor.setInverted(true);
         setOutput(0,0);
     }
 
-    @Log
-    public void setOutput(double motorPercent, double motorPercent2) {
-        this.m_ClimbMotor.set(motorPercent * climbinvert);
-        this.m_ClimbMotor2.set(motorPercent2 * climbinvert);
+    public void setOutput(double leftMotorPercent, double rightMotorPercent) {
+        this.m_LeftClimbMotor.set(leftMotorPercent * climbinvert);
+        this.m_RightClimbMotor.set(rightMotorPercent * climbinvert);
 
         // As soon as we start raising the hooks switch the camera so the hook view is larger
-        if(motorPercent > .5 || motorPercent2 > .5) {
+        if(leftMotorPercent > .5 || rightMotorPercent > .5) {
             NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(2);
         }
     }

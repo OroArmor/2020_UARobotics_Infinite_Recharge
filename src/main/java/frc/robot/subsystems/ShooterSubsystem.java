@@ -54,6 +54,11 @@ public class ShooterSubsystem extends PIDSubsystem implements Loggable{
     return m_controller.atSetpoint();
   }
 
+  @Log
+  public double getSetpoint() {
+    return m_controller.getSetpoint();
+  }
+
   public void runFeeder() {
     m_feederMotor.set(ShooterConstants.kFeederSpeed);
   }

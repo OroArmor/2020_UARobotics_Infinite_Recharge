@@ -43,10 +43,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class DriveSubsystem extends SubsystemBase implements Loggable{
   // TODO Need to fill in which Motor Controllers are actually being used on the drive
 	// The motors on the left and right side of the drivetrain
-	@Log
+	@Config(name="m_talonsrxleft")
 	private final WPI_TalonSRX m_talonsrxleft = new WPI_TalonSRX(DriveConstants.kLeftMotor2Port);
 	private final WPI_VictorSPX m_victorspxleft = new WPI_VictorSPX(DriveConstants.kLeftMotor1Port);
-	@Log
+	@Config(name="m_talonsrxright")
 	private final WPI_TalonSRX m_talonsrxright = new WPI_TalonSRX(DriveConstants.kRightMotor2Port);
   private final WPI_TalonSRX m_talonsrxright2 = new WPI_TalonSRX(DriveConstants.kRightMotor1Port);
 
@@ -57,6 +57,7 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
   private final DifferentialDriveOdometry m_odometry;
 
   // PID Controller for Driving straight with Gyro
+  @Config(name="gyroPID")
   private final PIDController m_gyropid = new PIDController(DriveConstants.kGyroPID, 0, 0);
 
   // Using onboard feedforward since it is more accurate than Talon Feedforward
@@ -181,7 +182,7 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
     _firstCall = true;
     _state = false;
     _printCount = 0;
-    zeroHeading();
+    zeroHeading(true);
   }
 
   public void resetOdometry() {
@@ -300,8 +301,8 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
   }
 
   /** Zero all sensors used. */
-  @Config
-  void zeroHeading() {
+  @Config.ToggleButton
+  void zeroHeading(boolean enabled) {
     m_pigeon.setYaw(0, DriveConstants.kTimeoutMs);
     m_pigeon.setAccumZAngle(0, DriveConstants.kTimeoutMs);
     System.out.println("[Pigeon] All sensors are zeroed.\n");
@@ -429,5 +430,15 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
     /* Determine which slot affects which PID */
     m_talonsrxright.selectProfileSlot(DriveConstants.kSlot_Distanc, DriveConstants.PID_PRIMARY);
     m_talonsrxright.selectProfileSlot(DriveConstants.kSlot_Turning, DriveConstants.PID_TURN);
+  }
+
+  @Log
+  public double getrighterror() {
+    return metersToSteps(m_talonsrxright.getClosedLoopError());
+  }
+
+  @Log
+  public double getlefterror() {
+    return metersToSteps(m_talonsrxleft.getClosedLoopError());
   }
 }

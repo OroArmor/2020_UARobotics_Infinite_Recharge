@@ -55,12 +55,12 @@ public class TurnToAngle extends PIDCommand implements Loggable{
     return getController().atSetpoint();
   }
 
-  @Log
+  @Log.Graph
   public double getPositionError() {
     return getController().getPositionError();
   }
 
-  @Log
+  @Log.Graph
   public double getVelocityError() {
     return getController().getVelocityError();
   }
