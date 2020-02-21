@@ -29,10 +29,14 @@ public class ShooterSubsystem extends PIDSubsystem implements Loggable{
       new SimpleMotorFeedforward(ShooterConstants.kSVolts,
                                  ShooterConstants.kVVoltSecondsPerRotation);
 
+  @Config
+  private final PIDController shooterPID;
+
   // The shooter subsystem for the robot.
   public ShooterSubsystem() {
     super(new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD));
-    getController().setTolerance(ShooterConstants.kShooterToleranceRPM);
+    shooterPID = getController();
+    shooterPID.setTolerance(ShooterConstants.kShooterToleranceRPM);
     m_shooterEncoder.setDistancePerPulse(ShooterConstants.kEncoderDistancePerPulse);
     m_shooterMotor2.follow(m_shooterMotor);
     m_shooterMotor2.setInverted(InvertType.OpposeMaster);
@@ -51,12 +55,12 @@ public class ShooterSubsystem extends PIDSubsystem implements Loggable{
 
   @Log
   public boolean atSetpoint() {
-    return m_controller.atSetpoint();
+    return shooterPID.atSetpoint();
   }
 
   @Log
   public double getSetpoint() {
-    return m_controller.getSetpoint();
+    return shooterPID.getSetpoint();
   }
 
   public void runFeeder() {

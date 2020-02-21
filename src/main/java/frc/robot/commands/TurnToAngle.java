@@ -7,12 +7,15 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
+import io.github.oblarg.oblog.annotations.Config;
 
 /**
  * A command that will turn the robot to the specified angle.
  */
 public class TurnToAngle extends PIDCommand implements Loggable{
   private final DriveSubsystem drive;
+
+  @Config
   private final PIDController controller;
   /**
    * Turns to robot to the specified angle.
@@ -42,11 +45,10 @@ public class TurnToAngle extends PIDCommand implements Loggable{
     this.drive = drive;
     this.controller = getController();
     // Set the controller to be continuous (because it is an angle controller)
-    getController().enableContinuousInput(-180, 180);
+    controller.enableContinuousInput(-180, 180);
     // Set the controller tolerance - the delta tolerance ensures the robot is stationary at the
     // setpoint before it is considered as having reached the reference
-    getController()
-        .setTolerance(DriveConstants.kTurnToleranceDeg, DriveConstants.kTurnRateToleranceDegPerS);
+    controller.setTolerance(DriveConstants.kTurnToleranceDeg, DriveConstants.kTurnRateToleranceDegPerS);
   }
 
   @Log

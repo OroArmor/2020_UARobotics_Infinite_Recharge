@@ -12,12 +12,12 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.RobotState;
 
 public class ClimbSubsystem extends SubsystemBase implements Loggable{
-    @Config(name="ClimbMotorLeft")
     //private final WPI_TalonSRX m_ClimbMotor = new WPI_TalonSRX(ClimbConstants.kClimbControllerPort);
+    @Config(name="ClimbMotorLeft")
     private final WPI_VictorSPX m_LeftClimbMotor = new WPI_VictorSPX(ClimbConstants.kClimbLeftControllerPort);
     
-    @Config(name="ClimbMotorRight")
     //private final WPI_TalonSRX m_ClimbMotor2 = new WPI_TalonSRX(ClimbConstants.kClimbController2Port);
+    @Config(name="ClimbMotorRight")
     private final WPI_VictorSPX m_RightClimbMotor = new WPI_VictorSPX(ClimbConstants.kClimbRightControllerPort);
 
     private int climbinvert = 1;
@@ -27,9 +27,11 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable{
         setOutput(0,0);
     }
 
+    @Config
     public void numOfRotations(double rotations) {
         double targetposition = rotations * ClimbConstants.kEncoderCPR;
         m_LeftClimbMotor.set(ControlMode.Position, targetposition);
+        m_RightClimbMotor.set(ControlMode.Position, targetposition);
     }
 
     public void setOutput(double leftMotorPercent, double rightMotorPercent) {
