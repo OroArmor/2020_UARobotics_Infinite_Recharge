@@ -215,5 +215,6 @@ public final class Constants {
     public static final class ClimbConstants {
         public static final int kClimbLeftControllerPort = 10;
         public static final int kClimbRightControllerPort = 11;
+        public static final int kEncoderCPR = 4096;
     }
 }

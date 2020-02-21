@@ -27,6 +27,11 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable{
         setOutput(0,0);
     }
 
+    public void numOfRotations(double rotations) {
+        double targetposition = rotations * ClimbConstants.kEncoderCPR;
+        m_LeftClimbMotor.set(ControlMode.Position, targetposition);
+    }
+
     public void setOutput(double leftMotorPercent, double rightMotorPercent) {
         this.m_LeftClimbMotor.set(leftMotorPercent * climbinvert);
         this.m_RightClimbMotor.set(rightMotorPercent * climbinvert);

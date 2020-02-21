@@ -13,6 +13,7 @@ import io.github.oblarg.oblog.annotations.Log;
  */
 public class TurnToAngle extends PIDCommand implements Loggable{
   private final DriveSubsystem drive;
+  private final PIDController controller;
   /**
    * Turns to robot to the specified angle.
    *
@@ -39,7 +40,7 @@ public class TurnToAngle extends PIDCommand implements Loggable{
         // Require the drive
         drive);
     this.drive = drive;
-
+    this.controller = getController();
     // Set the controller to be continuous (because it is an angle controller)
     getController().enableContinuousInput(-180, 180);
     // Set the controller tolerance - the delta tolerance ensures the robot is stationary at the
@@ -52,16 +53,16 @@ public class TurnToAngle extends PIDCommand implements Loggable{
   @Override
   public boolean isFinished() {
     // End when the controller is at the reference.
-    return getController().atSetpoint();
+    return controller.atSetpoint();
   }
 
-  @Log.Graph
+  @Log
   public double getPositionError() {
-    return getController().getPositionError();
+    return controller.getPositionError();
   }
 
-  @Log.Graph
+  @Log
   public double getVelocityError() {
-    return getController().getVelocityError();
+    return controller.getVelocityError();
   }
 }
