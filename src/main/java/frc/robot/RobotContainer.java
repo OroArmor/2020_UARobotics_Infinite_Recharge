@@ -128,7 +128,7 @@ public class RobotContainer {
     // Makes sure climber is not inverted
     m_climb.invertclimber(false);
 
-    autoChooser.addOption("Auto Aim", new AutoAim(m_robotDrive, m_shooter));
+    autoChooser.addOption("Auto Aim", new AutoAim(m_robotDrive));
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
@@ -194,10 +194,9 @@ public class RobotContainer {
       .whenActive(new InstantCommand(m_controlpanel::rotateWheel, m_controlpanel)); */
 
     new JoystickButton(m_operatorController, Button.kBumperLeft.value).or(new JoystickButton(m_driverController, Button.kBumperLeft.value))
-      .whenActive(new InstantCommand(() -> {
-        m_robotDrive.distancesetup();
-        m_robotDrive.drivestraight(120);
-      }, m_robotDrive));
+      .whileActiveContinuous(new InstantCommand(() -> {
+        m_robotDrive.drivestraight(120); }, m_robotDrive)
+      .beforeStarting(m_robotDrive::distancesetup));
 
     // Auto Aim when Y button is pressed
     /* new JoystickButton(m_driverController, Button.kY.value)
@@ -219,6 +218,11 @@ public class RobotContainer {
   @Config(name="shooterPID")
   public void setPID(double kP, double kI, double kD, double kF) {
     m_shooter.getController().setPID(kP, kI, kD);
+  }
+
+  @Log
+  public double getTurn(){
+    return m_driverController.getX(GenericHID.Hand.kRight);
   }
   
   /**
