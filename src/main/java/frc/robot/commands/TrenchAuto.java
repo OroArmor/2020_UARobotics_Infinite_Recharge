@@ -23,7 +23,7 @@ public class TrenchAuto extends CommandBase implements Loggable{
    * @param robotDrive The subsystem used by this command.
    * @param intake
    */
-  public AutoAim(ShooterSubsystem shooter, DriveSubsystem robotDrive, IntakeSubsystem intake) {
+  public TrenchAuto(ShooterSubsystem shooter, DriveSubsystem robotDrive, IntakeSubsystem intake) {
     m_shooter = shooter;
     m_robotDrive = robotDrive;
     m_intake = intake;

@@ -18,6 +18,7 @@ import static edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -194,9 +195,12 @@ public class RobotContainer {
       .whenActive(new InstantCommand(m_controlpanel::rotateWheel, m_controlpanel)); */
 
     new JoystickButton(m_operatorController, Button.kBumperLeft.value).or(new JoystickButton(m_driverController, Button.kBumperLeft.value))
-      .whileActiveContinuous(new InstantCommand(() -> {
-        m_robotDrive.drivestraight(120); }, m_robotDrive)
-      .beforeStarting(m_robotDrive::distancesetup));
+      .whenActive(new FunctionalCommand(
+        m_robotDrive::distancesetup,
+        () -> m_robotDrive.drivestraight(120),
+        m_robotDrive::stopmotors,
+        m_robotDrive::atSetpoint,
+        m_robotDrive));
 
     // Auto Aim when Y button is pressed
     /* new JoystickButton(m_driverController, Button.kY.value)

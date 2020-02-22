@@ -441,4 +441,18 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
   public double getlefterror() {
     return metersToSteps(m_talonsrxleft.getClosedLoopError());
   }
+
+  @Log
+  public boolean atSetpoint() {
+    if (m_talonsrxright.getClosedLoopError() < 1000){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public void stopmotors(boolean enabled) {
+    m_talonsrxright.set(0);
+    m_talonsrxleft.set(0);
+  }
 }
