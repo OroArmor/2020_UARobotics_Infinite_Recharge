@@ -201,15 +201,21 @@ public final class Constants {
 
     public static final class IntakeConstants {
         public static final int kIntakeControllerPort = 5;
-        public static final int kConveyor1ControllerPort = 7;
-        public static final int kConveyor2ControllerPort = 8;
+        
         public static final int kSolenoid1ControllerPort = 0;
         public static final int kSolenoid2ControllerPort = 1;
         public static final int kSolenoid3ControllerPort = 4;
         public static final int kSolenoid4ControllerPort = 5;
 
-        public static final double kIntakeMotorSpeed = 0.5;
+        public static final double kIntakeMotorSpeed = 1.0;
+    }
+
+    public static final class ConveyorConstants {
+        public static final int kConveyor1ControllerPort = 7;
+        public static final int kConveyor2ControllerPort = 8;
+
         public static final double kConveyorMotorSpeed = 1.0;
+
     }
 
     public static final class ClimbConstants {

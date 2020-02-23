@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -41,6 +42,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ControlPanelSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 
 // Constant Imports
@@ -65,6 +67,8 @@ public class RobotContainer {
   private final LEDSubsystem m_LED = new LEDSubsystem();
   @Log
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
+  @Log
+  private final ConveyorSubsystem m_conveyor = new ConveyorSubsystem();
   @Log
   private final ClimbSubsystem m_climb = new ClimbSubsystem();
 
@@ -187,8 +191,7 @@ public class RobotContainer {
     // When right bumper is pressed raise/lower the intake and stop/start the conveyor and intake on both controllers
     new JoystickButton(m_operatorController, Button.kBumperRight.value).or(new JoystickButton(m_driverController, Button.kBumperRight.value))
       .whenActive(new InstantCommand(() -> m_intake.toggleIntakePosition(true), m_intake)
-      .andThen(new InstantCommand(() -> m_intake.toggleIntakeWheels(true), m_intake))
-      .andThen(new InstantCommand(() -> m_intake.toggleConveyor(true), m_intake)));
+      .andThen(new InstantCommand(() -> m_intake.toggleIntakeWheels(true), m_intake)));
 
     /*     // When left bumper is pressed spin control panel
     new JoystickButton(m_operatorController, Button.kBumperLeft.value).or(new JoystickButton(m_driverController, Button.kBumperLeft.value))
@@ -201,6 +204,8 @@ public class RobotContainer {
         m_robotDrive::stopmotors,
         m_robotDrive::atSetpoint,
         m_robotDrive));
+    
+    Button frontConveyorSensor = new Button(() -> m_conveyor.getFrontConveyor());
 
     // Auto Aim when Y button is pressed
     /* new JoystickButton(m_driverController, Button.kY.value)
