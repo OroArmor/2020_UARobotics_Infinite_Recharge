@@ -18,12 +18,14 @@ public class ConveyorSubsystem extends SubsystemBase implements Loggable{
     @Config
     private final WPI_VictorSPX m_ConveyorMotor2 = new WPI_VictorSPX(ConveyorConstants.kConveyor2ControllerPort);
 
-    AnalogInput analog = new AnalogInput(3);
+    AnalogInput frontconveyor = new AnalogInput(2);
+    AnalogInput topconveyor = new AnalogInput(3);
 
     public ConveyorSubsystem() {
         m_ConveyorMotor2.setInverted(true);
         m_ConveyorMotor2.set(ControlMode.Follower, ConveyorConstants.kConveyor1ControllerPort);
-        analog.setAverageBits(4);
+        frontconveyor.setAverageBits(4);
+        topconveyor.setAverageBits(4);
     }
 
     @Config
@@ -44,6 +46,11 @@ public class ConveyorSubsystem extends SubsystemBase implements Loggable{
 
     @Log
     public boolean getFrontConveyor() {
-        return (analog.getAverageVoltage() < 4.75);
+        return (frontconveyor.getAverageVoltage() < 4.75);
+    }
+
+    @Log
+    public boolean getTopConveyor() {
+        return (topconveyor.getAverageVoltage() < 4.75);
     }
 }

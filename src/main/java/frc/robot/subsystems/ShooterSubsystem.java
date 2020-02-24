@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.Encoder;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -23,7 +24,7 @@ public class ShooterSubsystem extends PIDSubsystem implements Loggable{
 
   private final Encoder m_shooterEncoder =
       new Encoder(ShooterConstants.kEncoderPorts[0], ShooterConstants.kEncoderPorts[1],
-                  ShooterConstants.kEncoderReversed);
+                  ShooterConstants.kEncoderReversed, CounterBase.EncodingType.k1X);
 
   private final SimpleMotorFeedforward m_shooterFeedforward =
       new SimpleMotorFeedforward(ShooterConstants.kSVolts,
@@ -38,6 +39,7 @@ public class ShooterSubsystem extends PIDSubsystem implements Loggable{
     shooterPID = getController();
     shooterPID.setTolerance(ShooterConstants.kShooterToleranceRPM);
     m_shooterEncoder.setDistancePerPulse(ShooterConstants.kEncoderDistancePerPulse);
+    m_shooterEncoder.setSamplesToAverage(5);
     m_shooterMotor2.follow(m_shooterMotor);
     m_shooterMotor2.setInverted(InvertType.OpposeMaster);
   }
