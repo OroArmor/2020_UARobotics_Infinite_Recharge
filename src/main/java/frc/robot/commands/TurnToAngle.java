@@ -27,7 +27,7 @@ public class TurnToAngle extends PIDCommand implements Loggable{
     super(
         new PIDController(DriveConstants.kTurnP, DriveConstants.kTurnI, DriveConstants.kTurnD),
         // Close loop on heading
-        drive::getHeading,
+        () -> -drive.getHeading(),
         // Set reference to target
         targetAngleDegrees,
         // Pipe output to turn robot

@@ -184,7 +184,7 @@ public class RobotContainer {
     new JoystickButton(m_driverController, XboxController.Button.kA.value)
     .or(new JoystickButton(m_operatorController, XboxController.Button.kA.value))
     .or(frontConveyorSensor)
-    .whenActive(new InstantCommand(() -> {m_conveyor.setOutput(1);}, m_conveyor).withTimeout(5))
+    .whenActive(new InstantCommand(() -> m_conveyor.setOutput(1), m_conveyor).withTimeout(5))
     .whenInactive(new InstantCommand(() -> m_conveyor.setOutput(0), m_conveyor));
     
     // Run the feeder when the 'A' button is held, but only if the shooter is at speed
