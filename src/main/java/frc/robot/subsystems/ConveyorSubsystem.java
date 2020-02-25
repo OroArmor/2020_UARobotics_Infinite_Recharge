@@ -22,7 +22,7 @@ public class ConveyorSubsystem extends SubsystemBase implements Loggable{
     AnalogInput topconveyor = new AnalogInput(3);
 
     public ConveyorSubsystem() {
-        m_ConveyorMotor2.setInverted(true);
+        //m_ConveyorMotor2.setInverted(true);
         m_ConveyorMotor2.set(ControlMode.Follower, ConveyorConstants.kConveyor1ControllerPort);
         frontconveyor.setAverageBits(4);
         topconveyor.setAverageBits(4);
@@ -38,9 +38,11 @@ public class ConveyorSubsystem extends SubsystemBase implements Loggable{
     public void toggleConveyor(boolean enabled) {
         if(this.m_ConveyorMotor1.get() > 0) {
             this.m_ConveyorMotor1.set(0);
+            this.m_ConveyorMotor2.set(0);
         }
         else{
             this.m_ConveyorMotor1.set(ConveyorConstants.kConveyorMotorSpeed);
+            this.m_ConveyorMotor2.set(ConveyorConstants.kConveyorMotorSpeed);
         }   
     }
 

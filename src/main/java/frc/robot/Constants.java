@@ -133,11 +133,11 @@ public final class Constants {
         public static final double kGearRatio = 2.0;
         // 18730 (775pro RPM) / 600 = 31.21666
         // 4096 (sensor units per rotation) / 4 = 1024 * 31.21666 = 31965.866
-        public static final int kShooterMotorPort = 20;
-        public static final int kShooterMotorPort2 = 21;
+        public static final int kShooterMotorPort = 8;
+        public static final int kShooterMotorPort2 = 9;
         public static final int kFeederMotorPort = 22;
     
-        public static final double kShooterFarTrenchRPM = 3000;
+        public static final double kShooterFarTrenchRPM = 2100;
         public static final double kShooterNearTrenchRPM = 2000;
         public static final double kShooterAutoLineRPM = 1000;
         public static final double kShooterToleranceRPM = 50;
@@ -211,8 +211,8 @@ public final class Constants {
     }
 
     public static final class ConveyorConstants {
-        public static final int kConveyor1ControllerPort = 7;
-        public static final int kConveyor2ControllerPort = 8;
+        public static final int kConveyor1ControllerPort = 6;
+        public static final int kConveyor2ControllerPort = 7;
 
         public static final double kConveyorMotorSpeed = 1.0;
 
