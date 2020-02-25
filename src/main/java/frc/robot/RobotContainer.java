@@ -86,6 +86,7 @@ public class RobotContainer {
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
 
   Button frontConveyorSensor = new Button(() -> m_conveyor.getFrontConveyor());
+  Button topConveyorSensor = new Button(() -> m_conveyor.getTopConveyor());
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -181,11 +182,12 @@ public class RobotContainer {
         m_shooter.disable();
       }, m_shooter));
     
-    new JoystickButton(m_driverController, XboxController.Button.kA.value)
-    .or(new JoystickButton(m_operatorController, XboxController.Button.kA.value))
-    .or(frontConveyorSensor)
-    .whenActive(new InstantCommand(() -> m_conveyor.setOutput(1), m_conveyor).withTimeout(5))
-    .whenInactive(new InstantCommand(() -> m_conveyor.setOutput(0), m_conveyor));
+    topConveyorSensor.negate()
+    .and(frontConveyorSensor
+    .or(new JoystickButton(m_driverController, XboxController.Button.kA.value))
+    .or(new JoystickButton(m_operatorController, XboxController.Button.kA.value)))
+    .whenActive(new InstantCommand(m_conveyor::turnOn, m_conveyor).withTimeout(5))
+    .whenInactive(new InstantCommand(m_conveyor::turnOff, m_conveyor));
     
     // Run the feeder when the 'A' button is held, but only if the shooter is at speed
     /* new JoystickButton(m_driverController, XboxController.Button.kA.value)
@@ -199,7 +201,7 @@ public class RobotContainer {
           // desired speed
           m_shooter::atSetpoint)).whenInactive(new InstantCommand(m_shooter::stopFeeder, m_shooter)); */
 
-    // When right bumper is pressed raise/lower the intake and stop/start the conveyor and intake on both controllers
+    // When right bumper is pressed raise/lower the intake and stop/start the intake on both controllers
     new JoystickButton(m_operatorController, XboxController.Button.kBumperRight.value).or(new JoystickButton(m_driverController, XboxController.Button.kBumperRight.value))
       .whenActive(new InstantCommand(() -> m_intake.toggleIntakePosition(true), m_intake)
       .andThen(new InstantCommand(() -> m_intake.toggleIntakeWheels(true), m_intake)));

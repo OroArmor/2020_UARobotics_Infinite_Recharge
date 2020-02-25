@@ -29,9 +29,15 @@ public class ConveyorSubsystem extends SubsystemBase implements Loggable{
     }
 
     @Config
-    public void setOutput(double speed) {
-        this.m_ConveyorMotor1.set(speed);
-        this.m_ConveyorMotor2.set(speed);
+    public void turnOff() {
+        this.m_ConveyorMotor1.set(0);
+        this.m_ConveyorMotor2.set(0);
+    }
+
+    @Config
+    public void turnOn() {
+        this.m_ConveyorMotor1.set(ConveyorConstants.kConveyorMotorSpeed);
+        this.m_ConveyorMotor2.set(ConveyorConstants.kConveyorMotorSpeed);
     }
 
     @Config.ToggleButton
