@@ -183,8 +183,8 @@ public class RobotContainer {
       }, m_shooter));
     
     topConveyorSensor.negate()
-    .and(frontConveyorSensor
-    .or(new JoystickButton(m_driverController, XboxController.Button.kA.value))
+    .and(frontConveyorSensor)
+    .or(new JoystickButton(m_driverController, XboxController.Button.kA.value)
     .or(new JoystickButton(m_operatorController, XboxController.Button.kA.value)))
     .whenActive(new InstantCommand(m_conveyor::turnOn, m_conveyor).withTimeout(5))
     .whenInactive(new InstantCommand(m_conveyor::turnOff, m_conveyor));

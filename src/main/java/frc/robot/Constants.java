@@ -207,14 +207,15 @@ public final class Constants {
         public static final int kSolenoid3ControllerPort = 4;
         public static final int kSolenoid4ControllerPort = 5;
 
-        public static final double kIntakeMotorSpeed = 1.0;
+        public static final double kIntakeMotorSpeed = 0.5;
     }
 
     public static final class ConveyorConstants {
         public static final int kConveyor1ControllerPort = 6;
         public static final int kConveyor2ControllerPort = 7;
 
-        public static final double kConveyorMotorSpeed = 1.0;
+        public static final double kConveyorTopMotorSpeed = 1.0;
+        public static final double kConveyorBottomMotorSpeed = -0.2;
 
     }
 

@@ -36,8 +36,8 @@ public class ConveyorSubsystem extends SubsystemBase implements Loggable{
 
     @Config
     public void turnOn() {
-        this.m_ConveyorMotor1.set(ConveyorConstants.kConveyorMotorSpeed);
-        this.m_ConveyorMotor2.set(ConveyorConstants.kConveyorMotorSpeed);
+        this.m_ConveyorMotor1.set(ConveyorConstants.kConveyorTopMotorSpeed);
+        this.m_ConveyorMotor2.set(ConveyorConstants.kConveyorBottomMotorSpeed);
     }
 
     @Config.ToggleButton
@@ -47,14 +47,14 @@ public class ConveyorSubsystem extends SubsystemBase implements Loggable{
             this.m_ConveyorMotor2.set(0);
         }
         else{
-            this.m_ConveyorMotor1.set(ConveyorConstants.kConveyorMotorSpeed);
-            this.m_ConveyorMotor2.set(ConveyorConstants.kConveyorMotorSpeed);
+            this.m_ConveyorMotor1.set(ConveyorConstants.kConveyorTopMotorSpeed);
+            this.m_ConveyorMotor2.set(ConveyorConstants.kConveyorBottomMotorSpeed);
         }   
     }
 
     @Log
     public boolean getFrontConveyor() {
-        return (frontconveyor.getAverageVoltage() < 4.75);
+        return false; //(frontconveyor.getAverageVoltage() < 4.75);
     }
 
     @Log
