@@ -25,6 +25,8 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable{
     public ClimbSubsystem() {
         //m_RightClimbMotor.setInverted(true);
         setOutput(0,0);
+        m_LeftClimbMotor.setInverted(true);
+        m_RightClimbMotor.setInverted(false);
     }
 
     @Config

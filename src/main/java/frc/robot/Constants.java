@@ -128,14 +128,13 @@ public final class Constants {
     }
     
     public static final class ShooterConstants {
-        public static final int[] kEncoderPorts = new int[]{8, 9};
+        public static final int[] kEncoderPorts = new int[]{0, 1};
         public static final boolean kEncoderReversed = true;
         public static final double kGearRatio = 2.0;
         // 18730 (775pro RPM) / 600 = 31.21666
         // 4096 (sensor units per rotation) / 4 = 1024 * 31.21666 = 31965.866
         public static final int kShooterMotorPort = 8;
         public static final int kShooterMotorPort2 = 9;
-        public static final int kFeederMotorPort = 22;
     
         public static final double kShooterFarTrenchRPM = 2100;
         public static final double kShooterNearTrenchRPM = 2000;
@@ -149,17 +148,15 @@ public final class Constants {
             60.0 / (double) kEncoderCPR;
 
         // These are not real PID gains, and will have to be tuned for your specific robot.
-        public static final double kP = 0.167;
+        public static final double kP = 0.1;
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kF = 0.0; //Not used
     
         // On a real robot the feedforward constants should be empirically determined; these are
         // reasonable guesses.
-        public static final double kSVolts = 0.159; // .05 original
-        public static final double kVVoltSecondsPerRotation = 0.883; // 12
-    
-        public static final double kFeederSpeed = 0.5;
+        public static final double kSVolts = 0.5; // .05 original
+        public static final double kVVoltSecondsPerRotation = 12 / 138; // 12
     }
     
     public static final class ControlPanelConstants {
@@ -220,8 +217,8 @@ public final class Constants {
     }
 
     public static final class ClimbConstants {
-        public static final int kClimbLeftControllerPort = 10;
-        public static final int kClimbRightControllerPort = 11;
+        public static final int kClimbLeftControllerPort = 11;
+        public static final int kClimbRightControllerPort = 10;
         public static final int kEncoderCPR = 4096;
     }
 }

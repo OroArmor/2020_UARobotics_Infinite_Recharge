@@ -41,13 +41,15 @@ import io.github.oblarg.oblog.annotations.Log;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveSubsystem extends SubsystemBase implements Loggable{
-  // TODO Need to fill in which Motor Controllers are actually being used on the drive
 	// The motors on the left and right side of the drivetrain
-	@Config(name="m_talonsrxleft")
-	private final WPI_TalonSRX m_talonsrxleft = new WPI_TalonSRX(DriveConstants.kLeftMotor2Port);
-	private final WPI_VictorSPX m_victorspxleft = new WPI_VictorSPX(DriveConstants.kLeftMotor1Port);
-	@Config(name="m_talonsrxright")
-	private final WPI_TalonSRX m_talonsrxright = new WPI_TalonSRX(DriveConstants.kRightMotor2Port);
+	@Log
+  private final WPI_TalonSRX m_talonsrxleft = new WPI_TalonSRX(DriveConstants.kLeftMotor2Port);
+  
+  private final WPI_VictorSPX m_victorspxleft = new WPI_VictorSPX(DriveConstants.kLeftMotor1Port);
+  
+	@Log
+  private final WPI_TalonSRX m_talonsrxright = new WPI_TalonSRX(DriveConstants.kRightMotor2Port);
+  
   private final WPI_TalonSRX m_talonsrxright2 = new WPI_TalonSRX(DriveConstants.kRightMotor1Port);
 
   // Pigeon is plugged into the second talon on the left side
@@ -57,7 +59,7 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
   private final DifferentialDriveOdometry m_odometry;
 
   // PID Controller for Driving straight with Gyro
-  @Config(name="gyroPID")
+  @Log(name="gyroPID")
   private final PIDController m_gyropid = new PIDController(DriveConstants.kGyroPID, 0, 0);
 
   // Using onboard feedforward since it is more accurate than Talon Feedforward
@@ -233,6 +235,8 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
   public void arcadeDrive(double fwd, double rot) {
     fwd = Deadband(fwd);
     rot = Deadband(rot);
+    SmartDashboard.putNumber("fwd", fwd);
+    SmartDashboard.putNumber("rot", rot);
     m_talonsrxleft.set(ControlMode.PercentOutput, fwd, DemandType.ArbitraryFeedForward, +rot);
     m_talonsrxright.set(ControlMode.PercentOutput, fwd, DemandType.ArbitraryFeedForward, -rot);
   }
@@ -444,7 +448,7 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
 
   @Log
   public boolean atSetpoint() {
-    if (m_talonsrxright.getClosedLoopError() < 1000){
+    if (m_talonsrxright.getClosedLoopError() < 1000 && m_talonsrxright.getClosedLoopError() > 0){
       return true;
     } else {
       return false;

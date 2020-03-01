@@ -66,7 +66,7 @@ public class RobotContainer {
   @Log
   private final LEDSubsystem m_LED = new LEDSubsystem();
   @Log
-  private final IntakeSubsystem m_intake = new IntakeSubsystem();
+  public final IntakeSubsystem m_intake = new IntakeSubsystem();
   @Log
   private final ConveyorSubsystem m_conveyor = new ConveyorSubsystem();
   @Log
@@ -107,10 +107,10 @@ public class RobotContainer {
             .arcadeDrive(-m_driverController.getY(GenericHID.Hand.kLeft),
                          m_driverController.getX(GenericHID.Hand.kRight)), m_robotDrive));
 
-    m_intake.setDefaultCommand(
+    /* m_intake.setDefaultCommand(
         // Use right trigger to control the speed of the intake
         new RunCommand(() -> m_intake
-            .setOutput(m_driverController.getRawAxis(3)), m_intake));
+            .setOutput(m_driverController.getRawAxis(3)), m_intake)); */
 
 /*     m_controlpanel.setDefaultCommand(
       // Use left x axis to control the speed of the control panel
@@ -188,18 +188,6 @@ public class RobotContainer {
     .or(new JoystickButton(m_operatorController, XboxController.Button.kA.value)))
     .whenActive(new InstantCommand(m_conveyor::turnOn, m_conveyor).withTimeout(5))
     .whenInactive(new InstantCommand(m_conveyor::turnOff, m_conveyor));
-    
-    // Run the feeder when the 'A' button is held, but only if the shooter is at speed
-    /* new JoystickButton(m_driverController, XboxController.Button.kA.value)
-      .or(new JoystickButton(m_operatorController, XboxController.Button.kA.value))  
-      .whileActiveOnce(new ConditionalCommand(
-          // Run the feeder
-          new InstantCommand(m_shooter::runFeeder, m_shooter),
-          // Do nothing
-          new InstantCommand(),
-          // Determine which of the above to do based on whether the shooter has reached the
-          // desired speed
-          m_shooter::atSetpoint)).whenInactive(new InstantCommand(m_shooter::stopFeeder, m_shooter)); */
 
     // When right bumper is pressed raise/lower the intake and stop/start the intake on both controllers
     new JoystickButton(m_operatorController, XboxController.Button.kBumperRight.value).or(new JoystickButton(m_driverController, XboxController.Button.kBumperRight.value))
