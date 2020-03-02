@@ -134,10 +134,6 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
 		m_talonsrxright.setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 20, DriveConstants.kTimeoutMs);
 		m_pigeon.setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR , 5, DriveConstants.kTimeoutMs);
 		
-		/* Configure neutral deadband */
-		m_talonsrxright.configNeutralDeadband(DriveConstants.kNeutralDeadband, DriveConstants.kTimeoutMs);
-		m_talonsrxleft.configNeutralDeadband(DriveConstants.kNeutralDeadband, DriveConstants.kTimeoutMs);		
-
 		/* max out the peak output (for all modes).  However you can
 		 * limit the output of a given PID object with configClosedLoopPeakOutput().
 		 */
@@ -290,14 +286,14 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
         + m_talonsrxright.getSelectedSensorPosition() * DriveConstants.kEncoderDistancePerPulse) / 2.0;
   }
 
-  /** Deadband 5 percent, used on the gamepad */
+  /** Deadband 15 percent, used on the gamepad */
   double Deadband(final double value) {
     /* Upper deadband */
-    if (value >= +0.05)
+    if (value >= +0.15)
       return value;
 
     /* Lower deadband */
-    if (value <= -0.05)
+    if (value <= -0.15)
       return value;
 
     /* Outside deadband */

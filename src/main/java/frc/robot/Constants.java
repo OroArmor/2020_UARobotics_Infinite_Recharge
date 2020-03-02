@@ -66,11 +66,6 @@ public final class Constants {
         public final static int kTimeoutMs = 30;
 
         /**
-         * Motor neutral dead-band, set to the minimum 0.1%.
-         */
-        public final static double kNeutralDeadband = 0.001;
-        
-        /**
          * PID Gains may have to be adjusted based on the responsiveness of control loop.
          * kF: 1023 represents output value to Talon at 100%, 6800 represents Velocity units at 100% output
          * Not all set of Gains are used in this project and may be removed as desired.
@@ -136,7 +131,7 @@ public final class Constants {
         public static final int kShooterMotorPort = 8;
         public static final int kShooterMotorPort2 = 9;
     
-        public static final double kShooterFarTrenchRPM = 2100;
+        public static final double kShooterFarTrenchRPM = 7100;
         public static final double kShooterNearTrenchRPM = 2000;
         public static final double kShooterAutoLineRPM = 1000;
         public static final double kShooterToleranceRPM = 50;
@@ -148,15 +143,16 @@ public final class Constants {
             60.0 / (double) kEncoderCPR;
 
         // These are not real PID gains, and will have to be tuned for your specific robot.
-        public static final double kP = 0.1;
+        public static final double kP = 0.132; // .000321
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kF = 0.0; //Not used
     
         // On a real robot the feedforward constants should be empirically determined; these are
         // reasonable guesses.
-        public static final double kSVolts = 0.5; // .05 original
-        public static final double kVVoltSecondsPerRotation = 12 / 138; // 12
+        public static final double kSVolts = 1.12; // .05 original
+        public static final double kVVoltSecondsPerRotation = .0192; // 12
+        public static final double kA = .00282;
     }
     
     public static final class ControlPanelConstants {
