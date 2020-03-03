@@ -38,7 +38,7 @@ public class ShooterSubsystem extends PIDSubsystem implements Loggable{
     shooterPID = getController();
     shooterPID.setTolerance(ShooterConstants.kShooterToleranceRPM);
     m_shooterEncoder.setDistancePerPulse(ShooterConstants.kEncoderDistancePerPulse);
-    m_shooterEncoder.setSamplesToAverage(5);
+    m_shooterEncoder.setSamplesToAverage(50);
     m_shooterMotor2.follow(m_shooterMotor);
     m_shooterMotor.setInverted(true);
     m_shooterMotor2.setInverted(InvertType.OpposeMaster);
@@ -53,12 +53,14 @@ public class ShooterSubsystem extends PIDSubsystem implements Loggable{
   }
 
   @Log
+  @Log(tabName = "Dashboard")
   @Override
   public double getMeasurement() {
     return m_shooterEncoder.getRate();
   }
 
   @Log
+  @Log(tabName = "Dashboard")
   public boolean atSetpoint() {
     return shooterPID.atSetpoint();
   }

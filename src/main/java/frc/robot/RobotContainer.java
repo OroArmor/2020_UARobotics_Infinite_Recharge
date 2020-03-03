@@ -10,6 +10,7 @@ package frc.robot;
 import java.io.IOException;
 
 // WPI Imports
+import edu.wpi.cscore.HttpCamera;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -78,6 +79,7 @@ public class RobotContainer {
   // Creating this so we get logging in the Command
   Command m_TurnToAngle = new TurnToAngle(0, m_robotDrive);
 
+  @Log(tabName = "DriveSubsystem")
   private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
   // The driver's controller
@@ -87,6 +89,7 @@ public class RobotContainer {
 
   Button frontConveyorSensor = new Button(() -> m_conveyor.getFrontConveyor());
   Button topConveyorSensor = new Button(() -> m_conveyor.getTopConveyor());
+  public HttpCamera m_limelightFeed;
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -206,13 +209,9 @@ public class RobotContainer {
         m_robotDrive::atSetpoint,
         m_robotDrive));
     
-    
-
-    // Auto Aim when Y button is pressed
     /* new JoystickButton(m_driverController, Button.kY.value)
       .whileHeld(new AutoAim(m_robotDrive, m_shooter));
      */
-
     new JoystickButton(m_driverController, XboxController.Button.kY.value).whenPressed(() ->
       m_robotDrive.createCommandForTrajectory("LS to CP"));
      
@@ -235,6 +234,16 @@ public class RobotContainer {
     return m_driverController.getX(GenericHID.Hand.kRight);
   }
   
+  public void LimelightCamera() {
+    // Activate an HttpCamera for the Limelight
+    m_limelightFeed = new HttpCamera("Limelight Camera", "http://10.3.22.11:5800/stream.mjpg", HttpCamera.HttpCameraKind.kMJPGStreamer);
+  }
+
+  @Log.CameraStream(name = "Limelight Camera", tabName = "Dashboard")
+  public HttpCamera getLimelightFeed() {
+    return m_limelightFeed;
+  }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

@@ -76,7 +76,7 @@ public class Robot extends TimedRobot {
     Encoder encoder = new Encoder(0, 1, true, CounterBase.EncodingType.k1X);
     encoder.setReverseDirection(true);
     encoder.setDistancePerPulse(encoderConstant);
-    encoder.setSamplesToAverage(5);
+    encoder.setSamplesToAverage(50);
     encoderPosition = encoder::getDistance;
     encoderRate = encoder::getRate;
 

@@ -87,8 +87,8 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
 		m_talonsrxright2.set(ControlMode.Follower, DriveConstants.kRightMotor1Port);
 
     /* Disable all motor controllers */
-		m_talonsrxright.set(ControlMode.PercentOutput, 0);
-		m_talonsrxleft.set(ControlMode.PercentOutput, 0);
+		m_talonsrxright.set(0);
+		m_talonsrxleft.set(0);
 
 		/* Factory Default all hardware to prevent unexpected behaviour */
 		m_talonsrxright.configFactoryDefault();
@@ -184,10 +184,19 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
   }
 
   public void resetOdometry() {
+    setCurrentPose(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
+  }
+
+  /**
+   * Resets the current pose to the specified pose. This this ONLY be called
+   * when the robot's position on the field is known, like at the beginnig of
+   * a match. This will also reset the saved pose since the old pose could be invalidated.
+   * @param newPose new pose
+   */
+  public void setCurrentPose(Pose2d newPose) {
     resetEncoders();
-    m_pigeon.setYaw(0, DriveConstants.kTimeoutMs);
-    savedPose = new Pose2d(0, 0, Rotation2d.fromDegrees(getHeading()));
-    m_odometry.resetPosition(savedPose, Rotation2d.fromDegrees(getHeading()));
+    savedPose = newPose;
+    m_odometry.resetPosition(newPose, Rotation2d.fromDegrees(getHeading()));
   }
 
   @Override
@@ -212,17 +221,6 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
   }
 
   /**
-   * Resets the odometry to the specified pose.
-   *
-   * @param pose The pose to which to set the odometry.
-   */
-  @Config
-  public void resetOdometry(final Pose2d pose) {
-    resetEncoders();
-    m_odometry.resetPosition(pose, Rotation2d.fromDegrees(getHeading()));
-  }
-
-  /**
    * Drives the robot using arcade controls.
    *
    * @param fwd the commanded forward movement
@@ -233,8 +231,8 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
     rot = Deadband(rot);
     SmartDashboard.putNumber("fwd", fwd);
     SmartDashboard.putNumber("rot", rot);
-    m_talonsrxleft.set(ControlMode.PercentOutput, fwd, DemandType.ArbitraryFeedForward, +rot);
-    m_talonsrxright.set(ControlMode.PercentOutput, fwd, DemandType.ArbitraryFeedForward, -rot);
+    m_talonsrxleft.set(fwd + rot);
+    m_talonsrxright.set(fwd - rot);
   }
 
    /**
@@ -246,8 +244,8 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
   public void tankDrive(double left, double right) {
     left = Deadband(left);
     right = Deadband(right);
-    m_talonsrxleft.set(ControlMode.PercentOutput, left);
-    m_talonsrxright.set(ControlMode.PercentOutput, right);
+    m_talonsrxleft.set(left);
+    m_talonsrxright.set(right);
   }
 
   /**
