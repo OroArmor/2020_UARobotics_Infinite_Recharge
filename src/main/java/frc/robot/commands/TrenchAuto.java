@@ -36,8 +36,22 @@ public class TrenchAuto extends SequentialCommandGroup implements Loggable{
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_shooter, m_robotDrive, m_intake, m_conveyor);
 
-    // Comamands to be run in the order they should be run in
+    // Commands to be run in the order they should be run in
     addCommands(
+      //placed to face trench
+      //start shooter to speed we want
+      new InstantCommand(() -> {
+        m_shooter.setSetpoint(AutoConstants.kTrenchAutoShootRPM);
+        m_shooter.enable();
+      }, m_shooter);
+      //lower intake and spin intake
+      new InstantCommand(() -> m_intake.toggleIntakePosition(true), m_intake);
+      //drive forward distance of two balls (x feet)
+      
+      //turn around to face goal (-160), 
+      //run conveyor when shooter is at speed (stop moving conveyor when not at speed)
+      //turn (-45) to pick up more balls
+
       /* new FunctionalCommand(() -> {
         m_shooter.setSetpoint(AutoConstants.kTrenchAutoShootRPM);
         m_shooter.enable();},

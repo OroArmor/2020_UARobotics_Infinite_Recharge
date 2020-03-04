@@ -201,7 +201,7 @@ public class RobotContainer {
       .whenActive(new InstantCommand(m_controlpanel::rotateWheel, m_controlpanel)); */
 
     new JoystickButton(m_operatorController, XboxController.Button.kBumperLeft.value).or(new JoystickButton(m_driverController, XboxController.Button.kBumperLeft.value))
-      .whenActive(new FunctionalCommand(
+      .whileActiveContinuous(new FunctionalCommand(
         m_robotDrive::distancesetup,
         () -> m_robotDrive.drivestraight(120),
         m_robotDrive::stopmotors,
@@ -233,7 +233,7 @@ public class RobotContainer {
     return m_driverController.getX(GenericHID.Hand.kRight);
   }
   
-  public void LimelightCamera() {
+  /* public void LimelightCamera() {
     // Activate an HttpCamera for the Limelight
     m_limelightFeed = new HttpCamera("Limelight Camera", "http://10.3.22.11:5800/stream.mjpg", HttpCamera.HttpCameraKind.kMJPGStreamer);
   }
@@ -241,7 +241,7 @@ public class RobotContainer {
   @Log.CameraStream(name = "Limelight Camera", tabName = "Dashboard")
   public HttpCamera getLimelightFeed() {
     return m_limelightFeed;
-  }
+  } */
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
