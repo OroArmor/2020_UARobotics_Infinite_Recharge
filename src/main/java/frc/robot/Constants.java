@@ -117,6 +117,17 @@ public final class Constants {
         public static final double kTurnToleranceDeg = 5;
         public static final double kTurnRateToleranceDegPerS = 10; // degrees per second
 
+        public static final double kRelTurnP = .008;
+        public static final double kRelTurnI = 0;
+        public static final double kRelTurnD = 0.15;
+        public static final double kRelTurnFriction = 0.3;
+
+        public static final double kMaxRelTurnRateDegPerS = 20;
+        public static final double kMaxRelTurnAccelerationDegPerSSquared = 300;
+
+        public static final double kRelTurnToleranceDeg = 1;
+        public static final double kRelTurnRateToleranceDegPerS = 3; // degrees per second
+
         // Baseline values for a RAMSETE follower in units of meters and seconds
         public static final double RAMSETE_B = 2;
         public static final double RAMSETE_ZETA = 0.7;
@@ -169,6 +180,7 @@ public final class Constants {
     public static final class AutoConstants {
         public static final double kAutoTimeoutSeconds = 12;
         public static final double kAutoShootTimeSeconds = 7;
+        public static final double kTrenchAutoShootRPM = 7000;
 
         public static final double kMaxSpeedMetersPerSecond = 3;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
@@ -183,10 +195,6 @@ public final class Constants {
         public static final int kBufferSize = 60;
     }
     
-    public static final class AutoAimConstants {
-        public static final double kP = 0.0185;
-    }
-
     public static final class OIConstants {
         public static final int kDriverControllerPort = 1;
         public static final int kOperatorControllerPort = 2;

@@ -35,7 +35,6 @@ import io.github.oblarg.oblog.annotations.Log;
 // Command Imports
 import frc.robot.commands.AutoAim;
 import frc.robot.commands.TurnToAngle;
-import frc.robot.commands.TurnToAngleProfiled;
 import frc.robot.commands.TrenchAuto;
 // Subsystem Imports
 import frc.robot.subsystems.ShooterSubsystem;
@@ -140,9 +139,9 @@ public class RobotContainer {
     m_climb.invertclimber(false);
 
     autoChooser.addOption("Auto Aim", new AutoAim(m_robotDrive));
-    autoChooser.addOption("Trench Auto", new TrenchAuto(m_shooter, m_robotDrive, m_intake));
-    autoChooser.addOption("Straight Auto", new TrenchAuto(m_shooter, m_robotDrive, m_intake));
-    autoChooser.addOption("Steal Auto", new TrenchAuto(m_shooter, m_robotDrive, m_intake));
+    autoChooser.addOption("Trench Auto", new TrenchAuto(m_shooter, m_robotDrive, m_intake, m_conveyor));
+    autoChooser.addOption("Straight Auto", new TrenchAuto(m_shooter, m_robotDrive, m_intake, m_conveyor));
+    autoChooser.addOption("Steal Auto", new TrenchAuto(m_shooter, m_robotDrive, m_intake, m_conveyor));
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 

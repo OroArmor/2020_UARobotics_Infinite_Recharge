@@ -9,11 +9,11 @@ import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
+import frc.robot.commands.TurnToRelativeAngle;
 import frc.robot.Constants.AutoAimConstants;
 
 public class AutoAim extends CommandBase implements Loggable{
   private final DriveSubsystem m_robotDrive;
-  private final PIDController pid = new PIDController(AutoAimConstants.kP, 0, 0);
   /**
    * Creates a new AutoAimCommand.
    * @param m_robotDrive The subsystem used by this command.
@@ -38,7 +38,7 @@ public class AutoAim extends CommandBase implements Loggable{
 
     if (tv == 1)
     {
-      m_robotDrive.arcadeDrive(0,-pid.calculate(tx,0));
+      new TurnToRelativeAngle(tx, m_robotDrive);
     }
     else
     {

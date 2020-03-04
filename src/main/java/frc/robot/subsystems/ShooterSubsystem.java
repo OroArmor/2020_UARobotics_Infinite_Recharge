@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
-
+import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants.ShooterConstants;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
@@ -49,7 +49,7 @@ public class ShooterSubsystem extends PIDSubsystem implements Loggable{
   public void useOutput(double output, double setpoint) {
     SmartDashboard.putNumber("output", output);
     SmartDashboard.putNumber("setpoint", m_shooterFeedforward.calculate(setpoint));
-    m_shooterMotor.setVoltage(output + m_shooterFeedforward.calculate(setpoint));
+    m_shooterMotor.setVoltage(MathUtil.clamp(output + m_shooterFeedforward.calculate(setpoint), 0, 14));
   }
 
   @Log
