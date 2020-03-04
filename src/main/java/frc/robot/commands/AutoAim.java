@@ -10,7 +10,6 @@ import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 import frc.robot.commands.TurnToRelativeAngle;
-import frc.robot.Constants.AutoAimConstants;
 
 public class AutoAim extends CommandBase implements Loggable{
   private final DriveSubsystem m_robotDrive;
