@@ -83,8 +83,8 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
 		m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
 
 			// Set followers
-		m_victorspxleft.set(ControlMode.Follower, DriveConstants.kLeftMotor1Port);
-		m_talonsrxright2.set(ControlMode.Follower, DriveConstants.kRightMotor1Port);
+		m_victorspxleft.set(ControlMode.Follower, DriveConstants.kLeftMotor2Port);
+		m_talonsrxright2.set(ControlMode.Follower, DriveConstants.kRightMotor2Port);
 
     /* Disable all motor controllers */
 		m_talonsrxright.set(0);
@@ -126,7 +126,8 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
 		m_talonsrxleft.setInverted(false);
 		m_talonsrxleft.setSensorPhase(true);
 		m_talonsrxright.setInverted(true);
-		m_talonsrxright.setSensorPhase(true);
+    m_talonsrxright.setSensorPhase(true);
+    m_talonsrxright2.setInverted(true);
 		
 		/* Set status frame periods */
 		m_talonsrxright.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 20, DriveConstants.kTimeoutMs);
@@ -229,8 +230,6 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
   public void arcadeDrive(double fwd, double rot) {
     fwd = Deadband(fwd);
     rot = Deadband(rot);
-    SmartDashboard.putNumber("fwd", fwd);
-    SmartDashboard.putNumber("rot", rot);
     m_talonsrxleft.set(fwd + rot);
     m_talonsrxright.set(fwd - rot);
   }
