@@ -24,7 +24,7 @@
     # Encoder edges-per-revolution (*NOT* cycles per revolution!)
     # This value should be the edges per revolution *of the flywheel*, and so
     # should take into account gearing between the encoder and the wheels
-    "encoderEPR": 2048,
+    "encoderEPR": 8192,
     # Ports for the flywheel encoder
     "encoderPorts": [0, 1],
     # Whether the encoder is inverted

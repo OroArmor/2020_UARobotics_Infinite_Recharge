@@ -68,9 +68,9 @@ public class RobotContainer {
   @Log
   public final IntakeSubsystem m_intake = new IntakeSubsystem();
   @Log
-  private final ConveyorSubsystem m_conveyor = new ConveyorSubsystem();
+  public final ConveyorSubsystem m_conveyor = new ConveyorSubsystem();
   @Log
-  private final ClimbSubsystem m_climb = new ClimbSubsystem();
+  public final ClimbSubsystem m_climb = new ClimbSubsystem();
 
   @Log.PDP
   PowerDistributionPanel m_PDP = new PowerDistributionPanel(0);

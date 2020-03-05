@@ -43,9 +43,9 @@ public class TrenchAuto extends SequentialCommandGroup implements Loggable{
       new InstantCommand(() -> {
         m_shooter.setSetpoint(AutoConstants.kTrenchAutoShootRPM);
         m_shooter.enable();
-      }, m_shooter);
+      }, m_shooter),
       //lower intake and spin intake
-      new InstantCommand(() -> m_intake.toggleIntakePosition(true), m_intake);
+      new InstantCommand(() -> m_intake.toggleIntakePosition(true), m_intake)
       //drive forward distance of two balls (x feet)
       
       //turn around to face goal (-160), 

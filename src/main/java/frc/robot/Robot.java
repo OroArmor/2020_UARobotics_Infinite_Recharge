@@ -97,6 +97,8 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     m_robotContainer.m_intake.setOutput(0);
+    m_robotContainer.m_conveyor.turnOff();
+    m_robotContainer.m_climb.invertclimber(false);
   }
 
   /**

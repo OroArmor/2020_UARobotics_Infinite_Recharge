@@ -5,7 +5,6 @@ import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 import frc.robot.Constants.ClimbConstants;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -14,11 +13,11 @@ import edu.wpi.first.wpilibj.RobotState;
 public class ClimbSubsystem extends SubsystemBase implements Loggable{
     //private final WPI_TalonSRX m_ClimbMotor = new WPI_TalonSRX(ClimbConstants.kClimbControllerPort);
     @Config(name="ClimbMotorLeft")
-    private final WPI_VictorSPX m_LeftClimbMotor = new WPI_VictorSPX(ClimbConstants.kClimbLeftControllerPort);
+    private final WPI_TalonSRX m_LeftClimbMotor = new WPI_TalonSRX(ClimbConstants.kClimbLeftControllerPort);
     
     //private final WPI_TalonSRX m_ClimbMotor2 = new WPI_TalonSRX(ClimbConstants.kClimbController2Port);
     @Config(name="ClimbMotorRight")
-    private final WPI_VictorSPX m_RightClimbMotor = new WPI_VictorSPX(ClimbConstants.kClimbRightControllerPort);
+    private final WPI_TalonSRX m_RightClimbMotor = new WPI_TalonSRX(ClimbConstants.kClimbRightControllerPort);
 
     private int climbinvert = 1;
 
@@ -27,6 +26,8 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable{
         setOutput(0,0);
         m_LeftClimbMotor.setInverted(true);
         m_RightClimbMotor.setInverted(false);
+        m_LeftClimbMotor.configPeakOutputReverse(0);
+        m_RightClimbMotor.configPeakOutputReverse(0);
     }
 
     @Config
@@ -46,13 +47,33 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable{
         }
     }
 
+    @Config
+    public void setPosition(double position) {
+        m_RightClimbMotor.set(ControlMode.MotionMagic, position);
+        m_LeftClimbMotor.set(ControlMode.MotionMagic, position);
+    }
+
+    @Log
+    public double getRightPosition() {
+        return m_RightClimbMotor.getSelectedSensorPosition();
+    }
+
+    @Log
+    public double getLeftPosition() {
+        return m_LeftClimbMotor.getSelectedSensorPosition();
+    } 
+
     @Config.ToggleButton
     public void invertclimber(boolean enabled) {
         if (enabled) {
             climbinvert = -1;
+            m_LeftClimbMotor.configPeakOutputReverse(1);
+            m_RightClimbMotor.configPeakOutputReverse(1);
         }
         else {
             climbinvert = 1;
+            m_LeftClimbMotor.configPeakOutputReverse(0);
+            m_RightClimbMotor.configPeakOutputReverse(0);
         }
     }
 
