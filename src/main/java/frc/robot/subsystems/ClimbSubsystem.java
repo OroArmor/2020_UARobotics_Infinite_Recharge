@@ -21,6 +21,8 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable{
 
     private int climbinvert = 1;
 
+    public int climbstage = 0;
+
     public ClimbSubsystem() {
         //m_RightClimbMotor.setInverted(true);
         setOutput(0,0);
@@ -89,4 +91,14 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable{
   */       }
     }
 
+    @Config.ToggleButton
+    public void nextClimbStage(boolean enabled) {
+        climbstage = climbstage + 1;
+        switch(climbstage) {
+            case 1:
+            case 2:
+            case 3:
+            default:
+        }
+    }
 }
