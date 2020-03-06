@@ -42,7 +42,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable{
     }
 
     @Config
-    public void toggleIntakeWheels(boolean enbaled) {
+    public void toggleIntakeWheels(boolean enabled) {
         if(this.m_IntakeMotor.get() > 0) {
             this.m_IntakeMotor.set(0);
         }
