@@ -38,6 +38,7 @@ import frc.robot.commands.AutoAim;
 import frc.robot.commands.DriveStraight;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.commands.TrenchAuto;
+import frc.robot.commands.CenterAuto;
 // Subsystem Imports
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -140,7 +141,7 @@ public class RobotContainer {
 
     autoChooser.addOption("Auto Aim", new AutoAim(m_robotDrive));
     autoChooser.addOption("Trench Auto", new TrenchAuto(m_shooter, m_robotDrive, m_intake, m_conveyor));
-    autoChooser.addOption("Straight Auto", new TrenchAuto(m_shooter, m_robotDrive, m_intake, m_conveyor));
+    autoChooser.addOption("Center Auto", new CenterAuto(m_shooter, m_robotDrive, m_intake, m_conveyor));
     autoChooser.addOption("Steal Auto", new TrenchAuto(m_shooter, m_robotDrive, m_intake, m_conveyor));
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
