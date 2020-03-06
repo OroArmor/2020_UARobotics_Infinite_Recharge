@@ -367,8 +367,7 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
             new RamseteController(DriveConstants.RAMSETE_B, DriveConstants.RAMSETE_ZETA),
             DriveConstants.kDriveKinematics,
             this::tankDriveVelocity,
-            this)
-        .andThen(new InstantCommand(() -> arcadeDrive(0, 0), this));
+            this);
   }
 
     /**
@@ -426,6 +425,14 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
 				
     /* Determine which slot affects which PID */
     m_talonsrxright.selectProfileSlot(DriveConstants.kSlot_Distanc, DriveConstants.PID_PRIMARY);
+    m_talonsrxright.selectProfileSlot(DriveConstants.kSlot_Turning, DriveConstants.PID_TURN);
+  }
+
+  public void velocitysetup() {
+    resetEncoders();
+				
+    /* Determine which slot affects which PID */
+    m_talonsrxright.selectProfileSlot(DriveConstants.kSlot_Velocit, DriveConstants.PID_PRIMARY);
     m_talonsrxright.selectProfileSlot(DriveConstants.kSlot_Turning, DriveConstants.PID_TURN);
   }
 

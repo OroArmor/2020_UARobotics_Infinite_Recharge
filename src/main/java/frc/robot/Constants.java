@@ -180,7 +180,12 @@ public final class Constants {
     public static final class AutoConstants {
         public static final double kAutoTimeoutSeconds = 12;
         public static final double kAutoShootTimeSeconds = 7;
+
         public static final double kTrenchAutoShootRPM = 7000;
+        public static final double kTrenchAutoBallPickup = 60;
+        public static final double kTrenchAutoShootAngle = -160;
+        public static final double kTrenchAutoCenterAngle = -45;
+        public static final double kTrenchAutoDriveCenter = 120;
 
         public static final double kMaxSpeedMetersPerSecond = 3;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
@@ -224,5 +229,9 @@ public final class Constants {
         public static final int kClimbLeftControllerPort = 11;
         public static final int kClimbRightControllerPort = 10;
         public static final int kEncoderCPR = 4096;
+
+        public static final int kFullUpEncoderCount = 42000;
+        public static final int kOnBarEncoderCount = 65000;
+        public static final int kHangingEncoderCount = 77000;
     }
 }

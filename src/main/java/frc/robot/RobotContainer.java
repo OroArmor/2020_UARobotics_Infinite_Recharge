@@ -29,11 +29,13 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Timer;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 // Command Imports
 import frc.robot.commands.AutoAim;
+import frc.robot.commands.DriveStraight;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.commands.TrenchAuto;
 // Subsystem Imports
@@ -81,6 +83,7 @@ public class RobotContainer {
   @Log(tabName = "DriveSubsystem")
   private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
+  private final Timer timer = new Timer();
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   // The operator's controller
@@ -135,9 +138,6 @@ public class RobotContainer {
     // Sets the LEDs to start up with a rainbow config
     //m_LED.rainbow();
 
-    // Makes sure climber is not inverted
-    m_climb.invertclimber(false);
-
     autoChooser.addOption("Auto Aim", new AutoAim(m_robotDrive));
     autoChooser.addOption("Trench Auto", new TrenchAuto(m_shooter, m_robotDrive, m_intake, m_conveyor));
     autoChooser.addOption("Straight Auto", new TrenchAuto(m_shooter, m_robotDrive, m_intake, m_conveyor));
@@ -153,7 +153,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Spin up the shooter to Auto Line Speed when the 'Start' button is pressed
-    new JoystickButton(m_driverController, XboxController.Button.kStart.value)
+    /* new JoystickButton(m_driverController, XboxController.Button.kStart.value)
       .or(new JoystickButton(m_operatorController, XboxController.Button.kStart.value))
       .whenActive(new InstantCommand(() -> {
         m_shooter.setSetpoint(ShooterConstants.kShooterAutoLineRPM);
@@ -166,7 +166,7 @@ public class RobotContainer {
       .whenActive(new InstantCommand(() -> {
         m_shooter.setSetpoint(ShooterConstants.kShooterNearTrenchRPM);
         m_shooter.enable();
-      }, m_shooter));
+      }, m_shooter)); */
 
     // Spin up the shooter to far trench speed when the 'X' button is pressed.
     new JoystickButton(m_driverController, XboxController.Button.kX.value)
@@ -184,6 +184,7 @@ public class RobotContainer {
         m_shooter.disable();
       }, m_shooter));
     
+    // Turn on the conveyor when either the button is pressed or if the bottom sensor is blocked (new ball) and the top sensor is not blocked (ball has a place to go)
     topConveyorSensor.negate()
     .and(frontConveyorSensor)
     .or(new JoystickButton(m_driverController, XboxController.Button.kA.value)
@@ -191,22 +192,24 @@ public class RobotContainer {
     .whenActive(new InstantCommand(m_conveyor::turnOn, m_conveyor).withTimeout(5))
     .whenInactive(new InstantCommand(m_conveyor::turnOff, m_conveyor));
 
-    // When right bumper is pressed raise/lower the intake and stop/start the intake on both controllers
+    // When right bumper is pressed raise/lower the intake and stop/start the intake on both controllers.  If held for > .5 seconds don't start the intake
     new JoystickButton(m_operatorController, XboxController.Button.kBumperRight.value).or(new JoystickButton(m_driverController, XboxController.Button.kBumperRight.value))
-      .whenActive(new InstantCommand(() -> m_intake.toggleIntakePosition(true), m_intake)
-      .andThen(new InstantCommand(() -> m_intake.toggleIntakeWheels(true), m_intake)));
-
+      .whenActive(new InstantCommand(() -> m_intake.toggleIntakePosition(true))
+        .andThen(new InstantCommand(timer::reset))
+        .andThen(new InstantCommand(timer::start)))
+      .whenInactive(new ConditionalCommand(new InstantCommand(() -> m_intake.toggleIntakeWheels(true)), new WaitCommand(0), () -> timer.get() < .5));
+      
     /*     // When left bumper is pressed spin control panel
     new JoystickButton(m_operatorController, Button.kBumperLeft.value).or(new JoystickButton(m_driverController, Button.kBumperLeft.value))
       .whenActive(new InstantCommand(m_controlpanel::rotateWheel, m_controlpanel)); */
+    
+    new JoystickButton(m_driverController, XboxController.Button.kBack.value)
+      .or(new JoystickButton(m_operatorController, XboxController.Button.kBack.value))
+      .whileActiveContinuous(new DriveStraight(120, m_robotDrive));
 
-    new JoystickButton(m_operatorController, XboxController.Button.kBumperLeft.value).or(new JoystickButton(m_driverController, XboxController.Button.kBumperLeft.value))
-      .whileActiveContinuous(new FunctionalCommand(
-        m_robotDrive::distancesetup,
-        () -> m_robotDrive.drivestraight(120),
-        m_robotDrive::stopmotors,
-        m_robotDrive::atSetpoint,
-        m_robotDrive));
+    new JoystickButton(m_operatorController, XboxController.Button.kBumperLeft.value)
+      .or(new JoystickButton(m_driverController, XboxController.Button.kBumperLeft.value))
+      .whenActive(new InstantCommand(() -> m_climb.nextClimbStage(true)));      
     
     /* new JoystickButton(m_driverController, Button.kY.value)
       .whileHeld(new AutoAim(m_robotDrive, m_shooter));
@@ -221,16 +224,6 @@ public class RobotContainer {
     // Create "button" from POV Hat in down direction.  Use both of the angles to the left and right also.
     new POVButton(m_driverController, 225).or(new POVButton(m_driverController, 180)).or(new POVButton(m_driverController, 135))
       .whenActive(new TurnToAngle(-90, m_robotDrive).withTimeout(5));
-  }
-
-  @Config(name="shooterPID")
-  public void setPID(double kP, double kI, double kD, double kF) {
-    m_shooter.getController().setPID(kP, kI, kD);
-  }
-
-  @Log
-  public double getTurn(){
-    return m_driverController.getX(GenericHID.Hand.kRight);
   }
   
   /* public void LimelightCamera() {
