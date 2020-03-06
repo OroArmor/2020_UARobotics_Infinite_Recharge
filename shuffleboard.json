@@ -297,6 +297,28 @@
               "_source0": "network_table:///SmartDashboard/Auto Chooser",
               "_title": "Auto Chooser"
             }
+          },
+          "2,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/fwd",
+              "_title": "fwd"
+            }
+          },
+          "3,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/rot",
+              "_title": "rot"
+            }
           }
         }
       }

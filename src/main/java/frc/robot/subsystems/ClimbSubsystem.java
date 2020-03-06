@@ -25,10 +25,11 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable{
         //m_RightClimbMotor.setInverted(true);
         setOutput(0,0);
         m_LeftClimbMotor.setInverted(true);
+        m_LeftClimbMotor.setSensorPhase(true);
         m_RightClimbMotor.setInverted(false);
-        m_LeftClimbMotor.configPeakOutputReverse(0);
+     /*    m_LeftClimbMotor.configPeakOutputReverse(0);
         m_RightClimbMotor.configPeakOutputReverse(0);
-    }
+     */}
 
     @Config
     public void numOfRotations(double rotations) {
@@ -37,6 +38,11 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable{
         m_RightClimbMotor.set(ControlMode.Position, targetposition);
     }
 
+/*     @Config
+    public void setP(double p){
+        m_LeftClimbMotor.config_kP(0, p);
+    }
+ */
     public void setOutput(double leftMotorPercent, double rightMotorPercent) {
         this.m_LeftClimbMotor.set(leftMotorPercent * climbinvert);
         this.m_RightClimbMotor.set(rightMotorPercent * climbinvert);
@@ -49,8 +55,8 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable{
 
     @Config
     public void setPosition(double position) {
-        m_RightClimbMotor.set(ControlMode.MotionMagic, position);
-        m_LeftClimbMotor.set(ControlMode.MotionMagic, position);
+        m_RightClimbMotor.set(ControlMode.Position, position);
+        m_LeftClimbMotor.set(ControlMode.Position, position);
     }
 
     @Log
@@ -64,17 +70,23 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable{
     } 
 
     @Config.ToggleButton
+    public void resetEnc(boolean enabled) {
+        m_LeftClimbMotor.setSelectedSensorPosition(0);
+        m_RightClimbMotor.setSelectedSensorPosition(0);
+    }
+
+    @Config.ToggleButton
     public void invertclimber(boolean enabled) {
         if (enabled) {
             climbinvert = -1;
-            m_LeftClimbMotor.configPeakOutputReverse(1);
-            m_RightClimbMotor.configPeakOutputReverse(1);
-        }
+ /*            m_LeftClimbMotor.configPeakOutputReverse(-1);
+            m_RightClimbMotor.configPeakOutputReverse(-1);
+  */       }
         else {
             climbinvert = 1;
-            m_LeftClimbMotor.configPeakOutputReverse(0);
+ /*            m_LeftClimbMotor.configPeakOutputReverse(0);
             m_RightClimbMotor.configPeakOutputReverse(0);
-        }
+  */       }
     }
 
 }
