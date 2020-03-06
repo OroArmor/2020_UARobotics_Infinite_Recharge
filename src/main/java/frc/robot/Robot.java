@@ -99,6 +99,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.m_intake.setOutput(0);
     m_robotContainer.m_conveyor.turnOff();
     m_robotContainer.m_climb.invertclimber(false);
+    m_robotContainer.m_climb.setOutput(0, 0);
     m_robotContainer.m_climb.climbstage = 0;
   }
 

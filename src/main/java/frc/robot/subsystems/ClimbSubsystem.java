@@ -19,8 +19,10 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable{
     @Config(name="ClimbMotorRight")
     private final WPI_TalonSRX m_RightClimbMotor = new WPI_TalonSRX(ClimbConstants.kClimbRightControllerPort);
 
+    @Log
     private int climbinvert = 1;
 
+    @Log
     public int climbstage = 0;
 
     public ClimbSubsystem() {
@@ -29,6 +31,9 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable{
         m_LeftClimbMotor.setInverted(true);
         m_LeftClimbMotor.setSensorPhase(true);
         m_RightClimbMotor.setInverted(false);
+        m_RightClimbMotor.setSensorPhase(true);
+        m_LeftClimbMotor.config_kP(0, ClimbConstants.kClimbP);
+        m_RightClimbMotor.config_kP(0, ClimbConstants.kClimbP);
      /*    m_LeftClimbMotor.configPeakOutputReverse(0);
         m_RightClimbMotor.configPeakOutputReverse(0);
      */}
@@ -96,8 +101,14 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable{
         climbstage = climbstage + 1;
         switch(climbstage) {
             case 1:
+                setPosition(ClimbConstants.kFullUpEncoderCount);
+                break;
             case 2:
+                setPosition(ClimbConstants.kOnBarEncoderCount);
+                break;
             case 3:
+                setPosition(ClimbConstants.kHangingEncoderCount);
+                break;
             default:
         }
     }
