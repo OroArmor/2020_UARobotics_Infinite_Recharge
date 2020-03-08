@@ -12,6 +12,9 @@ import io.github.oblarg.oblog.annotations.Log;
 import frc.robot.commands.TurnToRelativeAngle;
 
 public class AutoAim extends CommandBase implements Loggable{
+  @Log
+  public double tx;
+  
   private final DriveSubsystem m_robotDrive;
   /**
    * Creates a new AutoAimCommand.
@@ -33,7 +36,7 @@ public class AutoAim extends CommandBase implements Loggable{
   public void execute() {
     // Read Limelight Data
     double tv = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
-    double tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+    tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
 
     if (tv == 1)
     {
