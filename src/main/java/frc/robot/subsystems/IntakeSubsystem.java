@@ -30,24 +30,24 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable{
 
     @Config
     public void toggleIntakePosition(boolean enabled) {
-        if(this.m_intakeSolenoid1.get() == DoubleSolenoid.Value.kForward) {
-            this.m_intakeSolenoid1.set(DoubleSolenoid.Value.kReverse);
-            this.m_intakeSolenoid2.set(DoubleSolenoid.Value.kReverse);
+        if(m_intakeSolenoid1.get() == DoubleSolenoid.Value.kForward) {
+            m_intakeSolenoid1.set(DoubleSolenoid.Value.kReverse);
+            m_intakeSolenoid2.set(DoubleSolenoid.Value.kReverse);
         }
         else{
-            this.m_intakeSolenoid1.set(DoubleSolenoid.Value.kForward);
-            this.m_intakeSolenoid2.set(DoubleSolenoid.Value.kForward);
+            m_intakeSolenoid1.set(DoubleSolenoid.Value.kForward);
+            m_intakeSolenoid2.set(DoubleSolenoid.Value.kForward);
         }
         
     }
 
     @Config
     public void toggleIntakeWheels(boolean enabled) {
-        if(this.m_IntakeMotor.get() > 0) {
-            this.m_IntakeMotor.set(0);
+        if(m_IntakeMotor.get() > 0 || m_intakeSolenoid1.get() == DoubleSolenoid.Value.kForward) {
+            m_IntakeMotor.set(0);
         }
         else{
-            this.m_IntakeMotor.set(IntakeConstants.kIntakeMotorSpeed);
+            m_IntakeMotor.set(IntakeConstants.kIntakeMotorSpeed);
         }
     }
 }

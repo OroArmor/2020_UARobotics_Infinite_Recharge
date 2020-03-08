@@ -62,6 +62,9 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable{
 
     @Config
     public void setPosition(double position) {
+        if (NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").getDouble(0) < 2)  {
+            NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(2);
+        }
         m_RightClimbMotor.set(ControlMode.Position, position);
         m_LeftClimbMotor.set(ControlMode.Position, position);
     }

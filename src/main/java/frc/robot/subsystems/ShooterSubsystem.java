@@ -49,7 +49,7 @@ public class ShooterSubsystem extends PIDSubsystem implements Loggable{
   public void useOutput(double output, double setpoint) {
     SmartDashboard.putNumber("output", output);
     SmartDashboard.putNumber("setpoint", m_shooterFeedforward.calculate(setpoint));
-    m_shooterMotor.setVoltage(MathUtil.clamp(output + m_shooterFeedforward.calculate(setpoint), 0, 14));
+    m_shooterMotor.setVoltage(MathUtil.clamp((output / 60) + (m_shooterFeedforward.calculate(setpoint) / 60), 0, 14));
   }
 
   @Log
