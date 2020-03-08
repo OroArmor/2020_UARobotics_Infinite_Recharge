@@ -119,7 +119,7 @@ public final class Constants {
 
         public static final double kRelTurnP = .1;
         public static final double kRelTurnI = 0;
-        public static final double kRelTurnD = 0;
+        public static final double kRelTurnD = 0.15;
         public static final double kRelTurnFriction = 0.3;
 
         public static final double kMaxRelTurnRateDegPerS = 20;
@@ -142,10 +142,10 @@ public final class Constants {
         public static final int kShooterMotorPort = 8;
         public static final int kShooterMotorPort2 = 9;
     
-        public static final double kShooterFarTrenchRPM = 7100;
+        public static final double kShooterFarTrenchRPM = 7400;
         public static final double kShooterNearTrenchRPM = 2000;
         public static final double kShooterAutoLineRPM = 1000;
-        public static final double kShooterToleranceRPM = 50;
+        public static final double kShooterToleranceRPM = 200;
         
         public static final int kEncoderCPR = 2048;
         public static final double kWheelDiameterInches = 4;
@@ -154,9 +154,9 @@ public final class Constants {
             60.0 / (double) kEncoderCPR;
 
         // These are not real PID gains, and will have to be tuned for your specific robot.
-        public static final double kP = 2.06; // .000321
+        public static final double kP = 1; // .000321
         public static final double kI = 0;
-        public static final double kD = 0;
+        public static final double kD = 0.1;
         public static final double kF = 0.0; //Not used
     
         // On a real robot the feedforward constants should be empirically determined; these are
@@ -230,6 +230,7 @@ public final class Constants {
         public static final int kClimbRightControllerPort = 10;
         public static final int kEncoderCPR = 4096;
         public static final double kClimbP = 0.1;
+        public static final double kErrorTolerance = 1000;
 
         public static final int kFullUpEncoderCount = 42000;
         public static final int kOnBarEncoderCount = 53000;

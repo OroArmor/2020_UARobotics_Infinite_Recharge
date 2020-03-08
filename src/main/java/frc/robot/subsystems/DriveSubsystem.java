@@ -82,8 +82,15 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
   public DriveSubsystem() {
 		m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
 
+    // Set factory defaults
+    m_talonsrxleft.configFactoryDefault();
+    m_victorspxleft.configFactoryDefault();
+    m_talonsrxright.configFactoryDefault();
+    m_talonsrxright2.configFactoryDefault();
+
 			// Set followers
-		m_victorspxleft.set(ControlMode.Follower, DriveConstants.kLeftMotor2Port);
+    //m_victorspxleft.set(ControlMode.Follower, DriveConstants.kLeftMotor2Port);
+    m_victorspxleft.follow(m_talonsrxleft);
 		m_talonsrxright2.set(ControlMode.Follower, DriveConstants.kRightMotor2Port);
 
     /* Disable all motor controllers */

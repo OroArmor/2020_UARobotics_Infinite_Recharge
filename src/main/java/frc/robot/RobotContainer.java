@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.PerpetualCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -37,6 +38,7 @@ import io.github.oblarg.oblog.annotations.Log;
 import frc.robot.commands.AutoAim;
 import frc.robot.commands.DriveStraight;
 import frc.robot.commands.TurnToAngle;
+import frc.robot.commands.TurnToRelativeAngle;
 import frc.robot.commands.TrenchAuto;
 import frc.robot.commands.CenterAuto;
 // Subsystem Imports
@@ -80,6 +82,7 @@ public class RobotContainer {
   
   // Creating this so we get logging in the Command
   Command m_TurnToAngle = new TurnToAngle(0, m_robotDrive);
+  Command m_TurnToRelativeAngle = new TurnToRelativeAngle(0, m_robotDrive);
 
   @Log(tabName = "DriveSubsystem")
   private final SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -104,6 +107,7 @@ public class RobotContainer {
 
     // Limelight Setup
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(1);
+    LimelightCamera();
 
     // Configure default commands
     // Set the default drive command to split-stick arcade drive
@@ -177,9 +181,12 @@ public class RobotContainer {
       .whileActiveContinuous(new DriveStraight(120, m_robotDrive));
     
     // When the left bumper is pressed on either controller go to the next climber stage
-    new JoystickButton(m_operatorController, XboxController.Button.kBumperLeft.value)
+     new JoystickButton(m_operatorController, XboxController.Button.kBumperLeft.value)
       .or(new JoystickButton(m_driverController, XboxController.Button.kBumperLeft.value))
-      .whenActive(new InstantCommand(() -> m_climb.nextClimbStage(true)));      
+      .whenActive(new PerpetualCommand(new InstantCommand(() -> m_climb.nextClimbStage(true))
+        .withInterrupt(() -> m_climb.atposition())));
+     // .whenActive(new InstantCommand(() -> m_climb.nextClimbStage(true))
+     //   .perpetually().withInterrupt(() -> m_climb.atposition()));  
     
     // When driver presses the Y button Auto Aim to the goal
     new JoystickButton(m_driverController, XboxController.Button.kY.value)

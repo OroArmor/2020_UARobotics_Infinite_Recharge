@@ -29,7 +29,7 @@ public class TurnToRelativeAngle extends PIDCommand implements Loggable{
         // Close loop on heading
         () -> -drive.getHeading(),
         // Set reference to target
-        -drive.getHeading() + targetRelativeAngleDegrees,
+        -drive.getHeading() - targetRelativeAngleDegrees,
         // Pipe output to turn robot
         output -> {
           if (output > 0) {

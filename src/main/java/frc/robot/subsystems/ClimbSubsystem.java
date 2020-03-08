@@ -115,4 +115,12 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable{
             default:
         }
     }
+
+    // Determines if the talon is at the desired position
+    @Log
+    public boolean atposition() {
+        return m_LeftClimbMotor.getClosedLoopError() < ClimbConstants.kErrorTolerance
+        && m_RightClimbMotor.getClosedLoopError() < ClimbConstants.kErrorTolerance
+        && m_RightClimbMotor.getClosedLoopTarget() > 100;
+    }
 }
