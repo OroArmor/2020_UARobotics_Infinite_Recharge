@@ -25,6 +25,9 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable{
     @Log
     public int climbstage = 0;
 
+    @Log
+    public int setpoint = 4200;
+
     public ClimbSubsystem() {
         //m_RightClimbMotor.setInverted(true);
         setOutput(0,0);
@@ -104,12 +107,15 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable{
         climbstage = climbstage + 1;
         switch(climbstage) {
             case 1:
+                setpoint = ClimbConstants.kFullUpEncoderCount;
                 setPosition(ClimbConstants.kFullUpEncoderCount);
                 break;
             case 2:
+                setpoint = ClimbConstants.kOnBarEncoderCount;
                 setPosition(ClimbConstants.kOnBarEncoderCount);
                 break;
             case 3:
+                setpoint = ClimbConstants.kHangingEncoderCount;
                 setPosition(ClimbConstants.kHangingEncoderCount);
                 break;
             default:
@@ -119,8 +125,18 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable{
     // Determines if the talon is at the desired position
     @Log
     public boolean atposition() {
-        return m_LeftClimbMotor.getClosedLoopError() < ClimbConstants.kErrorTolerance
-        && m_RightClimbMotor.getClosedLoopError() < ClimbConstants.kErrorTolerance
-        && m_RightClimbMotor.getClosedLoopTarget() > 100;
+        return inRange(m_LeftClimbMotor.getSelectedSensorPosition(), setpoint)
+        && inRange(m_RightClimbMotor.getSelectedSensorPosition(), setpoint)
+        && m_RightClimbMotor.getSelectedSensorPosition() > 100;
+    }
+
+    public Boolean inRange(double position, double setpoint){
+        if(position > setpoint + ClimbConstants.kErrorTolerance){
+            return false;
+        }else if(position < setpoint - ClimbConstants.kErrorTolerance){
+            return false;
+        }else{
+            return true;
+        }
     }
 }

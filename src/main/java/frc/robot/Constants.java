@@ -229,8 +229,8 @@ public final class Constants {
         public static final int kClimbLeftControllerPort = 11;
         public static final int kClimbRightControllerPort = 10;
         public static final int kEncoderCPR = 4096;
-        public static final double kClimbP = 0.1;
-        public static final double kErrorTolerance = 1000;
+        public static final double kClimbP = 0.5;
+        public static final double kErrorTolerance = 800;
 
         public static final int kFullUpEncoderCount = 42000;
         public static final int kOnBarEncoderCount = 53000;

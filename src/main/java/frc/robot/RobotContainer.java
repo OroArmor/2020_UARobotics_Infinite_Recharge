@@ -96,7 +96,6 @@ public class RobotContainer {
 
   Button frontConveyorSensor = new Button(() -> m_conveyor.getFrontConveyor());
   Button topConveyorSensor = new Button(() -> m_conveyor.getTopConveyor());
-  @Log
   Button shooteratsetpoint = new Button(() -> m_shooter.atSetpoint());
   public HttpCamera m_limelightFeed;
 
@@ -162,7 +161,7 @@ public class RobotContainer {
     
     // Turn on the conveyor when either the button is pressed or if the bottom sensor is blocked
     // (new ball) and the top sensor is not blocked (ball has a place to go)
-    topConveyorSensor.negate()
+    topConveyorSensor
       .and(frontConveyorSensor)
     .or(new JoystickButton(m_driverController, XboxController.Button.kA.value)
       .and(shooteratsetpoint))
@@ -226,7 +225,7 @@ public class RobotContainer {
         m_shooter.setSetpoint(m_shooter.getSetpoint() - 50);}));
   }
   
-  public void LimelightCamera() {
+/*   public void LimelightCamera() {
     // Activate an HttpCamera for the Limelight
     m_limelightFeed = new HttpCamera("Limelight Camera", "http://10.63.91.11:5800/stream.mjpg", HttpCamera.HttpCameraKind.kMJPGStreamer);
   }
@@ -234,7 +233,7 @@ public class RobotContainer {
   @Log.CameraStream(name = "Limelight Camera", tabName = "Dashboard")
   public HttpCamera getLimelightFeed() {
     return m_limelightFeed;
-  }
+  } */
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

@@ -63,6 +63,6 @@ public class ConveyorSubsystem extends SubsystemBase implements Loggable{
 
     @Log
     public boolean getTopConveyor() {
-        return (topconveyor.getAverageVoltage() < 4.75);
+        return (topconveyor.getAverageVoltage() > 4.75);
     }
 }
