@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import io.github.oblarg.oblog.Logger;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -101,6 +102,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.m_climb.setOutput(0, 0);
     m_robotContainer.m_climb.climbstage = 0;
     m_robotContainer.m_climb.resetEnc(true);
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
   }
 
   /**

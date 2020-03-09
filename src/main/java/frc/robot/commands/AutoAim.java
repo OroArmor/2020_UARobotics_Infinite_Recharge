@@ -12,9 +12,6 @@ import io.github.oblarg.oblog.annotations.Log;
 import frc.robot.commands.TurnToRelativeAngle;
 
 public class AutoAim extends CommandBase implements Loggable{
-  @Log
-  public double tx;
-  
   private final DriveSubsystem m_robotDrive;
   /**
    * Creates a new AutoAimCommand.
@@ -29,6 +26,8 @@ public class AutoAim extends CommandBase implements Loggable{
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(0);
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -36,7 +35,7 @@ public class AutoAim extends CommandBase implements Loggable{
   public void execute() {
     // Read Limelight Data
     double tv = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
-    tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+    double tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
 
     if (tv == 1)
     {
@@ -52,5 +51,7 @@ public class AutoAim extends CommandBase implements Loggable{
   @Override
   public void end(boolean interrupted) {
     m_robotDrive.arcadeDrive(0,0);
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(1);
   }
 }

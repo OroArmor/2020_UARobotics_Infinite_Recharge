@@ -222,7 +222,7 @@ public final class Constants {
 
         public static final double kConveyorTopMotorSpeed = 1.0;
         public static final double kConveyorBottomMotorSpeed = -0.2;
-
+        public static final double kConveyorBackSpeed = -0.5;
     }
 
     public static final class ClimbConstants {

@@ -39,6 +39,7 @@ import frc.robot.commands.AutoAim;
 import frc.robot.commands.DriveStraight;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.commands.TurnToRelativeAngle;
+import frc.robot.commands.NextClimbPosition;
 import frc.robot.commands.TrenchAuto;
 import frc.robot.commands.CenterAuto;
 // Subsystem Imports
@@ -95,6 +96,7 @@ public class RobotContainer {
 
   Button frontConveyorSensor = new Button(() -> m_conveyor.getFrontConveyor());
   Button topConveyorSensor = new Button(() -> m_conveyor.getTopConveyor());
+  @Log
   Button shooteratsetpoint = new Button(() -> m_shooter.atSetpoint());
   public HttpCamera m_limelightFeed;
 
@@ -183,10 +185,15 @@ public class RobotContainer {
     // When the left bumper is pressed on either controller go to the next climber stage
      new JoystickButton(m_operatorController, XboxController.Button.kBumperLeft.value)
       .or(new JoystickButton(m_driverController, XboxController.Button.kBumperLeft.value))
-      .whenActive(new PerpetualCommand(new InstantCommand(() -> m_climb.nextClimbStage(true))
-        .withInterrupt(() -> m_climb.atposition())));
+      .whenActive(new NextClimbPosition(m_climb));
+     // new PerpetualCommand(new InstantCommand(() -> m_climb.nextClimbStage(true))
+     // .withInterrupt(() -> m_climb.atposition())));
      // .whenActive(new InstantCommand(() -> m_climb.nextClimbStage(true))
-     //   .perpetually().withInterrupt(() -> m_climb.atposition()));  
+     //   .perpetually().withInterrupt(() -> m_climb.atposition()));
+    
+    new JoystickButton(m_operatorController, XboxController.Button.kBack.value)
+      .whenPressed(new InstantCommand(m_conveyor::turnBackwards, m_conveyor))
+      .whenReleased(new InstantCommand(m_conveyor::turnOff, m_conveyor));
     
     // When driver presses the Y button Auto Aim to the goal
     new JoystickButton(m_driverController, XboxController.Button.kY.value)

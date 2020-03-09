@@ -75,6 +75,8 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
   int _printCount = 0;
   private Pose2d savedPose;
   private Trajectory straightTrajectory;
+  @Log
+  double target_sensorUnits;
 
   /**
    * Creates a new DriveSubsystem.
@@ -89,9 +91,8 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
     m_talonsrxright2.configFactoryDefault();
 
 			// Set followers
-    //m_victorspxleft.set(ControlMode.Follower, DriveConstants.kLeftMotor2Port);
     m_victorspxleft.follow(m_talonsrxleft);
-		m_talonsrxright2.set(ControlMode.Follower, DriveConstants.kRightMotor2Port);
+		m_talonsrxright2.follow(m_talonsrxright);
 
     /* Disable all motor controllers */
 		m_talonsrxright.set(0);
@@ -421,7 +422,7 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
 
   // Drives straight specified distance in inches
   public void drivestraight(double distance) {
-    double target_sensorUnits = (distance * DriveConstants.SENSOR_UNITS_PER_ROTATION) / DriveConstants.WHEEL_CIRCUMFERENCE_INCHES ;
+    target_sensorUnits = (distance * DriveConstants.SENSOR_UNITS_PER_ROTATION) / DriveConstants.WHEEL_CIRCUMFERENCE_INCHES ;
     m_talonsrxright.set(ControlMode.Position, target_sensorUnits, DemandType.AuxPID, m_talonsrxright.getSelectedSensorPosition(1));
 		m_talonsrxleft.follow(m_talonsrxright, FollowerType.AuxOutput1);
   }
