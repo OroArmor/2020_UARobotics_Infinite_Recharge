@@ -37,6 +37,7 @@ import io.github.oblarg.oblog.annotations.Log;
 // Command Imports
 import frc.robot.commands.AutoAim;
 import frc.robot.commands.DriveStraight;
+import frc.robot.commands.DriveDistanceProfiled;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.commands.TurnToRelativeAngle;
 import frc.robot.commands.NextClimbPosition;
@@ -50,6 +51,7 @@ import frc.robot.subsystems.ControlPanelSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.Limelight;
 
 // Constant Imports
 import frc.robot.Constants.ShooterConstants;
@@ -77,6 +79,8 @@ public class RobotContainer {
   public final ConveyorSubsystem m_conveyor = new ConveyorSubsystem();
   @Log
   public final ClimbSubsystem m_climb = new ClimbSubsystem();
+
+  public final Limelight m_Limelight = new Limelight();
 
   @Log.PDP
   PowerDistributionPanel m_PDP = new PowerDistributionPanel(0);
@@ -108,7 +112,7 @@ public class RobotContainer {
 
     // Limelight Setup
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(1);
-    LimelightCamera();
+    //LimelightCamera();
 
     // Configure default commands
     // Set the default drive command to split-stick arcade drive
@@ -196,11 +200,15 @@ public class RobotContainer {
     
     // When driver presses the Y button Auto Aim to the goal
     new JoystickButton(m_driverController, XboxController.Button.kY.value)
-      .whenPressed(new AutoAim(m_robotDrive));
+      .whenPressed(new InstantCommand(() -> m_Limelight.beforeTurnToTarget()))
+      .whileHeld(new InstantCommand(() -> m_Limelight.turnToTargetVolts(m_robotDrive,m_shooter)))
+      .whenReleased(new InstantCommand(() -> m_Limelight.afterTurnToTarget()));
+    //.whenPressed(new AutoAim(m_robotDrive));
     
     // TEST when start is pressed follow trajectory
-    new JoystickButton(m_driverController, XboxController.Button.kStart.value).whenPressed(() ->
-      m_robotDrive.createCommandForTrajectory("LS to CP"));
+    new JoystickButton(m_driverController, XboxController.Button.kStart.value)
+      .whenPressed(new DriveDistanceProfiled(3, m_robotDrive).withTimeout(10));
+    //.whenPressed(() -> m_robotDrive.createCommandForTrajectory("LS to CP"));
     
     // When Y button is pressed on operators controller deploy the intake but do not spin the wheels
     new JoystickButton(m_operatorController, XboxController.Button.kY.value)
@@ -220,7 +228,7 @@ public class RobotContainer {
         m_shooter.setSetpoint(m_shooter.getSetpoint() + 50);}));
 
     // POV Down Direction on Operator Controller relatively increases the current setpoint of the shooter
-    new POVButton(m_driverController, 225).or(new POVButton(m_driverController, 180)).or(new POVButton(m_driverController, 135))
+    new POVButton(m_operatorController, 225).or(new POVButton(m_operatorController, 180)).or(new POVButton(m_operatorController, 135))
       .whenActive(new InstantCommand(() -> {
         m_shooter.setSetpoint(m_shooter.getSetpoint() - 50);}));
   }

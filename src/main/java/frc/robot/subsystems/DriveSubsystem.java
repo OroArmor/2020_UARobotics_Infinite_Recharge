@@ -97,11 +97,6 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
     /* Disable all motor controllers */
 		m_talonsrxright.set(0);
 		m_talonsrxleft.set(0);
-
-		/* Factory Default all hardware to prevent unexpected behaviour */
-		m_talonsrxright.configFactoryDefault();
-		m_talonsrxleft.configFactoryDefault();
-		m_pigeon.configFactoryDefault();
     
     // Set Ramping
     m_talonsrxleft.configClosedloopRamp(DriveConstants.kClosedRamp);
@@ -223,11 +218,11 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
    *
    * @return The current wheel speeds.
    */
-  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+  /* public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(
         m_talonsrxleft.getSelectedSensorVelocity() * DriveConstants.kEncoderDistancePerPulse,
         m_talonsrxright.getSelectedSensorVelocity() * DriveConstants.kEncoderDistancePerPulse);
-  }
+  } */
 
   /**
    * Drives the robot using arcade controls.
@@ -466,5 +461,11 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
   public void stopmotors(boolean enabled) {
     m_talonsrxright.set(0);
     m_talonsrxleft.set(0);
+  }
+
+  public void tankDriveVolts(final double leftVolts, final double rightVolts) {
+    m_talonsrxleft.setVoltage(leftVolts);
+    m_talonsrxright.setVoltage(rightVolts);
+    //m_drive.feed();
   }
 }

@@ -95,13 +95,13 @@ public final class Constants {
         public final static int kSlot_MotProf = SLOT_3;
         
         /** Voltage needed to overcome the motor’s static friction. kS */
-        public static final double kS = 0.829;
+        public static final double kS = 1.01; //.829
 
         /** Voltage needed to hold (or "cruise") at a given constant velocity. kV */
-        public static final double kV = 3.04;
+        public static final double kV = 2.93; //3.04
 
         /** Voltage needed to induce a given acceleration in the motor shaft. kA */
-        public static final double kA = 0.676;
+        public static final double kA = 0.761; //.676
 
         // Example value only - as above, this must be tuned for your drive!
         public static final double kPDriveVel = 8.5;       
@@ -131,6 +131,10 @@ public final class Constants {
         // Baseline values for a RAMSETE follower in units of meters and seconds
         public static final double RAMSETE_B = 2;
         public static final double RAMSETE_ZETA = 0.7;
+
+        // Drive straight profiled
+        public static final double kMaxSpeedMetersPerSecond = 3;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 2;
     }
     
     public static final class ShooterConstants {
@@ -235,5 +239,21 @@ public final class Constants {
         public static final int kFullUpEncoderCount = 42000;
         public static final int kOnBarEncoderCount = 53000;
         public static final int kHangingEncoderCount = 63000;
+    }
+
+    public static final class LimelightConstants {
+        public static final double CAMERA_ANGLE = 0;
+        public static final double CAMERA_HEIGHT = 0;
+        public static final double TARGET_HEIGHT = 0;
+        public static final int TARGET_PIPELINE = 0;
+        public static final int DEFAULT_PIPELINE = 1;
+        public static final int DRIVE_PIPELINE = 2;
+        public static final int LED_ON = 3;
+        public static final int LED_OFF = 1;
+        public static final double TURN_TO_TARGET_TOLERANCE = 1.5;
+        public static final double RANGE_TOO_CLOSE =4;
+        public static final double RANGE_TOO_FAR=-9;
+        public static final double RANGE_PRIME_START=0;
+        public static final double RANGE_PRIME_END=-2;
     }
 }
