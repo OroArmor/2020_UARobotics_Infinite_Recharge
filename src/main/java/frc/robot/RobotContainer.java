@@ -183,12 +183,12 @@ public class RobotContainer {
     // TEST when back is pressed drive straight 120 inches
     new JoystickButton(m_driverController, XboxController.Button.kBack.value)
       .or(new JoystickButton(m_operatorController, XboxController.Button.kBack.value))
-      .whileActiveContinuous(new DriveStraight(120, m_robotDrive));
+      .whenActive(new DriveStraight(120, m_robotDrive).withTimeout(10));
     
     // When the left bumper is pressed on either controller go to the next climber stage
      new JoystickButton(m_operatorController, XboxController.Button.kBumperLeft.value)
       .or(new JoystickButton(m_driverController, XboxController.Button.kBumperLeft.value))
-      .whenActive(new NextClimbPosition(m_climb));
+      .whenActive(new NextClimbPosition(m_climb).withTimeout(5));
      // new PerpetualCommand(new InstantCommand(() -> m_climb.nextClimbStage(true))
      // .withInterrupt(() -> m_climb.atposition())));
      // .whenActive(new InstantCommand(() -> m_climb.nextClimbStage(true))

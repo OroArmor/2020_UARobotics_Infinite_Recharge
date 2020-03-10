@@ -37,9 +37,9 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable{
         m_RightClimbMotor.setSensorPhase(true);
         m_LeftClimbMotor.config_kP(0, ClimbConstants.kClimbP);
         m_RightClimbMotor.config_kP(0, ClimbConstants.kClimbP);
-     /*    m_LeftClimbMotor.configPeakOutputReverse(0);
+        m_LeftClimbMotor.configPeakOutputReverse(0);
         m_RightClimbMotor.configPeakOutputReverse(0);
-     */}
+    }
 
     @Config
     public void numOfRotations(double rotations) {
@@ -92,14 +92,14 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable{
     public void invertclimber(boolean enabled) {
         if (enabled) {
             climbinvert = -1;
- /*            m_LeftClimbMotor.configPeakOutputReverse(-1);
+            m_LeftClimbMotor.configPeakOutputReverse(-1);
             m_RightClimbMotor.configPeakOutputReverse(-1);
-  */       }
+        }
         else {
             climbinvert = 1;
- /*            m_LeftClimbMotor.configPeakOutputReverse(0);
+            m_LeftClimbMotor.configPeakOutputReverse(0);
             m_RightClimbMotor.configPeakOutputReverse(0);
-  */       }
+        }
     }
 
     @Config.ToggleButton
