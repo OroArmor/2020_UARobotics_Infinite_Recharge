@@ -165,7 +165,7 @@ public class RobotContainer {
     
     // Turn on the conveyor when either the button is pressed or if the bottom sensor is blocked
     // (new ball) and the top sensor is not blocked (ball has a place to go)
-    topConveyorSensor
+    topConveyorSensor.negate()
       .and(frontConveyorSensor)
     .or(new JoystickButton(m_driverController, XboxController.Button.kA.value)
       .and(shooteratsetpoint))
