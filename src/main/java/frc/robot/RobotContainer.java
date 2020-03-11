@@ -128,8 +128,8 @@ public class RobotContainer {
       // Use right y axis to control the speed of the climber
       new RunCommand(
         () -> m_climb
-          .setOutput(m_operatorController.getRawAxis(2),
-            m_operatorController.getRawAxis(3)), m_climb));
+          .setOutput(Math.max(m_operatorController.getRawAxis(2),m_driverController.getRawAxis(2)),
+            Math.max(m_operatorController.getRawAxis(3), m_driverController.getRawAxis(3))), m_climb));
                          
     // Sets the LEDs to start up with a rainbow config
     //m_LED.rainbow();
