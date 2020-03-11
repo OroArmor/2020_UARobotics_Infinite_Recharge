@@ -3,12 +3,14 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.Constants.ShooterConstants;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Log;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-public class Limelight extends SubsystemBase {
+public class Limelight extends SubsystemBase implements Loggable{
   /**
    * Creates a new Limelight.
    */
@@ -72,6 +74,7 @@ public class Limelight extends SubsystemBase {
   }
 
   /** Returns if limelight can see defined retroreflective target */
+  @Log
   public boolean hasTarget(){
    // this.table.getEntry("ledMode").setNumber(3);
     SmartDashboard.putNumber("tv; ", tv.getDouble(0));
@@ -82,8 +85,9 @@ public class Limelight extends SubsystemBase {
     return false;
   }
 
-  public NetworkTableEntry getTx() {
-    return tx;
+  @Log
+  public double getTx() {
+    return tx.getDouble(0);
   }
 
   public NetworkTableEntry getTy() {
@@ -98,6 +102,10 @@ public class Limelight extends SubsystemBase {
     this.table.getEntry("pipeline").setNumber(pipeline);
   }
 
+  public void setStream(int stream){
+    this.table.getEntry("stream").setNumber(stream);
+  }
+
   public void setLedOn(boolean isOn) {
     if (isOn){
       ledMode.setNumber(LimelightConstants.LED_ON);
@@ -109,9 +117,10 @@ public class Limelight extends SubsystemBase {
   /**Returns the angle to targed in degrees negative values to the left and positive to the right
    * used for turn to target
    */
+  @Log
   public double getAngleOfError(){
     //+1 is a fudge factor cor camera mounting
-    return getTx().getDouble(0.0) + 1.5;
+    return getTx();
   }
 
   public void autoTurnToTarget(DriveSubsystem drivetrain, ShooterSubsystem shooter){
@@ -120,15 +129,15 @@ public class Limelight extends SubsystemBase {
   public boolean turnToTargetVolts(DriveSubsystem drivetrain, ShooterSubsystem shooter){
     //SmartDashboard.putString("turnToTarget ","Started");
     double turn = 0;
-    double min = 1.7;
+    double min = 3.7;
     boolean check = hasTarget();
-    if (hasTarget() && !shooter.atSetpoint()){
+    /* if (hasTarget() && !shooter.atSetpoint()){
       shooter.setSetpoint(ShooterConstants.kShooterFarTrenchRPM);
-    }
+    } */
    // SmartDashboard.putString("Target ","" + check);
     //SmartDashboard.putString("Initial Tx","" + getAngleOfError());
     if(Math.abs(getAngleOfError()) >= LimelightConstants.TURN_TO_TARGET_TOLERANCE && hasTarget()){
-      turn = getAngleOfError()*0.1;     
+      turn = getAngleOfError()*0.5;     
       if (Math.abs(turn) < min){
         turn = turn > 0 ? min:-min;
       }
@@ -146,13 +155,15 @@ public class Limelight extends SubsystemBase {
 
   public void beforeTurnToTarget(){
     setLedOn(true);
-    switchPipeline(true);
+    //switchPipeline(true);
+    setStream(1);
     m_targeting = true;
   }
 
   public void afterTurnToTarget(){
     setLedOn(false);
-    switchPipeline(false);
+    //switchPipeline(false);
+    //setStream(2);
     m_targeting = false;
   }
   public void switchPipeline(boolean targeting){
@@ -163,10 +174,12 @@ public class Limelight extends SubsystemBase {
     }
   }
   
+  @Log
   public boolean isTargeting(){
     return m_targeting;
   }
 
+  @Log
   public boolean isOutOfRange(){
     return (getTy().getDouble(0) > LimelightConstants.RANGE_TOO_CLOSE || getTy().getDouble(0) < LimelightConstants.RANGE_TOO_FAR);
   }

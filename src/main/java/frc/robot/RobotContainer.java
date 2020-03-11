@@ -88,6 +88,7 @@ public class RobotContainer {
   // Creating this so we get logging in the Command
   Command m_TurnToAngle = new TurnToAngle(0, m_robotDrive);
   Command m_TurnToRelativeAngle = new TurnToRelativeAngle(0, m_robotDrive);
+  Command DriveStraight = new DriveStraight(0, m_robotDrive);
 
   @Log(tabName = "DriveSubsystem")
   private final SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -150,10 +151,13 @@ public class RobotContainer {
     // Spin up the shooter to far trench speed when the 'X' button is pressed.
     new JoystickButton(m_driverController, XboxController.Button.kX.value)
       .or(new JoystickButton(m_operatorController, XboxController.Button.kX.value))
-      .whenActive(new InstantCommand(() -> {
+      .whenActive(new InstantCommand(m_conveyor::turnBackwards)
+        .andThen(new WaitCommand(.1)
+        .andThen(new InstantCommand(m_conveyor::turnOff)
+        .andThen(new InstantCommand(() -> {
         m_shooter.setSetpoint(ShooterConstants.kShooterFarTrenchRPM);
         m_shooter.enable();
-      }, m_shooter));
+      }, m_shooter)))));
 
     // Stop the Shooter when the B button is pressed
     new JoystickButton(m_driverController, XboxController.Button.kB.value)
@@ -165,13 +169,13 @@ public class RobotContainer {
     
     // Turn on the conveyor when either the button is pressed or if the bottom sensor is blocked
     // (new ball) and the top sensor is not blocked (ball has a place to go)
-    topConveyorSensor.negate()
-      .and(frontConveyorSensor)
+    (topConveyorSensor.negate()
+      .and(frontConveyorSensor))
     .or(new JoystickButton(m_driverController, XboxController.Button.kA.value)
-      .and(shooteratsetpoint))
+      .and(shooteratsetpoint.or(topConveyorSensor.negate())))
     .or(new JoystickButton(m_operatorController, XboxController.Button.kA.value)
-      .and(shooteratsetpoint))
-    .whenActive(new InstantCommand(m_conveyor::turnOn, m_conveyor).withTimeout(5))
+      .and(shooteratsetpoint.or(topConveyorSensor.negate())))
+    .whenActive(new InstantCommand(m_conveyor::turnOn, m_conveyor))
     .whenInactive(new InstantCommand(m_conveyor::turnOff, m_conveyor));
 
     // When right bumper is pressed raise/lower the intake and stop/start the intake on both controllers
@@ -201,7 +205,7 @@ public class RobotContainer {
     // When driver presses the Y button Auto Aim to the goal
     new JoystickButton(m_driverController, XboxController.Button.kY.value)
       .whenPressed(new InstantCommand(() -> m_Limelight.beforeTurnToTarget()))
-      .whileHeld(new InstantCommand(() -> m_Limelight.turnToTargetVolts(m_robotDrive,m_shooter)))
+      .whileHeld(new InstantCommand(() -> m_Limelight.turnToTargetVolts(m_robotDrive,m_shooter), m_robotDrive))
       .whenReleased(new InstantCommand(() -> m_Limelight.afterTurnToTarget()));
     //.whenPressed(new AutoAim(m_robotDrive));
     

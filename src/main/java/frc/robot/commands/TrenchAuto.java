@@ -53,7 +53,8 @@ public class TrenchAuto extends SequentialCommandGroup implements Loggable{
         m_intake.toggleIntakeWheels(true);}, m_intake),
 
       //drive forward distance of two balls (x feet)
-      new DriveStraight(AutoConstants.kTrenchAutoBallPickup, m_robotDrive),
+      //new DriveStraight(AutoConstants.kTrenchAutoBallPickup, m_robotDrive),
+      new InstantCommand(() -> m_robotDrive.driveTime(4, 0.5)),
       
       // Retract intake
       new InstantCommand(() -> {m_intake.toggleIntakePosition(true);

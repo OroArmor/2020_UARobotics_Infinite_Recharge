@@ -62,7 +62,7 @@ public class ShooterSubsystem extends PIDSubsystem implements Loggable{
   @Log
   @Log(tabName = "Dashboard")
   public boolean atSetpoint() {
-    return shooterPID.atSetpoint();
+    return shooterPID.atSetpoint() && shooterPID.getSetpoint() > 0;
   }
 
   @Log

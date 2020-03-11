@@ -106,10 +106,10 @@ public final class Constants {
         // Example value only - as above, this must be tuned for your drive!
         public static final double kPDriveVel = 8.5;       
         
-        public static final double kTurnP = .008;
+        public static final double kTurnP = .05;
         public static final double kTurnI = 0;
         public static final double kTurnD = 0.15;
-        public static final double kTurnFriction = 0.3;
+        public static final double kTurnFriction = 0.38;
 
         public static final double kMaxTurnRateDegPerS = 100;
         public static final double kMaxTurnAccelerationDegPerSSquared = 300;

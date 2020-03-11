@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -463,9 +464,18 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
     m_talonsrxleft.set(0);
   }
 
+  @Log
   public void tankDriveVolts(final double leftVolts, final double rightVolts) {
     m_talonsrxleft.setVoltage(leftVolts);
     m_talonsrxright.setVoltage(rightVolts);
     //m_drive.feed();
+  }
+
+  public void driveTime(double time, double speed) {
+    m_talonsrxleft.set(speed);
+    m_talonsrxright.set(speed);
+    new WaitCommand(time);
+    m_talonsrxleft.set(0);
+    m_talonsrxright.set(0);
   }
 }
