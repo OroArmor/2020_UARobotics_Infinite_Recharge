@@ -32,6 +32,9 @@ public class ShooterSubsystem extends PIDSubsystem implements Loggable{
   @Config
   private final PIDController shooterPID;
 
+  @Log
+  private double output;
+
   // The shooter subsystem for the robot.
   public ShooterSubsystem() {
     super(new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD));
@@ -45,28 +48,28 @@ public class ShooterSubsystem extends PIDSubsystem implements Loggable{
   }
 
   @Override
-  @Log
-  public void useOutput(double output, double setpoint) {
-    SmartDashboard.putNumber("output", output);
-    SmartDashboard.putNumber("setpoint", m_shooterFeedforward.calculate(setpoint));
-    m_shooterMotor.setVoltage(MathUtil.clamp((output / 60) + (m_shooterFeedforward.calculate(setpoint) / 60), 0, 14));
+  public void useOutput(double outputIn, double setpoint) {
+    output = outputIn / 60;
+    //1.111 is a fudge factor to get the F closer to the setpoint
+    m_shooterMotor.setVoltage(MathUtil.clamp(output + (m_shooterFeedforward.calculate(setpoint) / 60 * 1.111), 0, 14));
   }
 
   @Log
-  @Log(tabName = "Dashboard")
+  @Log(tabName = "Dashboard", name = "Shooter Speed")
   @Override
   public double getMeasurement() {
     return m_shooterEncoder.getRate();
   }
 
   @Log
-  @Log(tabName = "Dashboard")
-  public boolean atSetpoint() {
-    return shooterPID.atSetpoint() && shooterPID.getSetpoint() > 0;
+  @Log(tabName = "Dashboard", name = "Shooter Setpoint")
+  public double getSetpoint() {
+    return shooterPID.getSetpoint();
   }
 
   @Log
-  public double getSetpoint() {
-    return shooterPID.getSetpoint();
+  @Log(tabName = "Dashboard", name = "Good to Shoot?")
+  public boolean atSetpoint() {
+    return shooterPID.atSetpoint() && shooterPID.getSetpoint() > 0;
   }
 }

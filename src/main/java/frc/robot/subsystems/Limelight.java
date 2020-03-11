@@ -163,7 +163,7 @@ public class Limelight extends SubsystemBase implements Loggable{
   public void afterTurnToTarget(){
     setLedOn(false);
     //switchPipeline(false);
-    //setStream(2);
+    setStream(2);
     m_targeting = false;
   }
   public void switchPipeline(boolean targeting){

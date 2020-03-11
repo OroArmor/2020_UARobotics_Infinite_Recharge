@@ -327,6 +327,7 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
    * @return the robot's heading in degrees, from 180 to 180
    */
   @Log
+  //@Log(tabName = "Dashboard", name = "Gyro Heading")
   public double getHeading() {
     final double[] ypr = new double[3];
 		m_pigeon.getYawPitchRoll(ypr);

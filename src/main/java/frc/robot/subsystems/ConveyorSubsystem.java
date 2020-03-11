@@ -57,16 +57,17 @@ public class ConveyorSubsystem extends SubsystemBase implements Loggable{
     }
 
     @Log
+    @Log(tabName = "Dashboard", name = "Front Sensor")
     public boolean getFrontConveyor() {
         return (frontconveyor.getAverageVoltage() < 4.75);
     }
 
     @Log
+    @Log(tabName = "Dashboard", name = "Top Sensor")
     public boolean getTopConveyor() {
         return (topconveyor.getAverageVoltage() < 4.75);
     }
 
-    @Log
     public double getTopVolts() {
         return topconveyor.getAverageVoltage();
     }

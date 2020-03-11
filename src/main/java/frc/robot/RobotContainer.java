@@ -43,6 +43,7 @@ import frc.robot.commands.TurnToRelativeAngle;
 import frc.robot.commands.NextClimbPosition;
 import frc.robot.commands.TrenchAuto;
 import frc.robot.commands.CenterAuto;
+import frc.robot.commands.StealAuto;
 // Subsystem Imports
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -137,7 +138,7 @@ public class RobotContainer {
     autoChooser.addOption("Auto Aim", new AutoAim(m_robotDrive));
     autoChooser.addOption("Trench Auto", new TrenchAuto(m_shooter, m_robotDrive, m_intake, m_conveyor));
     autoChooser.addOption("Center Auto", new CenterAuto(m_shooter, m_robotDrive, m_intake, m_conveyor));
-    autoChooser.addOption("Steal Auto", new TrenchAuto(m_shooter, m_robotDrive, m_intake, m_conveyor));
+    autoChooser.addOption("Steal Auto", new StealAuto(m_shooter, m_robotDrive, m_intake, m_conveyor));
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
@@ -152,7 +153,7 @@ public class RobotContainer {
     new JoystickButton(m_driverController, XboxController.Button.kX.value)
       .or(new JoystickButton(m_operatorController, XboxController.Button.kX.value))
       .whenActive(new InstantCommand(m_conveyor::turnBackwards)
-        .andThen(new WaitCommand(.1)
+        .andThen(new WaitCommand(.15)
         .andThen(new InstantCommand(m_conveyor::turnOff)
         .andThen(new InstantCommand(() -> {
         m_shooter.setSetpoint(ShooterConstants.kShooterFarTrenchRPM);
