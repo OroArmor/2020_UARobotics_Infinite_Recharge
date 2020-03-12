@@ -29,13 +29,12 @@ public class DriveStraight extends CommandBase implements Loggable{
   @Override
   public void initialize() {
     m_robotDrive.distancesetup();
-    new InstantCommand(() -> m_robotDrive.drivestraight(distance), m_robotDrive);
+    m_robotDrive.drivePositionGyro(distance);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    new InstantCommand(() -> m_robotDrive.drivestraight(distance), m_robotDrive);
   }
 
   @Log

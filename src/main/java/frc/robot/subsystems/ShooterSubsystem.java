@@ -13,6 +13,7 @@ import frc.robot.Constants.ShooterConstants;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 import io.github.oblarg.oblog.annotations.Config;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 public class ShooterSubsystem extends PIDSubsystem implements Loggable{
   @Log
@@ -45,6 +46,8 @@ public class ShooterSubsystem extends PIDSubsystem implements Loggable{
     m_shooterMotor2.follow(m_shooterMotor);
     m_shooterMotor.setInverted(true);
     m_shooterMotor2.setInverted(InvertType.OpposeMaster);
+    m_shooterMotor.setNeutralMode(NeutralMode.Coast);
+		m_shooterMotor2.setNeutralMode(NeutralMode.Coast);
   }
 
   @Override

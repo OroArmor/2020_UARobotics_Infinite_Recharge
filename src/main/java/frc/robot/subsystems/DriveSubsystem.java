@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -431,6 +432,7 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
     /* Determine which slot affects which PID */
     m_talonsrxright.selectProfileSlot(DriveConstants.kSlot_Distanc, DriveConstants.PID_PRIMARY);
     m_talonsrxright.selectProfileSlot(DriveConstants.kSlot_Turning, DriveConstants.PID_TURN);
+    m_talonsrxleft.follow(m_talonsrxright, FollowerType.AuxOutput1);
   }
 
   public void velocitysetup() {
@@ -472,11 +474,17 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
     //m_drive.feed();
   }
 
-  public void driveTime(double time, double speed) {
-    m_talonsrxleft.set(speed);
-    m_talonsrxright.set(speed);
-    new WaitCommand(time);
-    m_talonsrxleft.set(0);
-    m_talonsrxright.set(0);
+  public Command driveTime(double time, double speed) {
+    return new RunCommand(() -> {m_talonsrxleft.set(speed);
+      m_talonsrxright.set(speed);})
+      .withTimeout(time)
+      .andThen(() -> {m_talonsrxleft.set(0);m_talonsrxright.set(0);});
+  }
+
+  public Command drivePositionGyro(double distance) {
+    target_sensorUnits = (distance * DriveConstants.SENSOR_UNITS_PER_ROTATION) / DriveConstants.WHEEL_CIRCUMFERENCE_INCHES ;
+    return new RunCommand(() -> 
+    m_talonsrxright.set(ControlMode.Position, target_sensorUnits, DemandType.AuxPID, m_talonsrxright.getSelectedSensorPosition(1)))
+    .withInterrupt(() -> atSetpoint());
   }
 }

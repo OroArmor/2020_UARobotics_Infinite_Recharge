@@ -7,6 +7,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import io.github.oblarg.oblog.annotations.Log;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -41,7 +42,7 @@ public class StealAuto extends SequentialCommandGroup implements Loggable{
 
     // Commands to be run in the order they should be run in
     addCommands(
-      new InstantCommand(() -> m_robotDrive.driveTime(3, .25), m_robotDrive)
+      m_robotDrive.driveTime(3, .25)
       /* //placed to face trench
       //start shooter to speed we want
       new InstantCommand(() -> {
