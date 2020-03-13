@@ -8,6 +8,7 @@ import io.github.oblarg.oblog.annotations.Log;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -42,29 +43,18 @@ public class StealAuto extends SequentialCommandGroup implements Loggable{
 
     // Commands to be run in the order they should be run in
     addCommands(
-      m_robotDrive.driveTime(3, .25)
-      /* //placed to face trench
+            //placed to face trench
       //start shooter to speed we want
       new InstantCommand(() -> {
         m_shooter.setSetpoint(AutoConstants.kTrenchAutoShootRPM);
         m_shooter.enable();
       }, m_shooter),
 
-      //lower intake and spin intake
-      new InstantCommand(() -> {m_intake.toggleIntakePosition(true);
-        m_intake.toggleIntakeWheels(true);}, m_intake),
-
       //drive forward distance of two balls (x feet)
       //new DriveStraight(AutoConstants.kTrenchAutoBallPickup, m_robotDrive),
-      new InstantCommand(() -> m_robotDrive.driveTime(4, 0.5)),
-      
-      // Retract intake
-      new InstantCommand(() -> {m_intake.toggleIntakePosition(true);
-        m_intake.toggleIntakeWheels(true);}, m_intake),
+      //new InstantCommand(() -> m_robotDrive.driveTime(4, 0.5)),
+      m_robotDrive.driveTime(5, -.25),
 
-      //turn around to face goal (-160)
-      new TurnToAngle(AutoConstants.kTrenchAutoShootAngle, m_robotDrive),
-      
       // Probably need to do a Limelight based AutoAim here but need to get it working first
 
       //run conveyor when shooter is at speed (stop moving conveyor when not at speed)
@@ -80,7 +70,7 @@ public class StealAuto extends SequentialCommandGroup implements Loggable{
       new TurnToAngle(AutoConstants.kTrenchAutoShootAngle, m_robotDrive),
 
       // Drive some more down field
-      new DriveStraight(AutoConstants.kTrenchAutoDriveCenter, m_robotDrive) */
+      new DriveStraight(AutoConstants.kTrenchAutoDriveCenter, m_robotDrive)
     );
   }
 }

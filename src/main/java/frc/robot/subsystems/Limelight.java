@@ -129,7 +129,7 @@ public class Limelight extends SubsystemBase implements Loggable{
   public boolean turnToTargetVolts(DriveSubsystem drivetrain, ShooterSubsystem shooter){
     //SmartDashboard.putString("turnToTarget ","Started");
     double turn = 0;
-    double min = 3.7;
+    double min = 3.5;
     boolean check = hasTarget();
     /* if (hasTarget() && !shooter.atSetpoint()){
       shooter.setSetpoint(ShooterConstants.kShooterFarTrenchRPM);
@@ -137,7 +137,7 @@ public class Limelight extends SubsystemBase implements Loggable{
    // SmartDashboard.putString("Target ","" + check);
     //SmartDashboard.putString("Initial Tx","" + getAngleOfError());
     if(Math.abs(getAngleOfError()) >= LimelightConstants.TURN_TO_TARGET_TOLERANCE && hasTarget()){
-      turn = getAngleOfError()*0.5;     
+      turn = getAngleOfError()*0.35;     
       if (Math.abs(turn) < min){
         turn = turn > 0 ? min:-min;
       }

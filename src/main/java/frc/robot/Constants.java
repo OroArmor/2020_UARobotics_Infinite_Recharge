@@ -106,10 +106,10 @@ public final class Constants {
         // Example value only - as above, this must be tuned for your drive!
         public static final double kPDriveVel = 8.5;       
         
-        public static final double kTurnP = .05;
+        public static final double kTurnP = .1;
         public static final double kTurnI = 0;
         public static final double kTurnD = 0.15;
-        public static final double kTurnFriction = 0.38;
+        public static final double kTurnFriction = 0.3;
 
         public static final double kMaxTurnRateDegPerS = 100;
         public static final double kMaxTurnAccelerationDegPerSSquared = 300;
@@ -187,7 +187,7 @@ public final class Constants {
 
         public static final double kTrenchAutoShootRPM = 7000;
         public static final double kTrenchAutoBallPickup = 60;
-        public static final double kTrenchAutoShootAngle = -160;
+        public static final double kTrenchAutoShootAngle = 160;
         public static final double kTrenchAutoCenterAngle = -45;
         public static final double kTrenchAutoDriveCenter = 120;
 
