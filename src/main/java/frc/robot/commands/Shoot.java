@@ -25,12 +25,15 @@ public class Shoot extends CommandBase implements Loggable{
     m_conveyor = conveyor;
     timeout = timeoutIn;
 
-    m_timer.reset();
-    m_timer.start();
-
     addRequirements(m_shooter, m_conveyor);
   }
 
+  @Override
+  public void initialize() {
+    m_timer.reset();
+    m_timer.start();
+  }
+  
   @Log
   @Override
   public boolean isFinished() {
@@ -40,11 +43,17 @@ public class Shoot extends CommandBase implements Loggable{
 
   @Override
   public void execute() {
-    if(m_shooter.atSetpoint()) {
+    m_conveyor.turnOn();
+    /* if(m_shooter.atSetpoint()) {
       m_conveyor.turnOn();
     }
     else{
       m_conveyor.turnOff();
-    }
+    } */
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    m_conveyor.turnOff();
   }
 }

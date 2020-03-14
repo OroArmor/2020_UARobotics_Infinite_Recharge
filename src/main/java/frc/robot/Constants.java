@@ -158,9 +158,9 @@ public final class Constants {
             60.0 / (double) kEncoderCPR;
 
         // These are not real PID gains, and will have to be tuned for your specific robot.
-        public static final double kP = 1; // .000321
+        public static final double kP = 1.2; // .000321
         public static final double kI = 0;
-        public static final double kD = 0.1;
+        public static final double kD = 0;
         public static final double kF = 0.0; //Not used
     
         // On a real robot the feedforward constants should be empirically determined; these are
@@ -225,7 +225,7 @@ public final class Constants {
         public static final int kConveyor2ControllerPort = 7;
 
         public static final double kConveyorTopMotorSpeed = 1.0;
-        public static final double kConveyorBottomMotorSpeed = -0.2;
+        public static final double kConveyorBottomMotorSpeed = 0.2;
         public static final double kConveyorBackSpeed = -0.5;
     }
 

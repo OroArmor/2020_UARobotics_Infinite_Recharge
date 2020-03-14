@@ -54,7 +54,7 @@ public class ShooterSubsystem extends PIDSubsystem implements Loggable{
   public void useOutput(double outputIn, double setpoint) {
     output = outputIn / 60;
     //1.111 is a fudge factor to get the F closer to the setpoint
-    m_shooterMotor.setVoltage(MathUtil.clamp(output + (m_shooterFeedforward.calculate(setpoint) / 60 * 1.111), 0, 14));
+    m_shooterMotor.setVoltage(MathUtil.clamp(output + (m_shooterFeedforward.calculate(setpoint) / 60 * 1.02), 0, 14));
   }
 
   @Log

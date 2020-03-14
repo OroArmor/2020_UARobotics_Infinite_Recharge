@@ -41,7 +41,10 @@ public class CenterAuto extends SequentialCommandGroup implements Loggable{
 
     // Commands to be run in the order they should be run in
     addCommands(
-      //placed to face shield generator
+      new InstantCommand(() -> {m_intake.toggleIntakeWheels(true);
+        m_intake.toggleIntakePosition(true);}, m_intake),
+      m_robotDrive.driveTime(5, .25) 
+/*       //placed to face shield generator
       //start shooter to speed we want
       new InstantCommand(() -> {
         m_shooter.setSetpoint(AutoConstants.kTrenchAutoShootRPM);
@@ -77,7 +80,7 @@ public class CenterAuto extends SequentialCommandGroup implements Loggable{
       new TurnToAngle(AutoConstants.kTrenchAutoShootAngle, m_robotDrive),
 
       // Drive some more down field
-      new DriveStraight(AutoConstants.kTrenchAutoDriveCenter, m_robotDrive)
+      new DriveStraight(AutoConstants.kTrenchAutoDriveCenter, m_robotDrive) */
     );
   }
 }
