@@ -60,10 +60,6 @@ public class DriveSubsystem extends SubsystemBase implements Loggable{
 	// Odometry class for tracking robot pose
   private final DifferentialDriveOdometry m_odometry;
 
-  // PID Controller for Driving straight with Gyro
-  @Log(name="gyroPID")
-  private final PIDController m_gyropid = new PIDController(DriveConstants.kGyroPID, 0, 0);
-
   // Using onboard feedforward since it is more accurate than Talon Feedforward
   private final SimpleMotorFeedforward m_driveFeedforward =
       new SimpleMotorFeedforward(DriveConstants.kS,
