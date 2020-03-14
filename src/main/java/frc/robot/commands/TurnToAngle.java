@@ -17,33 +17,37 @@ public class TurnToAngle extends PIDCommand implements Loggable{
 
   @Config
   private final PIDController controller;
+
+  @Log
+  private double logoutput;
   /**
    * Turns to robot to the specified angle.
    *
    * @param targetAngleDegrees The angle to turn to
    * @param drive              The drive subsystem to use
    */
-  public TurnToAngle(double targetAngleDegrees, DriveSubsystem drive) {
+  public TurnToAngle(double targetAngleDegrees, DriveSubsystem driveIn) {
     super(
         new PIDController(DriveConstants.kTurnP, DriveConstants.kTurnI, DriveConstants.kTurnD),
         // Close loop on heading
-        () -> -drive.getHeading(),
+        () -> -driveIn.getHeading(),
         // Set reference to target
-        -targetAngleDegrees,
+        targetAngleDegrees,
         // Pipe output to turn robot
         output -> {
           if (output > 0) {
-              drive.arcadeDrive(0, output + DriveConstants.kTurnFriction);
+              driveIn.arcadeDrive(0, output + DriveConstants.kTurnFriction);
           } else if (output < 0) {
-              drive.arcadeDrive(0, output - DriveConstants.kTurnFriction);
+              driveIn.arcadeDrive(0, output - DriveConstants.kTurnFriction);
           } else {
-              drive.arcadeDrive(0, output);
+              driveIn.arcadeDrive(0, output);
           }
         },
         // Require the drive
-        drive);
-    this.drive = drive;
-    this.controller = getController();
+        driveIn);
+    drive = driveIn;
+    controller = getController();
+    logoutput = controller.calculate(drive.getHeading());
     // Set the controller to be continuous (because it is an angle controller)
     controller.enableContinuousInput(-180, 180);
     // Set the controller tolerance - the delta tolerance ensures the robot is stationary at the

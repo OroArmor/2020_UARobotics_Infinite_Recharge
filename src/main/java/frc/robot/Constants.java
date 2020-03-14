@@ -187,7 +187,7 @@ public final class Constants {
 
         public static final double kTrenchAutoShootRPM = 7000;
         public static final double kTrenchAutoBallPickup = 60;
-        public static final double kTrenchAutoShootAngle = 160;
+        public static final double kTrenchAutoShootAngle = -160;
         public static final double kTrenchAutoCenterAngle = -45;
         public static final double kTrenchAutoDriveCenter = 120;
 

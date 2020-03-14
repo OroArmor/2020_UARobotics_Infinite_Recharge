@@ -56,6 +56,7 @@ public class StealAuto extends SequentialCommandGroup implements Loggable{
       m_robotDrive.driveTime(5, -.25),
 
       // Probably need to do a Limelight based AutoAim here but need to get it working first
+      new TimedAutoAim(2, m_robotDrive),
 
       //run conveyor when shooter is at speed (stop moving conveyor when not at speed)
       new Shoot(AutoConstants.kAutoShootTimeSeconds, m_shooter, m_conveyor),
