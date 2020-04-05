@@ -15,6 +15,7 @@ import frc.robot.Constants.ControlPanelConstants;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
+@SuppressWarnings("unused")
 public class ControlPanelSubsystem extends SubsystemBase implements Loggable {
 	/**
 	 * Change the I2C port below to match the connection of your color sensor
@@ -24,6 +25,7 @@ public class ControlPanelSubsystem extends SubsystemBase implements Loggable {
 	/**
 	 * Create the solenoid that will get the wheel and sensor into place
 	 */
+
 	private final Solenoid drop = new Solenoid(ControlPanelConstants.kSolenoidPort);
 
 	/**

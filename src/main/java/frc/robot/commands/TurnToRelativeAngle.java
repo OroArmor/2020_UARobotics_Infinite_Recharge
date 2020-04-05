@@ -4,17 +4,12 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
-import io.github.oblarg.oblog.Loggable;
-import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 /**
  * A command that will turn the robot to the specified angle.
  */
-public class TurnToRelativeAngle extends PIDCommand implements Loggable {
-	private final DriveSubsystem drive;
-
-	@Config
+public class TurnToRelativeAngle extends PIDCommand {
 	private final PIDController controller;
 
 	/**
@@ -41,7 +36,6 @@ public class TurnToRelativeAngle extends PIDCommand implements Loggable {
 				},
 				// Require the drive
 				drive);
-		this.drive = drive;
 		this.controller = getController();
 		// Set the controller to be continuous (because it is an angle controller)
 		controller.enableContinuousInput(-180, 180);

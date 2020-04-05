@@ -12,7 +12,6 @@ import edu.wpi.cscore.HttpCamera;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OIConstants;
 // Constant Imports
 import frc.robot.Constants.ShooterConstants;
@@ -84,15 +84,14 @@ public class RobotContainer {
 	@Log(tabName = "DriveSubsystem")
 	private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
-	private final Timer timer = new Timer();
 	// The driver's controller
 	XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 	// The operator's controller
 	XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
 
-	Button frontConveyorSensor = new Button(() -> m_conveyor.getFrontConveyor());
-	Button topConveyorSensor = new Button(() -> m_conveyor.getTopConveyor());
-	Button shooteratsetpoint = new Button(() -> m_shooter.atSetpoint());
+	Trigger frontConveyorSensor = new Trigger(() -> m_conveyor.getFrontConveyor());
+	Trigger topConveyorSensor = new Trigger(() -> m_conveyor.getTopConveyor());
+	Trigger shooteratsetpoint = new Trigger(() -> m_shooter.atSetpoint());
 	public HttpCamera m_limelightFeed;
 
 	/**

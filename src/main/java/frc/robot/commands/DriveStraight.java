@@ -2,10 +2,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
-import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
-public class DriveStraight extends CommandBase implements Loggable {
+public class DriveStraight extends CommandBase {
 	private final DriveSubsystem m_robotDrive;
 
 	private final Double distance;

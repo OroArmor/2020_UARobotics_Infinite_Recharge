@@ -4,10 +4,9 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
-public class Shoot extends CommandBase implements Loggable {
+public class Shoot extends CommandBase {
 	private final ShooterSubsystem m_shooter;
 	private final ConveyorSubsystem m_conveyor;
 

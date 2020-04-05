@@ -3,10 +3,9 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
-import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
-public class TimedAutoAim extends CommandBase implements Loggable {
+public class TimedAutoAim extends CommandBase {
 	private final DriveSubsystem m_robotDrive;
 
 	private final Timer m_timer = new Timer();

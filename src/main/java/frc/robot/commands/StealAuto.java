@@ -7,9 +7,8 @@ import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import io.github.oblarg.oblog.Loggable;
 
-public class StealAuto extends SequentialCommandGroup implements Loggable {
+public class StealAuto extends SequentialCommandGroup {
 	private final ShooterSubsystem m_shooter;
 	private final DriveSubsystem m_robotDrive;
 	private final IntakeSubsystem m_intake;

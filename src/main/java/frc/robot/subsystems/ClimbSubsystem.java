@@ -22,13 +22,13 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 	private final WPI_TalonSRX m_RightClimbMotor = new WPI_TalonSRX(ClimbConstants.kClimbRightControllerPort);
 
 	@Log
-	private int climbinvert = 1;
+	private int climbInvert = 1;
 
 	@Log
-	public int climbstage = 0;
+	private int climbStage = 0;
 
 	@Log
-	public int setpoint = 4200;
+	private int setpoint = 4200;
 
 	public ClimbSubsystem() {
 		// m_RightClimbMotor.setInverted(true);
@@ -54,8 +54,8 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 	 * @Config public void setP(double p){ m_LeftClimbMotor.config_kP(0, p); }
 	 */
 	public void setOutput(double leftMotorPercent, double rightMotorPercent) {
-		this.m_LeftClimbMotor.set(leftMotorPercent * climbinvert);
-		this.m_RightClimbMotor.set(rightMotorPercent * climbinvert);
+		this.m_LeftClimbMotor.set(leftMotorPercent * climbInvert);
+		this.m_RightClimbMotor.set(rightMotorPercent * climbInvert);
 
 		// As soon as we start raising the hooks switch the camera so the hook view is
 		// larger
@@ -90,13 +90,13 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 	}
 
 	@Config.ToggleButton
-	public void invertclimber(boolean enabled) {
+	public void invertClimber(boolean enabled) {
 		if (enabled) {
-			climbinvert = -1;
+			climbInvert = -1;
 			m_LeftClimbMotor.configPeakOutputReverse(-1);
 			m_RightClimbMotor.configPeakOutputReverse(-1);
 		} else {
-			climbinvert = 1;
+			climbInvert = 1;
 			m_LeftClimbMotor.configPeakOutputReverse(0);
 			m_RightClimbMotor.configPeakOutputReverse(0);
 		}
@@ -104,8 +104,8 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
 	@Config.ToggleButton
 	public void nextClimbStage(boolean enabled) {
-		climbstage = climbstage + 1;
-		switch (climbstage) {
+		climbStage = climbStage + 1;
+		switch (climbStage) {
 		case 1:
 			setpoint = ClimbConstants.kFullUpEncoderCount;
 			setPosition(ClimbConstants.kFullUpEncoderCount);
@@ -130,7 +130,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 				&& m_RightClimbMotor.getSelectedSensorPosition() > 100;
 	}
 
-	public Boolean inRange(double position, double setpoint) {
+	public boolean inRange(double position, double setpoint) {
 		if (position > setpoint + ClimbConstants.kErrorTolerance) {
 			return false;
 		} else if (position < setpoint - ClimbConstants.kErrorTolerance) {
@@ -138,5 +138,29 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 		} else {
 			return true;
 		}
+	}
+
+	public int getClimbInvert() {
+		return climbInvert;
+	}
+
+	public void setClimbInvert(int climbInvert) {
+		this.climbInvert = climbInvert;
+	}
+
+	public int getClimbStage() {
+		return climbStage;
+	}
+
+	public void setClimbStage(int climbStage) {
+		this.climbStage = climbStage;
+	}
+
+	public int getSetpoint() {
+		return setpoint;
+	}
+
+	public void setSetpoint(int setpoint) {
+		this.setpoint = setpoint;
 	}
 }

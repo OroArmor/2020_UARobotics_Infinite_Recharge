@@ -86,13 +86,7 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.schedule();
 		}
-		m_robotContainer.m_intake.setOutput(0);
-		m_robotContainer.m_conveyor.turnOff();
-		m_robotContainer.m_climb.invertclimber(false);
-		m_robotContainer.m_climb.setOutput(0, 0);
-		m_robotContainer.m_climb.climbstage = 0;
-		m_robotContainer.m_climb.resetEnc(true);
-		NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
+		resetRobot();
 	}
 
 	/**
@@ -112,13 +106,7 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
-		m_robotContainer.m_intake.setOutput(0);
-		m_robotContainer.m_conveyor.turnOff();
-		m_robotContainer.m_climb.invertclimber(false);
-		m_robotContainer.m_climb.setOutput(0, 0);
-		m_robotContainer.m_climb.climbstage = 0;
-		m_robotContainer.m_climb.resetEnc(true);
-		NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
+		resetRobot();
 	}
 
 	/**
@@ -139,5 +127,15 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+	}
+
+	private void resetRobot() {
+		m_robotContainer.m_intake.setOutput(0);
+		m_robotContainer.m_conveyor.turnOff();
+		m_robotContainer.m_climb.invertClimber(false);
+		m_robotContainer.m_climb.setOutput(0, 0);
+		m_robotContainer.m_climb.setClimbStage(0);
+		m_robotContainer.m_climb.resetEnc(true);
+		NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
 	}
 }
