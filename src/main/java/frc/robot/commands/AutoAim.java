@@ -1,11 +1,14 @@
 package frc.robot.commands;
 
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Limelight;
 
 public class AutoAim extends CommandBase {
 	private final DriveSubsystem m_robotDrive;
+	private NetworkTable m_table;
 
 	/**
 	 * Creates a new AutoAimCommand.
@@ -14,6 +17,7 @@ public class AutoAim extends CommandBase {
 	 */
 	public AutoAim(DriveSubsystem robotDrive) {
 		m_robotDrive = robotDrive;
+		m_table = NetworkTableInstance.getDefault().getTable("limelight");
 		// Use addRequirements() here to declare subsystem dependencies.
 		addRequirements(m_robotDrive);
 	}
@@ -21,16 +25,16 @@ public class AutoAim extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(0);
-		NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
+		m_table.getEntry("camMode").setNumber(0);
+		m_table.getEntry("ledMode").setNumber(3);
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
 		// Read Limelight Data
-		double tv = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
-		double tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+		double tv = m_table.getEntry("tv").getDouble(0);
+		double tx = m_table.getEntry("tx").getDouble(0);
 
 		if (tv == 1) {
 			new TurnToRelativeAngle(tx, m_robotDrive);
@@ -43,7 +47,7 @@ public class AutoAim extends CommandBase {
 	@Override
 	public void end(boolean interrupted) {
 		m_robotDrive.arcadeDrive(0, 0);
-		NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
-		NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(1);
+		m_table.getEntry("ledMode").setNumber(1);
+		m_table.getEntry("camMode").setNumber(1);
 	}
 }

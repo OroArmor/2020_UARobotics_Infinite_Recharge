@@ -26,12 +26,6 @@ public class Limelight extends SubsystemBase implements Loggable {
 		 * tx - Horizontal Offset ty - Vertical Offset ta - Area of target tv - Target
 		 * Visible
 		 */
-
-		this.tx = table.getEntry("tx");
-		this.ty = table.getEntry("ty");
-		this.ta = table.getEntry("ta");
-		this.ta = table.getEntry("tv");
-		this.ledMode = table.getEntry("ledMode");
 		setPipeline(LimelightConstants.DRIVE_PIPELINE);
 		setLedOn(false);
 
@@ -42,9 +36,9 @@ public class Limelight extends SubsystemBase implements Loggable {
 		// This method will be called once per scheduler run
 
 		// read values periodically
-		double x = this.tx.getDouble(0.0);
-		double y = this.ty.getDouble(0.0);
-		double area = this.ta.getDouble(0.0);
+		double x = tx.getDouble(0.0);
+		double y = ty.getDouble(0.0);
+		double area = ta.getDouble(0.0);
 
 		// post to smart dashboard periodically
 		SmartDashboard.putNumber("LimelightX", x);
@@ -55,13 +49,9 @@ public class Limelight extends SubsystemBase implements Loggable {
 
 	/** Returns distance to target in inches */
 	public double distanceToTargetInInches() {
-		double cameraAngle = LimelightConstants.CAMERA_ANGLE;
-		double angleToTarget = this.tx.getDouble(0.0);
-		double camHeight = LimelightConstants.CAMERA_HEIGHT;
-		double targetHeight = LimelightConstants.TARGET_HEIGHT;
-		double distance = ((targetHeight - camHeight) / Math.tan(cameraAngle + angleToTarget));
+		return ((LimelightConstants.TARGET_HEIGHT - LimelightConstants.CAMERA_HEIGHT) / Math.tan(LimelightConstants.CAMERA_ANGLE + tx.getDouble(0.0)));
 
-		return distance;
+		
 
 	}
 
@@ -70,10 +60,8 @@ public class Limelight extends SubsystemBase implements Loggable {
 	public boolean hasTarget() {
 		// this.table.getEntry("ledMode").setNumber(3);
 		SmartDashboard.putNumber("tv; ", tv.getDouble(0));
-		if (tv.getDouble(0) != 0)
-			return true;
+		return tv.getDouble(0) != 0;
 
-		return false;
 	}
 
 	@Log
@@ -90,19 +78,15 @@ public class Limelight extends SubsystemBase implements Loggable {
 	}
 
 	public void setPipeline(int pipeline) {
-		this.table.getEntry("pipeline").setNumber(pipeline);
+		table.getEntry("pipeline").setNumber(pipeline);
 	}
 
 	public void setStream(int stream) {
-		this.table.getEntry("stream").setNumber(stream);
+		table.getEntry("stream").setNumber(stream);
 	}
 
 	public void setLedOn(boolean isOn) {
-		if (isOn) {
-			ledMode.setNumber(LimelightConstants.LED_ON);
-		} else {
-			ledMode.setNumber(LimelightConstants.LED_OFF);
-		}
+		ledMode.setNumber(isOn ? LimelightConstants.LED_ON : LimelightConstants.LED_OFF);
 	}
 
 	/**
@@ -132,9 +116,8 @@ public class Limelight extends SubsystemBase implements Loggable {
 		// SmartDashboard.putString("Initial Tx","" + getAngleOfError());
 		if (Math.abs(getAngleOfError()) >= LimelightConstants.TURN_TO_TARGET_TOLERANCE && hasTarget()) {
 			turn = getAngleOfError() * 0.35;
-			if (Math.abs(turn) < min) {
+			if (Math.abs(turn) < min)
 				turn = turn > 0 ? min : -min;
-			}
 			// SmartDashboard.putNumber("Turn", turn);
 			drivetrain.tankDriveVolts(turn, -turn);
 			// SmartDashboard.putString("Loop Tx:",this.loop++ + ":" + getAngleOfError());
@@ -163,11 +146,7 @@ public class Limelight extends SubsystemBase implements Loggable {
 	}
 
 	public void switchPipeline(boolean targeting) {
-		if (targeting == true) {
-			setPipeline(LimelightConstants.TARGET_PIPELINE);
-		} else {
-			setPipeline(LimelightConstants.DRIVE_PIPELINE);
-		}
+		setPipeline(targeting ? LimelightConstants.TARGET_PIPELINE : LimelightConstants.DRIVE_PIPELINE);
 	}
 
 	@Log
@@ -184,5 +163,8 @@ public class Limelight extends SubsystemBase implements Loggable {
 	public boolean isPrimeRange() {
 		return (getTy().getDouble(0) > LimelightConstants.RANGE_PRIME_END
 				&& getTy().getDouble(0) < LimelightConstants.RANGE_PRIME_START);
+	}
+	public NetworkTable getTable(){
+		return table;
 	}
 }

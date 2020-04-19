@@ -28,11 +28,6 @@ public class DriveStraight extends CommandBase {
 		m_robotDrive.drivePositionGyro(distance);
 	}
 
-	// Called every time the scheduler runs while the command is scheduled.
-	@Override
-	public void execute() {
-	}
-
 	@Log
 	@Override
 	public boolean isFinished() {

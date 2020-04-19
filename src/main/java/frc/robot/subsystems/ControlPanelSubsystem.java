@@ -68,7 +68,7 @@ public class ControlPanelSubsystem extends SubsystemBase implements Loggable {
 	};
 
 	State state = State.DISABLED;
-	double target_rotation = 0;
+	double targetRotation = 0;
 
 	public ControlPanelSubsystem() {
 		m_colorMatcher.addColorMatch(kBlueTarget);
@@ -80,30 +80,34 @@ public class ControlPanelSubsystem extends SubsystemBase implements Loggable {
 	}
 
 	public void update() {
-		if (state == State.DISABLED) {
+		switch(state){
+		case DISABLED:
 			spinwheel.set(ControlMode.PercentOutput, 0);
-		} else if (state == State.ENC_ROTATE) {
-			if (spinwheel.getSelectedSensorPosition() < ControlPanelConstants.kWheelSpeedFast) {
+			break;
+		case ENC_ROTATE:
+			if (spinwheel.getSelectedSensorPosition() < ControlPanelConstants.kWheelSpeedFast)
 				spinwheel.set(ControlMode.PercentOutput, ControlPanelConstants.kWheelSpeedFast);
-			} else {
+			else 
 				state = State.DISABLED;
-			}
-		} else if (state == State.COLOR_ROTATE) {
-			if (get_color() != kRedTarget) {
+			break;
+		case COLOR_ROTATE:
+			if (getColor() != kRedTarget)
 				spinwheel.set(ControlMode.PercentOutput, ControlPanelConstants.colorwheel_slow);
-			} else {
+			else {
 				state = State.COLOR_ROTATE_FINAL;
-				target_rotation = ControlPanelConstants.colorwheel_past; // + m_robotDrive.getAverageEncoderDistance();
+				targetRotation = ControlPanelConstants.colorwheel_past; // + m_robotDrive.getAverageEncoderDistance();
 			}
-		} else if (state == State.COLOR_ROTATE_FINAL) {
-			if (spinwheel.getSelectedSensorPosition() < target_rotation) {
+			break;
+		case COLOR_ROTATE_FINAL:
+			if (spinwheel.getSelectedSensorPosition() < targetRotation)
 				spinwheel.set(ControlMode.PercentOutput, ControlPanelConstants.colorwheel_slow);
-			} else
+			else
 				state = State.DISABLED;
+			break;
 		}
 	}
 
-	public Color get_color() {
+	public Color getColor() {
 		/**
 		 * The method GetColor() returns a normalized color value from the sensor and
 		 * can be useful if outputting the color to an RGB LED or similar. To read the
@@ -122,7 +126,6 @@ public class ControlPanelSubsystem extends SubsystemBase implements Loggable {
 		String colorString;
 
 		ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
-
 		if (match.color == kBlueTarget) {
 			colorString = "Blue";
 		} else if (match.color == kRedTarget) {
@@ -189,7 +192,7 @@ public class ControlPanelSubsystem extends SubsystemBase implements Loggable {
 
 	@Log
 	public void setOutput(double motorPercent) {
-		this.spinwheel.set(motorPercent);
+		spinwheel.set(motorPercent);
 	}
 
 	@Log

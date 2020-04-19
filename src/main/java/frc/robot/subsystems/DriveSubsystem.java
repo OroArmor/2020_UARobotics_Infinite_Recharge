@@ -59,14 +59,14 @@ public class DriveSubsystem extends SubsystemBase implements Loggable {
 			DriveConstants.kV, DriveConstants.kA);
 
 	/** Tracking variables */
-	boolean _firstCall = false;
-	boolean _state = false;
-	double _targetAngle = 0;
-	int _printCount = 0;
+	private boolean firstCall = false;
+	private boolean state = false;
+	private double targetAngle = 0;
+	private int printCount = 0;
 	private Pose2d savedPose;
 	private Trajectory straightTrajectory;
 	@Log
-	double target_sensorUnits;
+	private double targetSensorUnits;
 
 	/**
 	 * Creates a new DriveSubsystem.
@@ -189,9 +189,9 @@ public class DriveSubsystem extends SubsystemBase implements Loggable {
 		m_talonsrxright.configAuxPIDPolarity(false, DriveConstants.kTimeoutMs);
 
 		/* Initialize */
-		_firstCall = true;
-		_state = false;
-		_printCount = 0;
+		firstCall = true;
+		state = false;
+		printCount = 0;
 		zeroHeading(true);
 	}
 
@@ -420,9 +420,9 @@ public class DriveSubsystem extends SubsystemBase implements Loggable {
 
 	// Drives straight specified distance in inches
 	public void drivestraight(double distance) {
-		target_sensorUnits = (distance * DriveConstants.SENSOR_UNITS_PER_ROTATION)
+		targetSensorUnits = (distance * DriveConstants.SENSOR_UNITS_PER_ROTATION)
 				/ DriveConstants.WHEEL_CIRCUMFERENCE_INCHES;
-		m_talonsrxright.set(ControlMode.Position, target_sensorUnits, DemandType.AuxPID,
+		m_talonsrxright.set(ControlMode.Position, targetSensorUnits, DemandType.AuxPID,
 				m_talonsrxright.getSelectedSensorPosition(1));
 		m_talonsrxleft.follow(m_talonsrxright, FollowerType.AuxOutput1);
 	}
@@ -487,9 +487,9 @@ public class DriveSubsystem extends SubsystemBase implements Loggable {
 	}
 
 	public Command drivePositionGyro(double distance) {
-		target_sensorUnits = (distance * DriveConstants.SENSOR_UNITS_PER_ROTATION)
+		targetSensorUnits = (distance * DriveConstants.SENSOR_UNITS_PER_ROTATION)
 				/ DriveConstants.WHEEL_CIRCUMFERENCE_INCHES;
-		return new RunCommand(() -> m_talonsrxright.set(ControlMode.Position, target_sensorUnits, DemandType.AuxPID,
+		return new RunCommand(() -> m_talonsrxright.set(ControlMode.Position, targetSensorUnits, DemandType.AuxPID,
 				m_talonsrxright.getSelectedSensorPosition(1))).withInterrupt(() -> atSetpoint());
 	}
 }
