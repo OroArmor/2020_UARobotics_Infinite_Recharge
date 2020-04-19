@@ -24,18 +24,11 @@ public class NextClimbPosition extends CommandBase {
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
-	@Override
-	public void execute() {
-	}
 
 	@Override
 	public boolean isFinished() {
 		// End when the climber is at specified position.
-		return m_climb.atposition();
+		return m_climb.atPosition();
 	}
 
-	// Called once the command ends or is interrupted.
-	@Override
-	public void end(boolean interrupted) {
-	}
 }

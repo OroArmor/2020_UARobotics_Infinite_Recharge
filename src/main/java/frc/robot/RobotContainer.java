@@ -92,6 +92,7 @@ public class RobotContainer {
 	Trigger frontConveyorSensor = new Trigger(() -> m_conveyor.getFrontConveyor());
 	Trigger topConveyorSensor = new Trigger(() -> m_conveyor.getTopConveyor());
 	Trigger shooteratsetpoint = new Trigger(() -> m_shooter.atSetpoint());
+	
 	public HttpCamera m_limelightFeed;
 
 	/**

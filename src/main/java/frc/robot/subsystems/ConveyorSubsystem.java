@@ -25,39 +25,39 @@ public class ConveyorSubsystem extends SubsystemBase implements Loggable {
 
 	@Config
 	public void turnOff() {
-		this.m_ConveyorMotor1.set(0);
-		this.m_ConveyorMotor2.set(0);
+		m_ConveyorMotor1.set(0);
+		m_ConveyorMotor2.set(0);
 	}
 
 	@Config
 	public void turnOn() {
-		this.m_ConveyorMotor1.set(ConveyorConstants.kConveyorTopMotorSpeed);
-		this.m_ConveyorMotor2.set(ConveyorConstants.kConveyorBottomMotorSpeed);
+		m_ConveyorMotor1.set(ConveyorConstants.kConveyorTopMotorSpeed);
+		m_ConveyorMotor2.set(ConveyorConstants.kConveyorBottomMotorSpeed);
 	}
 
 	@Config
 	public void turnBackwards() {
-		this.m_ConveyorMotor1.set(ConveyorConstants.kConveyorBackSpeed);
-		this.m_ConveyorMotor2.set(ConveyorConstants.kConveyorBackSpeed);
+		m_ConveyorMotor1.set(ConveyorConstants.kConveyorBackSpeed);
+		m_ConveyorMotor2.set(ConveyorConstants.kConveyorBackSpeed);
 	}
 
 	@Config.ToggleButton
 	public void toggleConveyor(boolean enabled) {
-		if (this.m_ConveyorMotor1.get() > 0) {
-			this.m_ConveyorMotor1.set(0);
-			this.m_ConveyorMotor2.set(0);
+		if (m_ConveyorMotor1.get() > 0) {
+			m_ConveyorMotor1.set(0);
+			m_ConveyorMotor2.set(0);
 		} else {
-			this.m_ConveyorMotor1.set(ConveyorConstants.kConveyorTopMotorSpeed);
-			this.m_ConveyorMotor2.set(ConveyorConstants.kConveyorBottomMotorSpeed);
+			m_ConveyorMotor1.set(ConveyorConstants.kConveyorTopMotorSpeed);
+			m_ConveyorMotor2.set(ConveyorConstants.kConveyorBottomMotorSpeed);
 		}
 	}
-
+	//is this necessary?
 	@Log
 	@Log(tabName = "Dashboard", name = "Front Sensor")
 	public boolean getFrontConveyor() {
 		return (frontconveyor.getAverageVoltage() < 4.75);
 	}
-
+	//is this necessary?
 	@Log
 	@Log(tabName = "Dashboard", name = "Top Sensor")
 	public boolean getTopConveyor() {
